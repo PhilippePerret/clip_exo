@@ -25,6 +25,7 @@ defmodule ClipExoWeb.Router do
     pipe_through :browser
 
     post "/build", ExoController, :build
+    get  "/build", ExoController, :build
   end
 
   # Other scopes may use custom stacks.
