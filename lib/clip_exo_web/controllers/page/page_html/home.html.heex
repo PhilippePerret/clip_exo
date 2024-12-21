@@ -1,0 +1,11 @@
+<div>C'est la page d'accueil</div>
+
+<h2>Produire un exercice</h2>
+
+<form action={~p"/exo/build"} method="POST">
+  <div>
+    <label for="exo_file_path">Chemin d'accès au fichier</label>
+    <input id="exo_file_path" name="exo[file_path]" type="text" />
+  </div>
+  <button type="submit">Constuire l'exercice</button>
+</form>
