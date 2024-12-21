@@ -8,4 +8,9 @@ defmodule ClipExoWeb.ExoController do
     Exo.build(params["exo"])
     render(conn, :builder, exo: params["exo"])
   end
+
+  def preformated_exo(conn, params) do
+    IO.inspect(params["exo"], label: "\nEXO")
+    render(conn, :preformated, exo: params["exo"])
+  end
 end
