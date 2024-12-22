@@ -1,6 +1,16 @@
 # Méthodes propres à un exercice
 defmodule ClipExo.Exo do
 
+  defstruct [
+    infos: %{
+      titre: "<titre de l'exercice>",
+      auteur: "<Auteur de l'exercice>",
+      created_at: NaiveDateTime.utc_now(),
+      revised_at: []
+    },
+    body: "<corps de l'exercice>"
+  ]
+
   @folder "./_exercices/clipexo/"
 
   @doc """
@@ -162,5 +172,13 @@ defmodule ClipExo.Exo do
     else
       {:error, "Impossible de trouver '#{path}'"}
     end
+  end
+
+
+
+
+  def build_preformated_exo(_params) do
+    IO.puts "Je dois apprendre à créer l'exercice préformaté"
+    {:error, "Je ne sais pas encore créer l'exercice préformaté."}
   end
 end

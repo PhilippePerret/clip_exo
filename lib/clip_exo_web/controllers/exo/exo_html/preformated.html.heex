@@ -1,11 +1,11 @@
 <%# Formulaire pour produire un fichier préformaté %>
 
-<form method="POST" action={~p"/exo/preformate"}>
-  <div>
-    <legend>Titre de l'exercice</legend>
-    <input type="text" id="exo_titre" name="exo[titre]" value={@exo["titre"]} />
-  </div>
-
+<.form 
+  for={@form}
+  action={~p"/exo/preformate"}
+  phx-submit="save">
+  <.input type="text" field={@form[:titre]} label="Titre de l'exercice" />
+  <.input type="text" field={@form[:auteur]} label="Auteur (Prénom NOM)" />
   <div>
     <legend>Rubriques nécessaires</legend>
     <div>
@@ -29,4 +29,5 @@
       <label for="exo_rubrique_recommandations">Recommandation</label>
     </div>
   </div>
-</form>
+  <.button type="submit">Créer l’exercice préformaté</.button>
+</.form>

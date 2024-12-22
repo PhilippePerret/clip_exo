@@ -25,7 +25,7 @@ defmodule ClipExoWeb.Router do
     pipe_through :browser
 
     get "/preformated", ExoController, :preformated_exo
-    post "/preformate", ExoController, :preformated_exo
+    post "/preformate", ExoController, :produce_preformated_exo
     get "/preformate", ExoController, :preformated_exo
     post "/build", ExoController, :build
     get  "/build", ExoController, :build
