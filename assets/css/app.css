@@ -3,3 +3,15 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+
+body {
+  max-width: 780px;
+}
+header {
+  background-color: purple;
+  padding: 0.5em 2em; 
+  color: white;
+}
+section#content {
+  margin:2em 4em;
+}
