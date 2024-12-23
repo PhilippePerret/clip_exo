@@ -11,43 +11,44 @@ defmodule ClipExoWeb.ExoController do
     render(conn, :builder, exo: params["exo"])
   end
 
+  def editor(conn, params) do
+    params = Map.merge(%{"exo" => %{
+      "path" => params["p"], # première arrivée
+    }}, params)
+    exo = %{
+      "path" => params["exo"]["path"],
+      "contenu" => Exo.get_content_of(params["exo"]["path"])
+    }
+    render(conn, :editor, exo: exo)
+  end
+
   def preformated_exo(conn, params) do
     IO.inspect(params, label: "\nPARAMS")
     
     exo_params = 
       params["exo"]
       |> IO.inspect(label: "\nEXO (en entrée)")
-      |> formate_param_rubriques()
-      |> IO.inspect(label: "\nEXO (à la fin)")
+      # |> formate_param_rubriques()
+      # |> IO.inspect(label: "\nEXO (à la fin)")
 
     exo = %Exo{}
     exo_schema = %ClipExo.ExoSchema{
-      titre: exo.infos.titre,
-      auteur: exo.infos.auteur,
+      titre: exo_params["titre"] || exo.infos.titre,
+      reference: exo_params["reference"] || exo.infos.reference,
+      auteur: exo_params["auteur"] || exo.infos.auteur,
       created_at: exo.infos.created_at,
-      body: exo.body
+      body: exo.body,
+      rubrique_mission: exo_params["rubrique_mission"],
+      rubrique_objectif: exo_params["rubrique_objectif"],
+      rubrique_scenario: exo_params["rubrique_scenario"],
+      rubrique_recommandations: exo_params["rubrique_recommandations"],
+      rubrique_aide: exo_params["rubrique_aide"]
     }
     form = 
       exo_schema
       |> ExoSchema.changeset(params["exo"] || %{})
       |> to_form(as: "exo")
-    render(conn, :preformated, exo: exo_params, form: form)
-  end
-
-  defp formate_param_rubriques(params) do
-    if params["rubriques"] do
-      rubriques_ser = 
-        params["rubriques"]
-        |> Enum.reduce(%{}, fn x, acc ->
-            Map.put(acc, "rubriques[#{x}]", "on") 
-          end)
-        |> IO.inspect(label: "\nrubriques séréalisées")
-      params = Map.delete(params, "rubriques")
-      Map.merge(params, rubriques_ser)
-      |> IO.inspect(label: "\nPARAMS à la fin de formate_param_rubriques")
-    else
-      params
-    end
+    render(conn, :preformated, form: form)
   end
 
   @doc """
@@ -55,18 +56,16 @@ defmodule ClipExoWeb.ExoController do
   """
   def produce_preformated_exo(conn, params) do
     IO.inspect(params["exo"], label: "\nEXO (dans produce)")
-    exo_params = 
-      params["exo"]
-      |> formate_param_rubriques()
+    exo_params = params["exo"]
     case Exo.build_preformated_exo(params["exo"]) do
-    {:ok, _} -> 
+    {:ok, path} -> 
       conn
-      |> put_flash(:info, "Exercice préformé créé avec succès dans ...")
-      |> render(:on_build, exo: exo_params)
+      |> put_flash(:info, "Exercice préformé créé avec succès dans #{path}")
+      |> render(:on_built, exo: exo_params)
     {:error, error_msg} ->
       conn
       |> put_flash(:error, error_msg)
-      |> redirect(to: ~p"/exo/preformated?#{URI.encode_query(exo_params)}")
+      |> preformated_exo(params)
     end
   end
 end

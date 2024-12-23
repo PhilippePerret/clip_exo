@@ -4,30 +4,28 @@
   for={@form}
   action={~p"/exo/preformate"}
   phx-submit="save">
-  <.input type="text" field={@form[:titre]} label="Titre de l'exercice" />
-  <.input type="text" field={@form[:auteur]} label="Auteur (Prénom NOM)" />
-  <div>
+
+  <fieldset id="infos">
+    <legend>Infos générales</legend>
+    <.input type="text" field={@form[:path]} placeholder="Chemin d’accès au fichier" />
+    <div class="explication">(depuis le dossier des exercices)</div>
+    <.input type="text" field={@form[:reference]} placeholder="Référence de l'exercice" />
+    <.input type="text" field={@form[:titre]} placeholder="Titre de l'exercice" />
+    <.input type="text" field={@form[:auteur]} placeholder="Auteur (Prénom NOM)" />
+    <.input type="text" field={@form[:duree_min]} placeholder="Durée minimale (minutes)" />
+    <.input type="text" field={@form[:duree_max]} placeholder="Durée maximale (minutes)" />
+  </fieldset>
+  <fieldset class="rubriques mt-10">
     <legend>Rubriques nécessaires</legend>
-    <div>
-      <input type="checkbox" id="exo_rubrique_mission" name="exo[rubriques][]" value="mission" \>
-      <label for="exo_rubrique_mission">Mission</label>
-    </div>
-    <div>
-      <input type="checkbox" id="exo_rubrique_description" name="exo[rubriques][]" value="description" \>
-      <label for="exo_rubrique_description">Description</label>
-    </div>
-    <div>
-      <input type="checkbox" id="exo_rubrique_scenario" name="exo[rubriques][]" value="scenario" \>
-      <label for="exo_rubrique_scenario">Scénario</label>
-    </div>
-    <div>
-      <input type="checkbox" id="exo_rubrique_aide" name="exo[rubriques][]" value="aide" \>
-      <label for="exo_rubrique_aide">Aide</label>
-    </div>
-    <div>
-      <input type="checkbox" id="exo_rubrique_recommandations" name="exo[rubriques][]" value="recommandations" \>
-      <label for="exo_rubrique_recommandations">Recommandation</label>
-    </div>
+    <div class="explication">(Au choix et pas forcément toutes)</div>
+    <.input type="checkbox" field={@form[:rubrique_mission]} label="Mission" />
+    <.input type="checkbox" field={@form[:rubrique_objectif]} label="Objectif" />
+    <.input type="checkbox" field={@form[:rubrique_scenario]} label="Scénario" />
+    <.input type="checkbox" field={@form[:rubrique_aide]} label="Aide" />
+    <.input type="checkbox" field={@form[:rubrique_recommandations]} label="Recommandations" />
+  </fieldset>
+  <div class="buttons">
+    <div class="while-submitting hidden">Merci de patienter pendant l’opération…</div>
+    <.button type="submit">Créer l’exercice préformaté</.button>
   </div>
-  <.button type="submit">Créer l’exercice préformaté</.button>
 </.form>

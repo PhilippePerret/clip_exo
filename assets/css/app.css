@@ -1,11 +1,12 @@
-@import "tailwindcss/base";
+/* @import "tailwindcss/base";
 @import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss/utilities"; */
 
 /* This file is for your main application CSS */
 
 body {
   max-width: 780px;
+  font-size: 16pt;
 }
 header {
   background-color: purple;
@@ -15,3 +16,82 @@ header {
 section#content {
   margin:2em 4em;
 }
+
+fieldset {
+  all: reset;
+}
+
+input[type="text"], input[type="password"], textarea {
+  font-size: inherit;
+  padding: 4px;
+  width: 100%;
+  margin: 4px;
+}
+
+div.description, div.explication {
+  font-size: 0.8em;
+  font-style: italic;
+}
+
+div.buttons {
+  text-align: right;
+}
+button, a.btn {
+  font-size: 0.9em;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  background-color: black;
+  color: #EEEEEE ;
+  padding: 12px 32px;
+  border:0;
+  margin:1em;
+  cursor:pointer;
+}
+button:hover, a.btn:hover {
+  background-color: purple;
+}
+
+
+div#flash-group {
+  position:absolute;
+  right:1em; top:0;
+  max-width:400px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  line-height: 1em;
+}
+div#flash-group > div {
+  padding: 0.2em 2em;
+}
+div#flash-group div#flash-error {
+  background-color: red;
+  color: white;
+}
+div#flash-group button[aria-label] {
+  display:none;
+}
+div#flash-group div#flash-info {
+  background-color: rgb(101, 249, 187);
+  color: rgb(24, 120, 0);
+}
+
+a, input[type="submit"], input[type="button"] {
+  display:inline;
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: none;
+  color:orange;
+  border:none;
+  background-color:inherit;
+  cursor: pointer;
+}
+header a {
+  color:inherit;
+}
+
+form.inline {
+  display:inline;
+  padding:0;
+  margin:0;
+  margin-left:-7px;
+}
+
+.hidden {display:none;}

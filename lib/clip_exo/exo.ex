@@ -3,15 +3,30 @@ defmodule ClipExo.Exo do
 
   defstruct [
     infos: %{
-      titre: "<titre de l'exercice>",
-      auteur: "<Auteur de l'exercice>",
-      created_at: NaiveDateTime.utc_now(),
-      revised_at: []
+      path:  "",
+      reference: "", 
+      titre: "",
+      auteur: "",
+      created_at: Date.utc_today(),
+      revised_at: [],
+      competences: [],
+      niveau: "",
+      duree: "",
     },
-    body: "<corps de l'exercice>"
+    body: "<corps de l'exercice>",
+    rubriques: []
   ]
 
   @folder "./_exercices/clipexo/"
+
+  @doc """
+  Retourne le contenu de l'exercice clip.exo +path+
+
+  +path+ est une path vérifiée
+  """
+  def get_content_of(path) do
+    File.read!(path)
+  end
 
   @doc """
   Construction de l'exercice définit dans +exo+
@@ -147,38 +162,112 @@ defmodule ClipExo.Exo do
   end
 
 
+  defp build_path_from(nil), do: nil
+  defp build_path_from(path) do
+    path_init = path
+    path = add_extensions_if_needed(path)
+    path_with_folder = Path.join([@folder, path])
+    cond do
+    File.exists?(path) -> {:ok, path}
+    File.exists?(path_with_folder) -> {:ok, path_with_folder}
+    true -> {:error, "Impossible de trouver le path du fichier à partir de #{path_init}"} 
+    end
+  end
 
-
-  # Pour définir précisément le chemin d'accès au fichier de l'exercice
+  # Pour définir précisément le chemin d'accès au fichier de l'exercice, qui n'existe
+  # pas forcément encore
   defp get_path_exo(exo) do
-    exo =
-      if exo["file_path"] do
-        paths = String.split(exo["file_path"], ".")
-        exts  = [Enum.fetch!(paths, -2), Enum.fetch!(paths, -1)]
-        |> IO.inspect(label: "\nexts")
-        path =
-          case exts do
-            ["clip", "exo"] -> exo["file_path"]
-            [_, "clip"]       -> exo["file_path"] <> ".exo"
-            _ -> exo["file_path"] <> ".clip.exo"
-          end
-        
-        Map.put(exo, "file_path", path)
-      end
-    path = Path.join([@folder, exo["file_path"] || "[nom fichier manquant]"])
-
-    if File.exists?(path) do
-      {:ok, path}
+    if exo["file_path"] do
+      { :ok, Path.join([@folder, add_extensions_if_needed(exo["file_path"])]) }
     else
-      {:error, "Impossible de trouver '#{path}'"}
+      { :error, "Il faut définir au moins le nom du fichier."}
+    end
+  end
+
+  # Retourne le chemin d'accès au fichier désigné par +path+, qui doit
+  # exister
+  def get_path_of_exo(path) do
+    case build_path_from(path) do
+    {:ok, path}       -> path
+    {:error, err_msg} -> {:error, err_msg}
+    nil -> {:error, "Il faut fournir le chemin de référence de l’exercice."}
+    end
+  end
+
+  # Ajoute si nécessaire ".clip.exo" ou simplement ".exo" au nom du fichier fourni
+  # dans +path+ (qui peut être un simple nom de fichier ou un path complet)
+  defp add_extensions_if_needed(path) do
+    if Regex.match?(~r/\./, path) do
+      paths = String.split(path, ".")
+      exts  = [Enum.fetch!(paths, -2), Enum.fetch!(paths, -1)]
+      |> IO.inspect(label: "\nexts")
+      case exts do
+        ["clip", "exo"] -> path
+        [_, "clip"]       -> path <> ".exo"
+        _ -> path <> ".clip.exo"
+      end
+    else
+      path <> ".clip.exo"
     end
   end
 
 
-
-
-  def build_preformated_exo(_params) do
-    IO.puts "Je dois apprendre à créer l'exercice préformaté"
-    {:error, "Je ne sais pas encore créer l'exercice préformaté."}
+  @doc """
+  Construction de l'exercice préformaté
+  """
+  def build_preformated_exo(params) do
+    params
+    |> IO.inspect(label: "\nPARAMS pour la construction")
+    exo_name = params["path"]
+    exo_path = Path.join([@folder, add_extensions_if_needed(exo_name)])
+    cond do
+    exo_path == ".clip.exo" ->
+      {:error, "Il faut fournir le nom du fichier"}
+    File.exists?(exo_path) ->
+      {:error, "Un fichier d’exercice porte déjà le nom #{exo_name}\n(#{exo_path})"}
+    true -> 
+      # On peut créer le fichier exercice
+      File.write!(exo_path, modele_preformated(params), [:utf8])
+      {:ok, exo_path}
+    end
   end
+
+  def modele_preformated(params) do
+    IO.inspect(params, label: "\nParams in modele_preformated")
+    """
+    ---
+    reference: #{params["reference"]}
+    titre: #{params["titre"]}
+    auteur: #{params["auteur"]}
+    competences: #{params["competences"]}
+    niveau: #{params["niveau"]}
+    duree: #{duree_form_max_and_min(params)}
+    created_at: #{Date.utc_today()}
+    ---
+    #{params["rubriques"]["mission"] && "rub:Mission\n" || ""}
+    #{params["rubriques"]["scenario"] && "rub:Scénario\n" || ""}
+    #{params["rubriques"]["aide"] && "rub:Aide\n" || ""}
+    #{params["rubriques"]["recommandations"] && "rub:Recommandations\n" || ""}
+    """
+  end
+
+  defp duree_form_max_and_min(params) do
+    if params["duree"] do
+      params["duree"]
+    else
+      "#{human_duree_for(params["duree_min"])} à #{human_duree_for(params["duree_max"])}"
+    end
+  end
+  defp human_duree_for(minutes) do
+    case minutes do
+    30 -> "une 1/2 heure"
+    "30" -> "une 1/2 heure"
+    60 -> "une heure"
+    "60" -> "une heure"
+    45 -> "trois quart d’heure"
+    "45" -> "trois quart d’heure"
+    _ -> "#{minutes} minutes"
+    end
+  end
+
 end

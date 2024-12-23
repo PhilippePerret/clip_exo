@@ -1,0 +1,11 @@
+<!-- Éditeur d'exercice -->
+<form action={~p"/exo/edit"} method="POST">
+
+  <input type="hidden" name="exo[path]" value={@exo["path"]} />
+
+  <textarea name="exo[contenu]" id="exo_contenu" style="with:100%;height:500px;">
+    <%= @exo["contenu"] %>
+  </textarea>
+
+
+</form>
