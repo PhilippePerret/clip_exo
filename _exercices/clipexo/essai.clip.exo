@@ -1,0 +1,17 @@
+---
+name: PSW-00-0
+reference: PSW-00-0
+titre: Un exercice pour voir\nsur deux lignes
+auteur: Philippe PERRET
+created_at: 23-12-2024
+niveau: Grand débutant
+competences: ["Prise en main de l'application", "Adjonction des couleurs", "Manipulation des blocs"]
+duree: [15, 45]
+---
+rub:Mission
+
+La mission de l'exercice va consister à le réussir.
+C'est une mission assez importante.
+
+rub:Scénario
+info: Suivez ce scénario à la lettre pour pouvoir réaliser l'exercice.

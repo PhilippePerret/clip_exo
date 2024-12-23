@@ -6,9 +6,15 @@ defmodule ClipExoWeb.ExoController do
   alias ClipExo.{Exo, ExoSchema}
 
   def build(conn, params) do
-    IO.inspect(params, label: "\nparams")
-    Exo.build(params["exo"])
-    render(conn, :builder, exo: params["exo"])
+    params_exo = params["exo"]
+    case Exo.build(params_exo) do
+    {:ok, path} -> 
+      params_exo = Map.merge(params_exo, %{"path" => path})
+      render(conn, :builder, exo: params_exo, builder: ClipExo.ExoBuilder)
+    {:error, err_msg} ->
+      conn |> put_flash(:error, err_msg)
+      render(conn, :no_way, exo: params_exo, error: err_msg)
+    end
   end
 
   def editor(conn, params) do

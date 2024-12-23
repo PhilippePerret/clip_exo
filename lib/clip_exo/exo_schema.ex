@@ -3,6 +3,7 @@ defmodule ClipExo.ExoSchema do
   import Ecto.Changeset
 
   embedded_schema do  
+    field :name, :string
     field :path, :string
     field :reference, :string
     field :titre, :string
@@ -44,8 +45,8 @@ defmodule ClipExo.ExoSchema do
     attrs = Map.merge(attrs, %{rubriques: rubriques})
     
     schema
-    |> cast(attrs, [:path, :reference, :titre, :auteur, :created_at, :body, :rubriques, :competences, :duree_min, :duree_max])
-    |> validate_required([:path, :titre, :auteur, :body])
+    |> cast(attrs, [:name, :path, :reference, :titre, :auteur, :created_at, :body, :rubriques, :competences, :duree_min, :duree_max])
+    |> validate_required([:name, :path, :titre, :auteur, :body])
   end
 
 end

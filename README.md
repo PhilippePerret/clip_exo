@@ -12,12 +12,16 @@ On fournit le fichier :
 
 ~~~document
 ---
+name: PSW-00
+reference: PSW-00-0
 titre: Le Titre de \n l'exercice
 niveau: débutant
 auteur: Philippe PERRET
-creation: 21/12/2024
+creation: 21-12-2024
 reviseurs: Philippe PERRET, Marion MICHEL
 revisions: 21/12/2024 (Philippe PERRET), 22/12/2024 (Marion MICHEL)
+duree: [15,30]
+competences: ["Pouvoir faire ça", "Et pouvoir faire ceci"]
 ---
 rub:Mission
 La mission de cet exercice consiste à… le réussir !

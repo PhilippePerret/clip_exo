@@ -1,0 +1,6 @@
+.block {display:block}
+.inline {display:inline}
+.hidden {display:none;}
+.smaller {
+  font-size:0.9em;
+}

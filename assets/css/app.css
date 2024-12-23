@@ -3,6 +3,7 @@
 @import "tailwindcss/utilities"; */
 
 /* This file is for your main application CSS */
+@import "by_class";
 
 body {
   max-width: 780px;
@@ -94,4 +95,6 @@ form.inline {
   margin-left:-7px;
 }
 
-.hidden {display:none;}
+pre code {
+  font-size: 11.5pt;
+}

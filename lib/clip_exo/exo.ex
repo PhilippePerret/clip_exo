@@ -3,6 +3,7 @@ defmodule ClipExo.Exo do
 
   defstruct [
     infos: %{
+      name: "", 
       path:  "",
       reference: "", 
       titre: "",
@@ -35,17 +36,25 @@ defmodule ClipExo.Exo do
   d'accès relatif au fichier. Par défaut, on le cherche dans @folfder
   """
   def build(exo) do
-    IO.puts "-> Exo.build"
     case get_path_exo(exo) do
     {:ok, path} -> 
-      IO.puts("Je dois parser le fichier que j'ai trouvé")
-      parse_file(path)
+      IO.puts("Parsing du fichier '#{path}'…")
+      {:ok, path}
     {:error, error} ->
       IO.puts error
+      {:error, error}
     end
   end
 
-  def parse_file(path), do: parse_code(File.read!(path))
+  def parse_file(path) do
+    case parse_code(File.read!(path)) do
+    {:ok, exo} -> 
+      exo_infos = Map.get(exo, :infos)
+      exo_infos = Map.merge(exo_infos, %{file_name: Path.basename(path)})
+      Map.put(exo, :infos, exo_infos)
+    {:error, msg} -> {:error, msg}
+    end
+  end
 
   @doc """
   Méthode qui prend le code +code+, en supposant qu'il est
@@ -53,7 +62,6 @@ defmodule ClipExo.Exo do
   AST pour produire le document HTML.
   """
   def parse_code(code) do
-    IO.puts "-> parse (avec '#{code}'')"
     code
     |> decompose_header_body()
   end
@@ -260,12 +268,16 @@ defmodule ClipExo.Exo do
   end
   defp human_duree_for(minutes) do
     case minutes do
+    15 -> "un 1/4 d’heure"
     30 -> "une 1/2 heure"
-    "30" -> "une 1/2 heure"
+    45 -> "trois 1/4 d’heure"
     60 -> "une heure"
-    "60" -> "une heure"
-    45 -> "trois quart d’heure"
+    90 -> "une heure 30"
+    "15" -> "un 1/4 d’heure"
+    "30" -> "une 1/2 heure"
     "45" -> "trois quart d’heure"
+    "60" -> "une heure"
+    "90" -> "une heure 30"
     _ -> "#{minutes} minutes"
     end
   end

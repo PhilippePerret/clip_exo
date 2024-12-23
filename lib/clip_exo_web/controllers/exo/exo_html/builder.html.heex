@@ -1,4 +1,29 @@
+<% 
+  file_name = @exo["file_path"]
+  file_path = @exo["path"]
+%>
 <div>
-  Exercice à construire : <%= @exo["file_path"] %>.
+  Exercice à construire : <%= file_name %>.
 
 </div>
+
+<div>
+  <form action={~p"/exo/build"} method="POST">
+    <div>
+      <input type="hidden" name="exo[file_path]" value={file_name} />
+      <button type="submit">Reconstuire l’exercice</button>
+    </div>
+  </form>
+</div>
+
+<pre><code>
+  <%= @builder.start_building(file_path) %>
+  <%= @builder.start_parse_file(file_path) %>
+  <%= exo = @builder.parse_file(file_path) ; "OK" %>
+  <%= @builder.end_parse_file(exo) %>
+
+  <%= @builder.start_build_file_specs(file_name) %>
+  <%= exo = @builder.build_file_specs(exo) ; "OK" %>
+  <%= @builder.end_build_file_specs(exo) %>
+
+</code></pre>

@@ -1,0 +1,24 @@
+<% 
+  infos = exo[:infos] 
+%>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../css/clip.css" />
+  </head>
+  <body>
+    <header>
+			<img id="logo" src="../../images/logo-clip-alpha.png" />
+			<titre><%= String.replace(infos[:titre], ~r/\n/, "<br/>") %></titre>
+		</header>
+
+    <table>
+      <tr>
+        <td class="libelle">Référence</td>
+        <td class="value"><%= infos[:reference] %></td>
+      </tr>
+    </table>
+    
+  </body>
+</html>
