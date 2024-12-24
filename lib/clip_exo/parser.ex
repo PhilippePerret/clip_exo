@@ -1,4 +1,21 @@
 defmodule ExoParser do
+  @moduledoc """
+  Module qui parse le code du fichier de la définition de l'exercice .clip.exo
+
+  Produit une liste qui contient des %ExoConteneur et des %ExoLine
+
+  %ExoConteneur
+    Un conteneur contenant des lines: [%ExoLine]
+  %ExoLine
+    Des lignes seules n'appartenant à aucun conteneur.
+
+  Voir les deux structures dans le fichier exo_structures.ex
+
+  TODO
+    * parser les lignes des lignes de conteneur qui peuvent aussi
+      être définies par des "css.css: La ligne" pour ajouter des classes CSS
+
+  """
 
   @types_conteneur %{
     raw:        "Bloc raw",
