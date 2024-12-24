@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../css/clip.css" />
+  </head>
+  <body>
+    <header>
+			<img id="logo" src="../../images/logo-clip-alpha.png" />
+			<titre><%= raw @exo_titre %></titre>
+		</header>
+
+    <.table_specs id={"infos"} rows={@infos} class="table_specs">
+      <:col :let={data} class="libelle">
+        {data.label}
+      </:col>
+      <:col :let={data} class="value">
+        {raw data.value}
+      </:col>
+    </.table_specs>
+    
+  </body>
+</html>

@@ -31,11 +31,13 @@ defmodule ClipExo.ExoBuilder do
     "Début de la construction du fichier caractéristiques"
   end
   def build_file_specs(exo) do
-    IO.inspect(exo, label: "\nEXO (in build_file_specs)")
-    template_path = Path.absname("./lib/clip_exo/exo_builder_assets/specs_file_template.html.eex")
-    assigns = %{exo: exo}
-    code = EEx.eval_file(template_path, Enum.into(assigns, []), [])
-    |> IO.inspect(label: "Code évalué")
+    # IO.inspect(exo, label: "\nEXO (in build_file_specs)")
+    # template_path = Path.absname("./lib/clip_exo/exo_builder_assets/specs_file_template.html.eex")
+    # assigns = %{exo: exo}
+    # code = EEx.eval_file(template_path, Enum.into(assigns, []), [])
+    # |> IO.inspect(label: "Code évalué")
+
+    code = ClipExoWeb.ExoBuilderView.build_file_specs(exo)
 
     # Nom de l'exercice
     exo_name = exo[:infos][:name]
@@ -56,8 +58,15 @@ defmodule ClipExo.ExoBuilder do
 
     exo # à la fin
   end
+
   def end_build_file_specs(_filename) do
     "👍 Fichier des caractéristiques construit avec succès."
   end
 
+
+
+
+  def essai(mot) do
+    "On m'a envoyé le mot #{mot}."
+  end
 end
