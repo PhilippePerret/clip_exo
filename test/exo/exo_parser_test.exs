@@ -4,7 +4,7 @@ defmodule ClipExo.BaseTest do
 
   # alias ClipExo.Exo
 
-  describe "Parseur de body" do
+  describe "Parseur de ligne" do
 
     test "une ligne vide est un séparateur" do
       provided = ""
@@ -90,5 +90,22 @@ defmodule ClipExo.BaseTest do
       assert attendu == obtenu
     end
 
-  end
+  end # /describe "parseur de ligne"
+
+
+  describe "Parseur de code" do
+
+    test "Un bloc raw" do
+      provided = ":raw\n: Une première ligne\n: Une deuxième ligne\n"
+      attendu  = [
+        {:ok, [type: conteneur, conteneur: %ExoConteneur{
+          type: :raw,
+          options: [],
+          lines: []
+        }]}
+      ]
+      obtenu = ExoParser.parse_code(provided)
+      assert attendu == obtenu
+    end
+  end #/describe "Parseur de code"
 end 
