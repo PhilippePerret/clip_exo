@@ -6,9 +6,23 @@ defmodule ClipExo.BaseTest do
 
   describe "Parseur de body" do
 
+    test "une ligne vide est un séparateur" do
+      provided = ""
+      attendu  = {:ok, [type: :separator, conteneur: nil]}
+      obtenu   = ExoParser.parse_line(provided, %ExoConteneur{type: :raw})
+      assert attendu == obtenu
+    end
+
+    test "une ligne vide annule le conteneur courant" do
+      provided = ""
+      obtenu   = ExoParser.parse_line(provided, %ExoConteneur{type: :raw})
+      conteneur = elem(obtenu, 1)[:conteneur]
+      assert conteneur == nil
+    end
+
     test "parse une ligne simple (paragraphe régulier)" do
       provided = "Une simple ligne"
-      attendu = {:ok, [type: :regular, content: "Une simple ligne", conteneur: nil]}
+      attendu = {:ok, [type: :paragraph, content: "Une simple ligne", classes: [], conteneur: nil]}
       obtenu  = ExoParser.parse_line(provided, nil)
       assert attendu == obtenu
     end

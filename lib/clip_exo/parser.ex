@@ -6,6 +6,12 @@ defmodule ExoParser do
     blockcode:  "Bloc de codes",
     table:      "Table"
   }
+
+  def parse_code(code) do
+
+  end
+
+
   @doc """
   Entrée principale qui reçoit une ligne du fichier exercice et retourne
   {:ok, content, conteneur} ou {:error, message_erreur} en cas d'erreur
@@ -23,7 +29,8 @@ defmodule ExoParser do
   :+  Paragraphe          Une ligne de code à mettre en exergue dans un conteneur de type :blockcode
   
   +conteneur+
-    Structure   %ExoConteneur{type: <type>, options: [<options>]}
+    Structure   %ExoConteneur{type: <type>, lines: [<lignes>], options: [<options>]}
+
   """
   @reg_exo_line ~r/
   ^ # début
@@ -36,14 +43,17 @@ defmodule ExoParser do
   $ # jusqu'à la fin
   /x
   def parse_line(line, conteneur) do
-    case Regex.named_captures(@reg_exo_line, line) do
-    nil ->
-      # Une ligne sans ":", donc simple (note : elle annule le conteneur)
-      {:ok, [type: :regular, content: line, conteneur: nil]}
-    captures -> 
-      check_captures(captures, conteneur, line)
+    if line == "" do
+      {:ok, [type: :separator, conteneur: nil]}
+    else
+      case Regex.named_captures(@reg_exo_line, line) do
+      nil ->
+        # Une ligne sans ":", donc simple (note : elle annule le conteneur)
+        {:ok, [type: :paragraph, content: line, classes: [], conteneur: nil]}
+      captures -> 
+        check_captures(captures, conteneur, line)
+      end
     end
-
   end
 
   defp check_captures(%{
