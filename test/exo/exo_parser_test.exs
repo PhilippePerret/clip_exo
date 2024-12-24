@@ -22,21 +22,21 @@ defmodule ClipExo.BaseTest do
 
     test "parse une ligne simple (paragraphe régulier)" do
       provided = "Une simple ligne"
-      attendu = {:ok, [type: :paragraph, content: "Une simple ligne", classes: [], conteneur: nil]}
+      attendu = {:ok, [line: %ExoLine{type: :paragraph, content: "Une simple ligne", classes: []}, conteneur: nil]}
       obtenu  = ExoParser.parse_line(provided, nil)
       assert attendu == obtenu
     end
 
     test "une ligne avec simple classe" do
       provided = "rub: Une ligne avec classe 'rub'"
-      attendu  = {:ok, [type: :paragraph, content: "Une ligne avec classe 'rub'", classes: ["rub"], conteneur: nil]}
+      attendu  = {:ok, [line: %ExoLine{type: :paragraph, content: "Une ligne avec classe 'rub'", classes: ["rub"]}, conteneur: nil]}
       obtenu   = ExoParser.parse_line(provided, %ExoConteneur{})
       assert attendu == obtenu
     end
     
     test "une ligne avec deux classes css" do
       provided = "rub.sub: Une ligne avec classe 'rub' et 'sub'   "
-      attendu  = {:ok, [type: :paragraph, content: "Une ligne avec classe 'rub' et 'sub'", classes: ["rub", "sub"], conteneur: nil]}
+      attendu  = {:ok, [line: %ExoLine{type: :paragraph, content: "Une ligne avec classe 'rub' et 'sub'", classes: ["rub", "sub"]}, conteneur: nil]}
       obtenu   = ExoParser.parse_line(provided, %ExoConteneur{})
       assert attendu == obtenu
     end
@@ -64,7 +64,7 @@ defmodule ClipExo.BaseTest do
 
     test "une ligne simple de conteneur avec un conteneur" do
       provided = ": Ligne simple"
-      attendu  = {:ok, [conteneur: %ExoConteneur{type: :raw, lines: [[type: :line, content: " Ligne simple"]]}]}
+      attendu  = {:ok, [conteneur: %ExoConteneur{type: :raw, lines: [%ExoLine{type: :line, content: " Ligne simple"}]}]}
       obtenu   = ExoParser.parse_line(provided, %ExoConteneur{type: :raw})
       assert attendu == obtenu
     end
@@ -74,6 +74,22 @@ defmodule ClipExo.BaseTest do
       attendu  = {:error, "Ligne de conteneur sans conteneur : ': Ligne simple'" }
       obtenu   = ExoParser.parse_line(provided, nil)
       assert attendu == obtenu
+    end
+
+    test "une ligne de conteneur avec un type de ligne (tline)" do
+      provided = ":+ Ligne de code ajoutée"
+      line = %ExoLine{type: :line, content: " Ligne de code ajoutée", tline: "+", classes: nil}
+      attendu  = {:ok, [conteneur: %ExoConteneur{type: :blockcode, lines: [line], options: []}]}
+      actual   = ExoParser.parse_line(provided, %ExoConteneur{type: :blockcode})
+      assert attendu == actual
+    end
+
+    test "une ligne de steps de résultat (=>)" do
+      provided = ":=> Ligne de résultat"
+      line = %ExoLine{type: :line, content: " Ligne de résultat", tline: "=>", classes: nil}
+      attendu = {:ok, [conteneur: %ExoConteneur{type: :steps, lines: [line], options: []}]}
+      actual  = ExoParser.parse_line(provided, %ExoConteneur{type: :steps, lines: []})
+      assert attendu == actual
     end
 
     test "une ligne définissant une option de conteneur, sans conteneur (erreur)" do
@@ -98,14 +114,33 @@ defmodule ClipExo.BaseTest do
     test "Un bloc raw" do
       provided = ":raw\n: Une première ligne\n: Une deuxième ligne\n"
       attendu  = [
-        {:ok, [type: conteneur, conteneur: %ExoConteneur{
-          type: :raw,
+        %ExoConteneur{
+          type: :raw, 
           options: [],
-          lines: []
-        }]}
+          lines: [
+            %ExoLine{type: :line, content: " Une première ligne", classes: nil},
+            %ExoLine{type: :line, content: " Une deuxième ligne", classes: nil},
+          ]
+        }
       ]
       obtenu = ExoParser.parse_code(provided)
       assert attendu == obtenu
+    end
+
+    test "Un bloc blockcode avec des lignes" do
+      provided = ":blockcode\n:  Première ligne de code\n:+ deuxième ligne de code\n"
+      attendu  = [
+        %ExoConteneur{
+          type: :blockcode,
+          lines: [
+            %ExoLine{type: :line, content: "  Première ligne de code", classes: nil},
+            %ExoLine{type: :line, content: " deuxième ligne de code", classes: nil, tline: "+"},
+          ],
+          options: []
+        }
+      ]
+      actual = ExoParser.parse_code(provided)
+      assert attendu == actual
     end
   end #/describe "Parseur de code"
 end 
