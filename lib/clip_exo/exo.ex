@@ -3,9 +3,9 @@ defmodule ClipExo.Exo do
 
   defstruct [
     infos: %{
-      name: "", 
+      name: "",
       path:  "",
-      reference: "", 
+      reference: "",
       titre: "",
       auteur: "",
       created_at: Date.utc_today(),
@@ -32,12 +32,12 @@ defmodule ClipExo.Exo do
   @doc """
   Construction de l'exercice définit dans +exo+
 
-  Pour le moment, +exo+ ne contient que "file_path", le chemin 
+  Pour le moment, +exo+ ne contient que "file_path", le chemin
   d'accès relatif au fichier. Par défaut, on le cherche dans @folfder
   """
   def build(exo) do
     case get_path_exo(exo) do
-    {:ok, path} -> 
+    {:ok, path} ->
       IO.puts("Parsing du fichier '#{path}'…")
       {:ok, path}
     {:error, error} ->
@@ -48,7 +48,7 @@ defmodule ClipExo.Exo do
 
   def parse_file(path) do
     case parse_code(File.read!(path)) do
-    {:ok, exo} -> 
+    {:ok, exo} ->
       exo_infos = Map.get(exo, :infos)
       exo_infos = Map.merge(exo_infos, %{file_name: Path.basename(path)})
       Map.put(exo, :infos, exo_infos)
@@ -89,18 +89,18 @@ defmodule ClipExo.Exo do
   defp get_infos_from_front_matter(front_matter) do
     infos =
       String.split(front_matter, "\n")
-      |> Enum.map(fn line -> 
+      |> Enum.map(fn line ->
         case Regex.named_captures(@reg_front_matter_line, line) do
         nil -> {:error, "Mauvaise ligne d'info : #{line}"}
-        captures -> 
-          { 
+        captures ->
+          {
             captures["property"] |> String.trim() |> String.downcase() |> String.to_atom(),
-            captures["value"] |> String.trim() 
+            captures["value"] |> String.trim()
           }
         end
         end)
       |> Enum.reject(fn x -> elem(x,0) == :"" || elem(x,1) == "" end)
-      |> Enum.reduce(%{}, fn tup, acc -> 
+      |> Enum.reduce(%{}, fn tup, acc ->
           Map.put(acc, elem(tup, 0), elem(tup, 1))
         end)
     {:ok, infos}
@@ -160,7 +160,7 @@ defmodule ClipExo.Exo do
   defp rationnalise_params_bodyline(params) do
     case params do
     "" -> nil
-    params -> params 
+    params -> params
       |> String.split(",")
       |> Enum.map(fn x -> elem(Code.eval_string(String.trim(x)), 0) end)
       # TODO Ici, on pourrait apporter une protection suplémentaire : dans
@@ -178,7 +178,7 @@ defmodule ClipExo.Exo do
     cond do
     File.exists?(path) -> {:ok, path}
     File.exists?(path_with_folder) -> {:ok, path_with_folder}
-    true -> {:error, "Impossible de trouver le path du fichier à partir de #{path_init}"} 
+    true -> {:error, "Impossible de trouver le path du fichier à partir de #{path_init}"}
     end
   end
 
@@ -233,7 +233,7 @@ defmodule ClipExo.Exo do
       {:error, "Il faut fournir le nom du fichier"}
     File.exists?(exo_path) ->
       {:error, "Un fichier d’exercice porte déjà le nom #{exo_name}\n(#{exo_path})"}
-    true -> 
+    true ->
       # On peut créer le fichier exercice
       File.write!(exo_path, modele_preformated(params), [:utf8])
       {:ok, exo_path}
@@ -251,6 +251,7 @@ defmodule ClipExo.Exo do
     niveau: #{params["niveau"]}
     duree: #{duree_form_max_and_min(params)}
     created_at: #{Date.utc_today()}
+    revisions: []
     ---
     #{params["rubriques"]["mission"] && "rub:Mission\n" || ""}
     #{params["rubriques"]["scenario"] && "rub:Scénario\n" || ""}

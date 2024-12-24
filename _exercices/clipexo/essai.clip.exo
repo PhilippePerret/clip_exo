@@ -6,6 +6,7 @@ auteur: Philippe PERRET
 created_at: 23-12-2024
 niveau: Grand débutant
 competences: ["Prise en main de l'application", "Adjonction des couleurs", "Manipulation des blocs"]
+logiciels: ["Traitement de texte", "IDE"]
 duree: [15, 45]
 ---
 rub:Mission

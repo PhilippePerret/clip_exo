@@ -2,7 +2,7 @@ defmodule ClipExo.ExoSchema do
   use Ecto.Schema
   import Ecto.Changeset
 
-  embedded_schema do  
+  embedded_schema do
     field :name, :string
     field :path, :string
     field :reference, :string
@@ -28,13 +28,13 @@ defmodule ClipExo.ExoSchema do
   def changeset(schema, attrs) do
     attrs
     |> IO.inspect(label: "\nATTRS in changeset")
-    rubriques = 
+    rubriques =
       ["mission","objectif","scenario","aide","recommandation"]
       |> Enum.map(fn x ->
           if attrs["rubrique_" <> x] do
             IO.puts "La rubrique #{x} est prise"
             x
-          else 
+          else
             IO.puts "La rubrique #{x} n'est pas prise"
             nil
           end
@@ -43,10 +43,11 @@ defmodule ClipExo.ExoSchema do
       |> IO.inspect(label: "\nRubriques à la fin")
 
     attrs = Map.merge(attrs, %{rubriques: rubriques})
-    
+
     schema
     |> cast(attrs, [:name, :path, :reference, :titre, :auteur, :created_at, :body, :rubriques, :competences, :duree_min, :duree_max])
     |> validate_required([:name, :path, :titre, :auteur, :body])
+    |> validate_format(:duree, ~r/\[ ?[0-9]+, ?[0-9]+ ?\]/, message: "La durée doit être formatée de cette manière : [<durée min en minutes>, <durée max en minutes>]. Par exemple «[15, 30]».")
   end
 
 end

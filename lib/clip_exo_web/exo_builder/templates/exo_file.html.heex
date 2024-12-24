@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../css/clip.css" />
+  </head>
+  <body>
+    <header>
+			<img id="logo" src="../../images/logo-clip-alpha.png" />
+      <div class="titre"><%= raw @exo_titre %></div>
+      <div class="reference"><%= @exo[:infos][:reference] %></div>
+		</header>
+
+    <section id="exercice">
+      <%= raw @lines_formated %>
+    </section>
+    
+  </body>
+</html>

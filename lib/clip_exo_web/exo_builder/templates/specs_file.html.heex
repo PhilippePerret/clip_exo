@@ -11,10 +11,10 @@
 		</header>
 
     <.table_specs id={"infos"} rows={@infos} class="table_specs">
-      <:col :let={data} class="libelle">
+      <:col :let={data}>
         {data.label}
       </:col>
-      <:col :let={data} class="value">
+      <:col :let={data}>
         {raw data.value}
       </:col>
     </.table_specs>
