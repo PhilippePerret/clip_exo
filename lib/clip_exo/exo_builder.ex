@@ -68,7 +68,7 @@ defmodule ClipExo.ExoBuilder do
   ################################################################################
 
   def start_build_file_exo(file_name) do
-    "Construction de l'exercice…"
+    "Construction de l'exercice '#{file_name}'…"
   end
 
   # Méthode qui construit vraiment l'exercice
@@ -87,9 +87,11 @@ defmodule ClipExo.ExoBuilder do
 
     # Construire le fichier
     File.write(exo_file_path, code)
+
+    exo
   end
 
-  def end_build_file_exo(exo) do
+  def end_build_file_exo(_exo) do
     "👍 Fichier de l'exercice construit avec succès."
   end
 

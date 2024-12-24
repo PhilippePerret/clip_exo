@@ -16,3 +16,39 @@ C'est une mission assez importante.
 
 rub:Scénario
 info: Suivez ce scénario à la lettre pour pouvoir réaliser l'exercice.
+
+:etapes(num)
+:   Faire la première action
+:cr Faire la deuxième action
+:   Faire la troisième action
+:=> Ça produit le résultat attendu.
+
+:etapes(num)
+:   Un nouveau comptage
+:   Un deuxième nouveau pas
+:=> Ça produit ça.
+
+:blockcode(num)
+:   <html>
+:+    <head>
+:+    <head>
+:   </html>
+
+:blockcode(num)
+:+  <body>
+:     <div>Mon div</div>
+:   </body>
+
+:raw
+:<table>
+:<tr><td>C1.1</td><td>C1.2</td>
+:<tr><td>C2.1</td><td>C2.2</td>
+:</table>
+
+:table
+::cols_name(Libellé, Valeur)
+::cols_width(20%, _)
+::cols_class(libelle, value)
+:Premier libellé, Première valeur
+:Deuxième libellé, Deuxième valeur
+:Troisième libellé, Troisième valeur

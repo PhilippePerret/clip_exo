@@ -25,17 +25,60 @@ defmodule ClipExoWeb.ExoBuilderView do
   # code +exo[:body]+
   @table_short_type_to_full_type %{
     :rub  => "rubrique", 
-    :rubi => "rubriquesi"
+    :rubi => "rubriquesi",
     nil   => "regular"
+  }
+  @table_short_param_to_full_param %{
+    "+" => "added"
   }
   def formate_lines_of_exo(exo) do
     exo[:body]
     |> Enum.map(fn dline -> 
-        {line_type, line_content, line_params} = dline
-        css_class = Map.get(@table_short_type_to_full_type, line_type)
+        {line_type, line_content, line_param} = dline
+        line_param =
+          cond do
+          is_binary(line_param) -> 
+            get_real_param(line_param)
+          is_list(line_param)   -> 
+            line_param |> Enum.map(fn pm -> get_real_param(pm) end) |> Enum.join(" ")
+          line_param == nil     -> 
+            ""
+          end
+        
+        [line_content, line_type] = 
+          if line_content == "" do
+            ["&nbsp;", "empty"] 
+          else
+            [line_content, line_type]
+          end
+
+        # Pour certains types de ligne, on doit faire des corrections du texte
+        line_content = 
+          case line_type do
+          :code -> traite_line_type_code(dline)
+          _ -> String.trim(line_content)
+          end
+
+        css_class = 
+          [Map.get(@table_short_type_to_full_type, line_type, line_type), line_param]
+          |> Enum.join(" ")
+          |> String.trim()
         "<div class=\"#{css_class}\">#{line_content}</div>"
       end)
     |> Enum.join("")
+  end
+
+  defp get_real_param(param) do
+    Map.get(@table_short_param_to_full_param, param, param)
+  end
+
+  defp traite_line_type_code(dline) do
+    {_line_type, line_content, _line_param} = dline
+    line_content
+    |> String.replace("<", "&lt;")
+    |> String.replace("\t", "  ")
+    |> String.replace([" ", " "], "&nbsp;")
+    # |> IO.inspect(label: "\nString de code")
   end
   
   ##############################################################

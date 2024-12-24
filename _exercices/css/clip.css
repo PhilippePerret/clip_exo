@@ -5,6 +5,7 @@ body {
   zoom: 120%;	
   font-size:13pt;
   counter-reset: pageNumber;
+  counter-reset: compteurPas;
 }
 
 @page {
@@ -45,6 +46,12 @@ div.rubriquei {
   display:inline-block;
 }
 
+div.info, div.infos {
+  border: 1px solid;
+  padding: 0.5em;
+  font-size: 0.85em;
+}
+
 img#logo {
   position:fixed;
   top: 1cm;
@@ -68,7 +75,7 @@ blockcode line, blockcode linem {
   position: relative;
 }
 blockcode line:before, blockcode linem:before {
-  content: counter(monCompteur);
+  content:counter(monCompteur); 
   position: absolute;
   left: -1cm;
   font-size: 7.5pt;
@@ -119,6 +126,67 @@ div.reference:before {
   margin-left: 1em;
 }
 
-div.rubrique {
+div.scenario {
+  counter-reset: compteurPas;
+}
 
+div.pas.counter_reset {
+  counter-reset: compteurPas;
+}
+
+/* Pas d'un scénario */
+div.pas {
+  counter-increment: compteurPas;
+
+}
+div.pas:before {
+  content: counter(compteurPas) ". ";
+  /* margin-right: 0.5em; */
+  display:inline-block;
+  width:28px;
+}
+div.resultat:before {
+  content: "=> ";
+}
+div.pas.rouge {
+  color:red;
+}
+
+/* Les lignes de code */
+
+div.code.counter_reset {
+  counter-reset: codeCounter;
+}
+div.code {
+  counter-increment: codeCounter;
+  font-family: Courier, Monospace;
+  font-size: 11pt;
+  background-color: #DDDDDD;
+  padding:0;
+  padding-right:8px;
+}
+div.empty + div.code {padding-top:8px;}
+
+div.code + div.empty:before {
+  display:block;
+  background-color: #DDDDDD;
+  height:8px;
+  content: " ";
+}
+
+div.code:before {
+  content: counter(codeCounter);
+  display:inline-block;
+  background-color:#EEEEEE;
+  width: 26px;
+  margin-right:16px;
+  font-family: Courier, Monospace;
+  font-size: 7.5pt;
+  line-height:11pt;
+  color: #555555;
+}
+div.code.added:before {
+  content: counter(codeCounter) " +";
+  color:red;
+  font-weight:bold;
 }

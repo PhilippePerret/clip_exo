@@ -110,7 +110,7 @@ defmodule ClipExo.Exo do
     liste_bodys =
       String.split(raw_body, "\n")
       |> Enum.map(&analyse_body_lines(&1))
-      |> Enum.reject(fn x -> elem(x,1) == "" end)
+      # |> Enum.reject(fn x -> elem(x,1) == "" end) # Non, on garde les lignes vides
 
     cond do
     is_list(liste_bodys)    -> {:ok, liste_bodys}
@@ -121,7 +121,7 @@ defmodule ClipExo.Exo do
   # Méthode qui analyse une ligne unique du corps de l'exercice
   defp analyse_body_lines(line) do
     line
-    |> String.trim()
+    # |> String.trim() # Non, car pour le code on garde les espaces
     |> separe_tag_from_content()
     # --- à partir d'ici, on a un Tuple {tag, content, params} --
   end
@@ -135,7 +135,7 @@ defmodule ClipExo.Exo do
   … et retourne un tuple contenant :
     { :tag|nil, "<contenu textuel>", [params]|nil }
   """
-  @reg_tag_params_content ~r/^(?:(?<tag>[^\(\:)]*)(\((?<params>.*)\))?:)?(?<content>.*)$/m
+  @reg_tag_params_content ~r/^(?:(?<tag>[^\(\:)]*)(\((?<params>.*)\))? *:)?(?<content>.*)$/m
   def separe_tag_from_content(line) do
     Regex.named_captures(@reg_tag_params_content, line)
     |> rationnalise_captures_line_body
@@ -155,17 +155,30 @@ defmodule ClipExo.Exo do
     end
   end
   defp rationnalise_content_bodyline(content) do
-    String.trim(content)
+    # String.trim(content) Non car on en a besoin pour certains code
+    content
   end
+
+  @reg_virgule ~r/,/
   defp rationnalise_params_bodyline(params) do
     case params do
     "" -> nil
-    params -> params
-      |> String.split(",")
-      |> Enum.map(fn x -> elem(Code.eval_string(String.trim(x)), 0) end)
-      # TODO Ici, on pourrait apporter une protection suplémentaire : dans
-      # le cas où un paramètre ne puisse pas être évalué, on le considèrerait
-      # comme une simple chaine.
+    params -> 
+      if Regex.match?(@reg_virgule, params) do
+        params
+        |> String.split(",")
+        |> Enum.map(fn x -> safe_eval(String.trim(x)) end)
+      else
+        safe_eval(params)
+      end
+    end
+  end
+
+  defp safe_eval(maybe_string) do
+    try do
+      elem(Code.eval_string(maybe_string), 0)
+    rescue 
+      _e -> maybe_string
     end
   end
 
