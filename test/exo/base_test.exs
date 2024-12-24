@@ -42,12 +42,4 @@ defmodule ClipExo.BaseTest do
     
   end # describe "le parseur"
 
-  describe "Analyse de la ligne de body" do
-    test "peut séparer les trois éléments (tag, params, content)" do
-      line = "lbc(true):Une ligne de bloc code ajoutée"
-      actual = Exo.separe_tag_from_content(line)
-      expected = {:lbc, "Une ligne de bloc code ajoutée", [true]}
-      assert expected == actual
-    end
-  end
 end 

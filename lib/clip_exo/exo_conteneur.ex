@@ -1,4 +1,4 @@
 defmodule ExoConteneur do
-  defstruct type: nil, options: []
-  
+  defstruct type: nil, lines: [], options: []
+
 end
