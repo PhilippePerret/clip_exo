@@ -10,12 +10,11 @@ logiciels: ["Traitement de texte", "IDE"]
 duree: [15, 45]
 ---
 rub:Mission
-
 La mission de l'exercice va consister à le réussir.
 C'est une mission assez importante.
 
 rub:Scénario
-info: Suivez ce scénario à la lettre pour pouvoir réaliser l'exercice.
+cadre: Suivez ce scénario à la lettre pour pouvoir réaliser l'exercice.
 
 :etapes(num)
 :   Faire la première action
@@ -23,7 +22,8 @@ info: Suivez ce scénario à la lettre pour pouvoir réaliser l'exercice.
 :   Faire la troisième action
 :=> Ça produit le résultat attendu.
 
-:etapes(num)
+:etapes
+::no_num
 :   Un nouveau comptage
 :   Un deuxième nouveau pas
 :=> Ça produit ça.
@@ -39,18 +39,20 @@ info: Suivez ce scénario à la lettre pour pouvoir réaliser l'exercice.
 :     <div>Mon div</div>
 :   </body>
 
-:raw
-:<table>
-:<tr><td>C1.1</td><td>C1.2</td>
-:<tr><td>C2.1</td><td>C2.2</td>
-:</table>
+:table
+:Table, sans, options
+:options, sans, table
 
 :table
-::border(h,v)
+::borders(h)
 ::cols_label(Nom, Prénom)
 ::cols_width(20%, _)
 ::cols_align(center, center)
 ::cols_class(libelle, value)
-:Premier libellé, Première valeur
+:Table : ,  borders(h)
 :Deuxième libellé, Deuxième valeur
 :Troisième libellé, Troisième valeur
+
+:table
+::borders(v)
+: Table : ,  borders(v)

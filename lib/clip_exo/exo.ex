@@ -9,6 +9,7 @@ defmodule ClipExo.Exo do
       titre: "",
       auteur: "",
       created_at: Date.utc_today(),
+      logiciels: "",
       revisions: [],
       competences: [],
       niveau: "",

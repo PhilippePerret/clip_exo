@@ -105,7 +105,8 @@ defmodule ExoConteneur.Builder do
       :table  -> "table"
       _       -> "section"
       end
-    "<#{cont_tag} class=\"conteneur #{conteneur.type}\">"
+    css = ExoConteneur.classes_css(conteneur)
+    "<#{cont_tag} class=\"#{css}\">"
     <> (conteneur.lines
     |> Enum.map(&ExoInnerFormater.build_element(&1, conteneur))
     |> Enum.join(""))

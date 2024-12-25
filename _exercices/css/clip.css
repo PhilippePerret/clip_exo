@@ -15,6 +15,23 @@ body {
   }
 }
 
+div.separator {
+  height: 0;
+}
+
+header {
+  position: relative;
+  display:block;
+  border:1px solid transparent ;
+}
+
+img#logo {
+  position:absolute;
+  top: 0cm;
+  left: 0cm;
+  width: 2.5cm;
+}
+
 div.titre {
   display:block;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -24,6 +41,7 @@ div.titre {
   text-align:center;
   margin-top: 2.5cm;
   margin-bottom: 2cm;
+  line-height: 0.8em;
 }
 
 section#exercice {
@@ -31,8 +49,8 @@ section#exercice {
   margin-bottom: 5cm;
 }
 
-section.conteneur {
-  margin: 0.5cm 0;
+section.conteneur,  table.conteneur {
+  margin: 0.75cm 0;
 }
 
 section.blockcode {
@@ -87,34 +105,9 @@ div.info, div.infos {
   font-size: 0.85em;
 }
 
-div.separator {
-  height: 1em;
-}
 
-img#logo {
-  position:fixed;
-  top: 1cm;
-  left: 1cm;
-  width: 2.5cm;
-}
 
 .bold {font-weight:bold}
-
-table.conteneur {
-  border-collapse: collapse;
-}
-table.conteneur.border {
-  border: 2px solid;
-}
-table.conteneur tr {
-  border-bottom: 1px solid;
-}
-table.conteneur tr:nth-child(1) {
-  border-top: 1px solid;
-}
-table.conteneur td {
-  padding: 8px;
-}
 
 /* 
 -------- Pour les caractéristiques -----------
@@ -156,8 +149,7 @@ div.reference:before {
 
 section.etapes {
   counter-reset: compteurPas;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
+  margin-left: 1em;
 }
 
 /* Pas d'un scénario (étapes) */
@@ -166,7 +158,6 @@ section.etapes div.pas:not(resultat) {
 }
 section.etapes div.pas:before {
   content: counter(compteurPas) ". ";
-  /* margin-right: 0.5em; */
   display:inline-block;
   width:28px;
 }
@@ -214,4 +205,33 @@ div.code.added:before {
   content: counter(codeCounter) " +";
   color:red;
   font-weight:bold;
+}
+
+
+table.conteneur {
+  border-collapse: collapse;
+}
+table.conteneur.border {
+  border: 2px solid;
+}
+table.conteneur tr {
+  border-bottom: 1px solid;
+}
+table.conteneur tr:nth-child(1) {
+  border-top: 1px solid;
+}
+table.conteneur td {
+  padding: 8px;
+  border-right: 1px solid;
+}
+table.conteneur tr td:nth-child(1) {
+  border-left: 1px solid;
+}
+/* avec l'option h seulement => lignes horizontales */
+table.conteneur.borders-h td {
+  border: 0 !important;
+}
+/* avec l'option v seule => lignes verticales */
+table.conteneur.borders-v tr {
+  border: none;
 }

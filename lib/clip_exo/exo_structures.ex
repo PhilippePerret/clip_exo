@@ -1,8 +1,21 @@
+defmodule ExoOptionsConteneur do
+  defstruct [
+    borders:    ["h", "v"],  # les bordures des tables par défaut
+    cols_label: [],  # label des colonnes de table par défaut
+    cols_width: [],  # largeur des colonnes de table par défaut
+    cols_class: [],  # classes CSS des colonnes de table par défaut
+    cols_align: [],  # alignement des colones de table par défaut
+    cols_pad:   [],  # padding pour chaque colonnes
+    no_num:     false, # Pour les étapes et les codes, suppression des numéros
+  ]
+end
+
 defmodule ExoConteneur do
   defstruct [
-    type:     nil,  # le type de conteneur (cf @types_conteneur)
-    lines:    [],   # Liste des %ExoLine
-    options:  []
+    type:     nil,      # le type de conteneur (cf @types_conteneur)
+    lines:    [],       # Liste des %ExoLine
+    options:  %ExoOptionsConteneur{}, # options (cf. ci-dessus)
+    raw_options: []     # Options pendant la relève (une liste de strings)
   ]
 
   # Types possible de conteneur
@@ -18,7 +31,22 @@ defmodule ExoConteneur do
 
   def get_types_conteneur(), do: @types_conteneur
 
-  
+  def classes_css(%ExoConteneur{type: :table} = conteneur) do
+    IO.inspect(conteneur.options, label: "\nOPTIONS DE TABLE")
+    default_css(conteneur)
+    ++ ["borders-" <> Enum.join(conteneur.options.borders, "")]
+    |> Enum.join(" ")
+  end
+  def classes_css(conteneur) do
+    default_css(conteneur)
+    |> Enum.join(" ")
+  end
+
+  defp default_css(conteneur) do
+    ["conteneur", "#{conteneur.type}"]
+  end
+
+
 end #/defmodule ExoConteneur
 
 defmodule ExoLine do

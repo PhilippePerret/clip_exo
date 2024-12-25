@@ -48,8 +48,7 @@ defmodule ClipExoWeb.ExoBuilderView do
     cond do
     nil -> ""
     is_binary(raw_liste) ->
-      Code.eval_string(raw_liste)
-      |> elem(0)
+      StringTo.list(raw_liste)
       |> Enum.map(fn com -> 
         "<li>#{com}</li>"
         end)

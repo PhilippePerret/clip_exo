@@ -43,3 +43,10 @@ Ce code produit :
 {Afficher ici le résultat}
 
 Définition des tables, il faut échapper les virgules (car elles servent de délimiteur de cellule)
+
+- borders(h,v) -- par défaut
+  borders(h) -- seulement horizontales
+  borders(v) -- seulement verticales
+  cols_label(name, name, ... name) -- label pour chaque colonne (th)
+  cols_width(widt, width, ... width) -- width pour chaque colonne ("_" pour "ce qui reste")
+  cols_pad(x,y,..z) -- padding de chaque colonne
