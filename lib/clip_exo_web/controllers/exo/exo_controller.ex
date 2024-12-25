@@ -7,10 +7,11 @@ defmodule ClipExoWeb.ExoController do
 
   def build(conn, params) do
     params_exo = params["exo"]
+    |> IO.inspect(label: "\nPARAMS_EXO")
     case Exo.build(params_exo) do
-    {:ok, path} -> 
-      params_exo = Map.merge(params_exo, %{"path" => path})
-      render(conn, :builder, exo: params_exo, builder: ClipExo.ExoBuilder)
+    {:ok, path} ->
+      params_exo = Map.merge(params_exo, %{"path" => path, "name" => Path.basename(path)})
+      render(conn, :builder, exo: params_exo)
     {:error, err_msg} ->
       conn |> put_flash(:error, err_msg)
       render(conn, :no_way, exo: params_exo, error: err_msg)

@@ -105,10 +105,6 @@ div.info, div.infos {
   font-size: 0.85em;
 }
 
-
-
-.bold {font-weight:bold}
-
 /* 
 -------- Pour les caractéristiques -----------
 */
@@ -235,3 +231,13 @@ table.conteneur.borders-h td {
 table.conteneur.borders-v tr {
   border: none;
 }
+
+pre.warning {
+  padding: 1em;
+  color: red;
+  background-color: #FFEEEE;
+  font-size: 10pt;
+  white-space: pre-wrap;
+}
+
+.bold {font-weight:bold}

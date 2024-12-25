@@ -84,7 +84,7 @@ defmodule ClipExo.ExoBuilder do
   end
 
   def build_section_errors(errors) do
-    "<div class=\"warning\">#{errors}</div>"
+    "<pre class=\"warning\">#{Enum.join(errors, "\n")}</pre>"
   end
   
   ################################################################################

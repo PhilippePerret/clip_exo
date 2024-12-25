@@ -22,8 +22,5 @@
 </div>
 
 <pre><code>
-  <%# = @builder.start_build_file_exo(file_name) %>
-  <%# = exo = @builder.build_file_exo(exo) ; "OK" %>
-  <%# = @builder.end_build_file_exo(exo) %>
-
+  <%= ClipExo.Exo.build(@exo) %>
 </code></pre>
