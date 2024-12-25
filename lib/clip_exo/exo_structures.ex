@@ -5,6 +5,10 @@ defmodule ExoConteneur do
     options:  []
   ]
 
+  # Types possible de conteneur
+  #
+  # Si un type est ajouté, il faut ajouter son traitement des lignes
+  # dans exo_inner_formater.ex (ExoLine.Builder.to_htm/2)
   @types_conteneur %{
     raw:        "Bloc raw",
     etapes:      "Liste d'étapes numérotées",
@@ -50,14 +54,14 @@ defmodule ExoLine do
     preline:  nil     # ou les espaces/tabulations avant
   ]
 
-  # Formatage d'une ligne dans un conteneur
-  def to_html(%ExoLine{} = exo, %ExoConteneur{} = _conteneur) do
-    "Line dans conteneur #{exo.content}"
-  end
-  # Formatage d'une ligne hors conteneur
-  def to_html(%ExoLine{} = exo, nil) do
-    "Line hors conteneur #{exo.content}"
-  end
+  # # Formatage d'une ligne dans un conteneur
+  # def to_html(%ExoLine{} = exo, %ExoConteneur{} = _conteneur) do
+  #   "Line dans conteneur #{exo.content}"
+  # end
+  # # Formatage d'une ligne hors conteneur
+  # def to_html(%ExoLine{} = exo, nil) do
+  #   "Line hors conteneur #{exo.content}"
+  # end
 
 end #/defmodule ExoLine
 

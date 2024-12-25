@@ -24,22 +24,65 @@ defmodule ExoInnerFormater do
   Function qui construit l'élément
   """
   def build_element(%ExoConteneur{} = conteneur) do
-    "<div>Construction d'un conteneur</div>"
+    ExoConteneur.Builder.to_html(conteneur)
   end
   def build_element(%ExoLine{} = exoline) do
-    "<div>Construction d'une exoline</div>"
+    ExoLine.Builder.to_html(exoline)
   end
   def build_element(%ExoLine{} = exoline, %ExoConteneur{} = conteneur) do
-    "<div>Construction d'une exoline dans un conteneur</div>"
+    ExoLine.Builder.to_html(exoline, conteneur)
   end
 
-  def build_element([type: :separator] = element) do
+  def build_element(%ExoSeparator{} = _separator) do
     "<div>Construction d'un séparateur</div>"
   end
 
   def build_element(element) do
 
-    "<div>Construction d'un élément inconnu</div>"
+    "<div>Construction d'un élément de type inconnu</div>"
   end
 
+end #/module ExoInnerFormater
+
+
+
+
+defmodule ExoLine.Builder do
+
+  # Formatage d'une ligne dans un conteneur
+  def to_html(%ExoLine{} = exo, %ExoConteneur{type: :blockcode} = conteneur) do
+    "LINE dans blockcode (bon) : #{exo.content}"
+  end
+  def to_html(%ExoLine{} = exo, %ExoConteneur{type: :table} = conteneur) do
+    "LINE dans TABLE : #{exo.content}"
+  end
+  def to_html(%ExoLine{} = exo, %ExoConteneur{type: :etapes} = conteneur) do
+    "LINE dans ÉTAPES : #{exo.content}"
+  end
+  def to_html(%ExoLine{} = exo, %ExoConteneur{type: :raw} = conteneur) do
+    "LINE dans RAW : #{exo.content}"
+  end
+
+  def to_html(%ExoLine{} = exo, %ExoConteneur{} = conteneur) do
+    "<div class=\"warning\">Line dans CONTENEUR INCONNU (#{conteneur.type}) : #{exo.content}</div>"
+  end
+
+
+
+  # Formatage d'une ligne hors conteneur
+  def to_html(%ExoLine{} = exo) do
+    "Line séparée #{exo.content}"
+  end
+  
+end
+
+
+defmodule ExoConteneur.Builder do
+  def to_html(conteneur) do
+    "<section class=\"#{conteneur.type}\">"
+    <> (conteneur.lines
+    |> Enum.map(&ExoInnerFormater.build_element(&1, conteneur))
+    |> Enum.join(""))
+    <> "</section>"
+  end
 end
