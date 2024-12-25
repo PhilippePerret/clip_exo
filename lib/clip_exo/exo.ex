@@ -80,12 +80,12 @@ defmodule ClipExo.Exo do
     suivi = ["Début de la construction"]
 
     suivi = suivi ++ [case Builder.build_file_specs(exo) do
-      {:ok, exo} -> "👍 Construction du fichier des caractéristiques"
+      {:ok, _exo} -> "👍 Construction du fichier des caractéristiques"
       {:error, msg} -> "💣 Échec de la construction du fichier des caractéristiques : " <> msg
     end]
 
     suivi = suivi ++ [case Builder.build_file_exo(exo) do
-      {:ok, exo} -> "👍 Construction du fichier de l'exercice"
+      {:ok, _exo} -> "👍 Construction du fichier de l'exercice"
       {:error, msg} -> "💣 Échec de la construction du fichier de l'exercice : " <> msg
     end]
 
@@ -144,15 +144,6 @@ defmodule ClipExo.Exo do
         end)
     {:ok, infos}
   end
-
-  defp safe_eval(maybe_string) do
-    try do
-      elem(Code.eval_string(maybe_string), 0)
-    rescue 
-      _e -> maybe_string
-    end
-  end
-
 
   defp build_path_from(nil), do: nil
   defp build_path_from(path) do

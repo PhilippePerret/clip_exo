@@ -43,14 +43,19 @@ defmodule ExoParser do
             # %ExoConteneur{} == element -> element
             is_list(element) and (Keyword.get(element, :type) == :separator) -> %ExoSeparator{}
             is_list(element) and Keyword.get(element, :line) -> Keyword.get(element, :line)
-            true -> element
+            true -> 
+              if Map.has_key?(element, :options) do
+                %{element | options: eval_options(element.options)}
+              else
+                element
+              end
             end
           end)
     %{
       errors: final_accumateur.errors,
       elements: elements_reduits
     }
-    |> IO.inspect(label: "\n\nFINAL_ACCUMULATEUR RETOURNÉ PAR PARSE_CODE (pour réduction)")
+    # |> IO.inspect(label: "\n\nFINAL_ACCUMULATEUR RETOURNÉ PAR PARSE_CODE (pour réduction)")
 
   end
 
@@ -157,7 +162,7 @@ defmodule ExoParser do
     "rest"          => rest
   }, conteneur, line) do
     cond do
-      options != "" -> # une option "::" de conteneur
+      options != "" -> # une option "::" de conteneur (note : elles seront seulement évaluées à la fin)
         if conteneur do
           conteneur = Map.put(conteneur, :options, Map.get(conteneur, :options) ++ [type_cont <> rest])
           {:ok, [type: :conteneur, conteneur: conteneur]}
@@ -192,11 +197,95 @@ defmodule ExoParser do
     end
 
   end
-
-  # Return le conteneur mais seulement s'il est connu
+    
+  # Return true si le conteneur est connu
   defp type_cont_valid?(type_cont) do
     Map.get(ExoConteneur.get_types_conteneur(), String.to_atom(type_cont), false) != false
   end
 
+  # Retourne les éventuelles options, sous forme de liste
+  @reg_function_and_parameters ~r/^(?<fun>[a-z_]+)\((?<parameters>(.*))\)$/
+  defp eval_options(options) do
+    (options || [])
+    # |> String.split(",")
+    |> Enum.map(fn x -> 
+        # Les options peuvent être simple («««no_num»»») ou 
+        # complexes «««cols_label(20%, _)
+        x = String.trim(x)
+        |> IO.inspect(label: "\nUNE OPTION")
+        captures = Regex.named_captures(@reg_function_and_parameters, x)
+        IO.inspect(captures, label: "\nCAPTURES")
+        case captures do
+        nil ->
+          # Option simple
+          safe_eval(x, __MODULE__)
+        _ ->
+          # Option complexe
+          %{"fun" => fun, "parameters" => parameters} = captures
+          params = 
+            if parameters == "" do
+              []
+            else
+              stringify_parameters(parameters)
+            end
+          fun = String.to_atom(fun)
+          if function_exported?(__MODULE__, fun, 1) do
+            apply(__MODULE__, fun, [params])
+          else
+            [inconnue: fun]
+          end
+        end
+      end)
+      |> Enum.concat()
+      |> IO.inspect(label: "\nOPTIONS (évaluées)")
+  end
 
-end 
+  # Dans le code du fichier, les paramètres string ne sont mis entre
+  # guillemets que lorsqu'il y a des espaces. Dans le cas contraire, ils
+  # sont mis tel quel. Pour pouvoir en faire des paramètres, il faut
+  # donc les entourer de guillemets avant de les évaluer
+  #
+  defp stringify_parameters(params) do
+    if Regex.match?(~r/[^0-9]/, params) && not Regex.match?(~r/"/, params) do
+      String.split(params, ",") |> Enum.map(fn x -> String.trim(x) end)
+    else
+      safe_eval("[" <> params <> "]") # => par exemple [12]
+    end
+  end
+
+  def border(values) do
+    [borders: values]
+  end
+  def cols_label(values) do
+    [cols_label: values]
+  end
+  def cols_class(values) do
+    [cols_class: values]
+  end
+  def cols_width(values) do
+    [cols_width: values]
+  end
+  def cols_align(values) do
+    [cols_align: values]
+  end
+
+  # Quand une valeur est donnée en paramètre (par exemple «««mafonction(valeur)»»» ), on
+  # doit l'évaluer avec prudence. Si ça produit une erreur, on considère que c'est
+  # une valeur string
+  defp safe_eval(maybe_string) do
+    try do
+      elem(Code.eval_string(maybe_string), 0)
+    rescue 
+      _e -> maybe_string
+    end
+  end
+  defp safe_eval(maybe_string, bind) do
+    try do
+      elem(Code.eval_string(maybe_string, bind), 0)
+    rescue 
+      _e -> maybe_string
+    end
+  end
+
+
+end # module ExoParser

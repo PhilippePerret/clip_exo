@@ -1,11 +1,9 @@
 body {
-  margin: 1.8cm 2.5cm 1cm;
+  margin: 1.8cm 2.5cm 5cm;
   width: 17cm;
-  height: 16.7cm;			
   zoom: 120%;	
   font-size:13pt;
   counter-reset: pageNumber;
-  counter-reset: compteurPas;
 }
 
 @page {
@@ -30,33 +28,11 @@ div.titre {
 
 section#exercice {
   margin-top:1cm;
+  margin-bottom: 5cm;
 }
 
-div.rubrique, div.rubriquei {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14pt;
-  font-weight: bold;
-}
-div.rubrique {
-  display:block;
-  margin-top: 1cm;
-  margin-bottom: 0.5cm;
-}
-div.rubriquei {
-  display:inline-block;
-}
-
-div.info, div.infos {
-  border: 1px solid;
-  padding: 0.5em;
-  font-size: 0.85em;
-}
-
-img#logo {
-  position:fixed;
-  top: 1cm;
-  left: 1cm;
-  width: 2.5cm;
+section.conteneur {
+  margin: 0.5cm 0;
 }
 
 section.blockcode {
@@ -65,7 +41,6 @@ section.blockcode {
   font-family: 'Courier New', Courier, monospace;
   font-size: 11pt;
   background-color: #EEEEEE;
-  margin: 0.5em 0;
   padding: 0.5em;
 }
 
@@ -90,9 +65,60 @@ section.blockcode > div.linem:before {
   font-weight: bold;
 }
 
+
+div.rub, div.rubi {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14pt;
+  font-weight: bold;
+}
+div.rub {
+  display:block;
+  margin-top: 1cm;
+  margin-bottom: 0.5cm;
+}
+/* Rubrique en ligne */
+div.rubi {
+  display:inline-block;
+}
+
+div.info, div.infos {
+  border: 1px solid;
+  padding: 0.5em;
+  font-size: 0.85em;
+}
+
+div.separator {
+  height: 1em;
+}
+
+img#logo {
+  position:fixed;
+  top: 1cm;
+  left: 1cm;
+  width: 2.5cm;
+}
+
 .bold {font-weight:bold}
 
+table.conteneur {
+  border-collapse: collapse;
+}
+table.conteneur.border {
+  border: 2px solid;
+}
+table.conteneur tr {
+  border-bottom: 1px solid;
+}
+table.conteneur tr:nth-child(1) {
+  border-top: 1px solid;
+}
+table.conteneur td {
+  padding: 8px;
+}
 
+/* 
+-------- Pour les caractéristiques -----------
+*/
 table.table_specs {
   padding:0;
   margin:0;

@@ -41,3 +41,5 @@ Si vous voulez de l'aide, faites appel à vos neurones !
 Ce code produit :
 
 {Afficher ici le résultat}
+
+Définition des tables, il faut échapper les virgules (car elles servent de délimiteur de cellule)

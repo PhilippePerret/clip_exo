@@ -46,8 +46,10 @@ info: Suivez ce scénario à la lettre pour pouvoir réaliser l'exercice.
 :</table>
 
 :table
-::cols_name(Libellé, Valeur)
+::border(h,v)
+::cols_label(Nom, Prénom)
 ::cols_width(20%, _)
+::cols_align(center, center)
 ::cols_class(libelle, value)
 :Premier libellé, Première valeur
 :Deuxième libellé, Deuxième valeur

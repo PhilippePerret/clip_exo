@@ -14,7 +14,7 @@ defmodule ExoInnerFormater do
   ExoParser.parse_code
 
   """
-  def build(elements, %ClipExo.Exo{} = exo, options \\ []) do
+  def build(elements, %ClipExo.Exo{} = _exo, _options \\ []) do
     elements
     |> Enum.map(&build_element(&1))
     |> Enum.join("")
@@ -29,18 +29,17 @@ defmodule ExoInnerFormater do
   def build_element(%ExoLine{} = exoline) do
     ExoLine.Builder.to_html(exoline)
   end
+  def build_element(%ExoSeparator{} = _separator) do
+    "<div class=\"separator\"></div>"
+  end
+  def build_element(element) do
+    "<div>Construction d'un élément de type inconnu : #{element.content}</div>"
+  end
+
   def build_element(%ExoLine{} = exoline, %ExoConteneur{} = conteneur) do
     ExoLine.Builder.to_html(exoline, conteneur)
   end
 
-  def build_element(%ExoSeparator{} = _separator) do
-    "<div>Construction d'un séparateur</div>"
-  end
-
-  def build_element(element) do
-
-    "<div>Construction d'un élément de type inconnu</div>"
-  end
 
 end #/module ExoInnerFormater
 
@@ -50,19 +49,32 @@ end #/module ExoInnerFormater
 defmodule ExoLine.Builder do
 
   # Formatage d'une ligne dans un conteneur
-  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :blockcode} = conteneur) do
+  # - blockcode -
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :blockcode} = _conteneur) do
     css = "line#{if exoline.tline == "+", do: "m"}"
-    "<div class=\"#{css}\">#{traite_line_type_code(exoline)}</div>"
+    "<div class=\"#{css}\">#{ExoLine.pre_line_in_blockcode(exoline)}#{traite_line_type_code(exoline)}</div>"
   end
-  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :table} = conteneur) do
-    "LINE dans TABLE : #{exoline.content}"
+  # - table -
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :table} = _conteneur) do
+    row =
+      exoline.content
+      |> String.replace("\\,", "__VIRG__")
+      |> String.split(",")
+      |> Enum.map(fn cel -> 
+          # TODO elles peuvent être stylé avec «««css: Le texte»»»
+          "<td>#{String.trim(cel)}</td>"
+        end)
+      |> Enum.join("")
+      |> String.replace("__VIRG__", "\\,")
+    "<tr>" <> row <> "</tr>"
   end
+  # - etapes -
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :etapes} = conteneur) do
-    css = "pas#{if exoline.tline == "=>", do: " resultat", else: ""}"
-    "<div class=\"#{css}\">#{exoline.content}</div>"
+    "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.content}</div>"
   end
+  # - raw -
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :raw} = conteneur) do
-    "LINE dans RAW : #{exoline.content}"
+    "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{traite_line_type_code(exoline)}</div>"
   end
 
   def to_html(%ExoLine{} = exoline, %ExoConteneur{} = conteneur) do
@@ -71,7 +83,7 @@ defmodule ExoLine.Builder do
 
   # Formatage d'une ligne hors conteneur
   def to_html(%ExoLine{} = exoline) do
-    "Line séparée #{exoline.content}"
+    "<div class=\"#{ExoLine.classes_css(exoline)}\">#{exoline.content}</div>"
   end
   
 
@@ -89,10 +101,14 @@ end #/ExoLine.Builder
 
 defmodule ExoConteneur.Builder do
   def to_html(conteneur) do
-    "<section class=\"#{conteneur.type}\">"
+    cont_tag = case conteneur.type do
+      :table  -> "table"
+      _       -> "section"
+      end
+    "<#{cont_tag} class=\"conteneur #{conteneur.type}\">"
     <> (conteneur.lines
     |> Enum.map(&ExoInnerFormater.build_element(&1, conteneur))
     |> Enum.join(""))
-    <> "</section>"
+    <> "</#{cont_tag}>"
   end
-end
+end # /module ExoConteneur.Builder

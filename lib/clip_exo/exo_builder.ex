@@ -1,6 +1,6 @@
 defmodule ClipExo.ExoBuilder do
 
-  alias ClipExo.Exo
+  # alias ClipExo.Exo
 
   @folder_html Path.absname("./_exercices/html")
   # IO.inspect(@folder_html, label: "\nDossier html")

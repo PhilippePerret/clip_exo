@@ -17,20 +17,9 @@ defmodule ClipExoWeb.ExoBuilderView do
       inner_formated: exo.body_html
     ]
     render_to_string(__MODULE__, "exo_file.html", assigns)
-    |> IO.inspect(label: "Code retourné par la vue exo_file.html")
+    # |> IO.inspect(label: "Code retourné par la vue exo_file.html")
 
   end
-
-  # Méthode principale qui formate les lignes des exercices à partir du 
-  # code +exo[:body]+
-  @table_short_type_to_full_type %{
-    :rub  => "rubrique", 
-    :rubi => "rubriquesi",
-    nil   => "regular"
-  }
-  @table_short_param_to_full_param %{
-    "+" => "added"
-  }
 
 
   ##############################################################
