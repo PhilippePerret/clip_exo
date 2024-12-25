@@ -77,7 +77,11 @@ defmodule ExoLine do
   # Ce qu'il faut ajouter avant le contenu d'un blockcode
   def pre_line_in_blockcode(exoline) do
     len = String.length( (exoline.tline || "") <> (exoline.preline || "") )
-    String.duplicate(" ", len - 2)
+    if len > 2 do
+      String.duplicate(" ", len - 2)
+    else
+      ""
+    end
   end
 end #/defmodule ExoLine
 

@@ -22,7 +22,9 @@ Un conteneur est définie par une balise (tag) d'ouverture et une balise de ferm
 
 :blockcode
 :		<boite>
+:
 :			Contenu du conteneur
+:
 :		</boite>
 
 (le mot `boite` peut être remplacé `div` ou `ul` ou `section`, ou plein d'autres choses)

@@ -63,7 +63,6 @@ defmodule ExoParser do
   defp add_line_or_conteneur(res, accumulateur) do
     new_conteneur = res[:conteneur] # peut être nil
     
-    # updated_accumulateur =
     cond do
     new_conteneur == nil and accumulateur.current_conteneur ->
       # On doit consigner ce conteneur
@@ -121,16 +120,22 @@ defmodule ExoParser do
   $ # jusqu'à la fin
   /x
   def parse_line(line, conteneur) do
+    IO.inspect(line, label: "\n-> parse_line")
     cond do
     line == "" ->
        {:ok, [type: :separator, conteneur: nil]}
-    Regex.match?(@reg_cssed_paragraph, line) ->
+    # --- Ça ne remplit pas encore le conteneur ---
+    String.trim(line) == ":" and conteneur ->
+      conteneur = Map.put(conteneur, :lines, conteneur.lines ++ [%ExoLine{type: :line, content: ""}])
+      {:ok, [conteneur: conteneur]}
+    # --- /CORRIGER ---
+    line =~ @reg_cssed_paragraph ->
       {:ok, [line: exo_line_from_cssed_line(line), conteneur: nil]}
     true ->
       case Regex.named_captures(@reg_exo_line, line) do
       nil ->
         # Une ligne sans ":", donc simple (note : elle annule le conteneur)
-        {:ok, [line: %ExoLine{type: :paragraph, content: line, classes: []}, conteneur: nil]}
+        {:ok, [line: %ExoLine{type: :line, content: line, classes: []}, conteneur: nil]}
       captures -> 
         check_captures(captures, conteneur, line)
       end
