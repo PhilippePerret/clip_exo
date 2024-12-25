@@ -59,22 +59,24 @@ img#logo {
   width: 2.5cm;
 }
 
-blockcode {
+section.blockcode {
   display: block;
   counter-reset: monCompteur;
   font-family: 'Courier New', Courier, monospace;
   font-size: 11pt;
   background-color: #EEEEEE;
-  margin-left: 0.5em;
+  margin: 0.5em 0;
   padding: 0.5em;
 }
-blockcode line, blockcode linem {
+
+/* linem pour "line modified" */
+section.blockcode > div.line, section.blockcode > div.linem {
   display: block;
   counter-increment: monCompteur;
   margin-left: 1cm;
   position: relative;
 }
-blockcode line:before, blockcode linem:before {
+section.blockcode > div.line:before, section.blockcode > div.linem:before {
   content:counter(monCompteur); 
   position: absolute;
   left: -1cm;
@@ -82,7 +84,7 @@ blockcode line:before, blockcode linem:before {
   top: 2px;
 }
 
-blockcode linem:before {
+section.blockcode > div.linem:before {
   content: counter(monCompteur) " +";
   color: red;
   font-weight: bold;
@@ -126,29 +128,26 @@ div.reference:before {
   margin-left: 1em;
 }
 
-div.scenario {
+section.etapes {
   counter-reset: compteurPas;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
-div.pas.counter_reset {
-  counter-reset: compteurPas;
-}
-
-/* Pas d'un scénario */
-div.pas {
+/* Pas d'un scénario (étapes) */
+section.etapes div.pas:not(resultat) {
   counter-increment: compteurPas;
-
 }
-div.pas:before {
+section.etapes div.pas:before {
   content: counter(compteurPas) ". ";
   /* margin-right: 0.5em; */
   display:inline-block;
   width:28px;
 }
-div.resultat:before {
+section.etapes div.resultat:before {
   content: "=> ";
 }
-div.pas.rouge {
+section.etapes div.pas.rouge {
   color:red;
 }
 

@@ -87,16 +87,6 @@ defmodule ClipExo.ExoBuilder do
     "<div class=\"warning\">#{errors}</div>"
   end
   
-  defp traite_line_type_code(dline) do
-    {_line_type, line_content, _line_param} = dline
-    line_content
-    |> String.replace("<", "&lt;")
-    |> String.replace("\t", "  ")
-    |> String.replace([" ", " "], "&nbsp;")
-    # |> IO.inspect(label: "\nString de code")
-  end
-  
-
   ################################################################################
   #
   # FONCTIONS GÉNÉRALISTES

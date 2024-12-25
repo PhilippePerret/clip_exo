@@ -50,31 +50,41 @@ end #/module ExoInnerFormater
 defmodule ExoLine.Builder do
 
   # Formatage d'une ligne dans un conteneur
-  def to_html(%ExoLine{} = exo, %ExoConteneur{type: :blockcode} = conteneur) do
-    "LINE dans blockcode (bon) : #{exo.content}"
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :blockcode} = conteneur) do
+    css = "line#{if exoline.tline == "+", do: "m"}"
+    "<div class=\"#{css}\">#{traite_line_type_code(exoline)}</div>"
   end
-  def to_html(%ExoLine{} = exo, %ExoConteneur{type: :table} = conteneur) do
-    "LINE dans TABLE : #{exo.content}"
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :table} = conteneur) do
+    "LINE dans TABLE : #{exoline.content}"
   end
-  def to_html(%ExoLine{} = exo, %ExoConteneur{type: :etapes} = conteneur) do
-    "LINE dans ÉTAPES : #{exo.content}"
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :etapes} = conteneur) do
+    css = "pas#{if exoline.tline == "=>", do: " resultat", else: ""}"
+    "<div class=\"#{css}\">#{exoline.content}</div>"
   end
-  def to_html(%ExoLine{} = exo, %ExoConteneur{type: :raw} = conteneur) do
-    "LINE dans RAW : #{exo.content}"
-  end
-
-  def to_html(%ExoLine{} = exo, %ExoConteneur{} = conteneur) do
-    "<div class=\"warning\">Line dans CONTENEUR INCONNU (#{conteneur.type}) : #{exo.content}</div>"
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :raw} = conteneur) do
+    "LINE dans RAW : #{exoline.content}"
   end
 
-
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{} = conteneur) do
+    "<div class=\"warning\">Line dans CONTENEUR INCONNU (#{conteneur.type}) : #{exoline.content}</div>"
+  end
 
   # Formatage d'une ligne hors conteneur
-  def to_html(%ExoLine{} = exo) do
-    "Line séparée #{exo.content}"
+  def to_html(%ExoLine{} = exoline) do
+    "Line séparée #{exoline.content}"
   end
   
-end
+
+  defp traite_line_type_code(exoline) do
+    exoline.content
+    |> String.replace("<", "&lt;")
+    |> String.replace("\t", "  ")
+    |> String.replace([" ", " "], "&nbsp;")
+    # |> IO.inspect(label: "\nString de code")
+  end
+  
+
+end #/ExoLine.Builder
 
 
 defmodule ExoConteneur.Builder do
