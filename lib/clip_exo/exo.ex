@@ -14,8 +14,9 @@ defmodule ClipExo.Exo do
       niveau: "",
       duree: "",
     },
-    body: "<corps de l'exercice>",
-    rubriques: []
+    body:       "contenu brut de l'exercice",
+    body_html:  nil,  # le contenu formaté
+    rubriques:  []
   ]
 
   alias ClipExo.ExoBuilder, as: Builder
@@ -76,8 +77,19 @@ defmodule ClipExo.Exo do
   """
   def build_two_files(%ClipExo.Exo{} = exo) do
     IO.puts "Je vais construire les deux fichiers de '#{exo.infos.name}'"
-    Builder.build_file_specs(exo)
-    |> IO.inspect(label: "\nRetour de build_file_specs")
+    suivi = ["Début de la construction"]
+
+    suivi = suivi ++ [case Builder.build_file_specs(exo) do
+      {:ok, exo} -> "👍 Construction du fichier des caractéristiques"
+      {:error, msg} -> "💣 Échec de la construction du fichier des caractéristiques : " <> msg
+    end]
+
+    suivi = suivi ++ [case Builder.build_file_exo(exo) do
+      {:ok, exo} -> "👍 Construction du fichier de l'exercice"
+      {:error, msg} -> "💣 Échec de la construction du fichier de l'exercice : " <> msg
+    end]
+
+    {:ok, suivi}
   end
 
   ###################################################################

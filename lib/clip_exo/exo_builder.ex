@@ -2,47 +2,16 @@ defmodule ClipExo.ExoBuilder do
 
   alias ClipExo.Exo
 
-  def build_exo(%Exo{} = exo) do
-    IO.puts "Construction d'un exercice à partir de %Exo{}"
-    IO.inspect(exo, label: "\nEXO")
-  end
-
-  def build_exo(path) when is_binary(path) do
-    IO.puts "Construction d'un exercice quand on fournit le path"
-  end
-
-  def build_exo(elements) when is_list(elements) do
-    IO.puts "Construction d'un exercice quand on fournit le résultat de ExoParser.parse_code"
-  end
-
-  def build_exo(%{errors: errors, elements: elements}) do
-    div_errors = Enum.any?(errors) && build_div_errors(errors) || ""
-
-    IO.puts "Construction d'un exercice à partir d'un accumulateur de ExoParser.parse_code"
-  end
-
-  def build_exo(foo) do
-    raise(ArgumentError, "La méthode build_exo attend un path ou une liste d'éléments (du parseur). Elle a reçu : " <> inspect(foo) <> ".")
-  end
-  def build_exo(), do: raise(ArgumentError, "La méthode build_exo attend un path ou une liste d'éléments (du parseur)")
-
-
-  def build_div_errors(errors) do
-    "<div class=\"warning\">#{errors}</div>"
-  end
-  ###################################################################################
-  #  FONCTIONS AVANT ExoParser
-
-  alias ClipExo.Exo
-
   @folder_html Path.absname("./_exercices/html")
-  IO.inspect(@folder_html, label: "\nDossier html")
+  # IO.inspect(@folder_html, label: "\nDossier html")
+
 
   ################################################################################
   #
   # CONSTRUCTION DU FICHIER DE CARACTÉRISTIQUES 
   #
   ################################################################################
+
 
   def build_file_specs(exo) do
     # IO.inspect(exo, label: "\nEXO (in build_file_specs)")
@@ -69,29 +38,38 @@ defmodule ClipExo.ExoBuilder do
   end
 
 
-
-  def end_build_file_specs(_filename) do
-    "👍 Fichier des caractéristiques construit avec succès."
-  end
-
-
   ################################################################################
   #
   # CONSTRUCTION DU FICHIER DE L'EXERCICE PROPREMENT DIT 
   #
   ################################################################################
 
-  def start_build_file_exo(file_name) do
-    "Construction de l'exercice '#{file_name}'…"
-  end
-
-  # Méthode qui construit vraiment l'exercice
+  # Méthode qui construit l'exercice proprement dit
   def build_file_exo(exo) do
+
+    # Parser le body de l'exo
+    accumulateur = ExoParser.parse_code(exo.body)
+    # |> IO.inspect(label: "\nACCUMULATEUR")
+
+    inner = [] 
+    
+    inner = inner ++ [
+      if Enum.any?(accumulateur.errors) do
+        build_section_errors(accumulateur.errors)
+      else
+        ""
+      end
+    ]
+
+    # Le corps de l'exercice
+    inner = inner ++ [ExoInnerFormater.build(accumulateur.elements, exo)]
+
+    exo = %{exo | body_html: Enum.join(inner, "")}
 
     code = ClipExoWeb.ExoBuilderView.build_file_exo(exo)
 
     # Nom de l'exercice
-    exo_name = exo[:infos][:name]
+    exo_name = exo.infos.name
 
     # Construction du dossier de l'exercice
     exo_folder = build_exo_folder_if_required(exo)
@@ -102,13 +80,22 @@ defmodule ClipExo.ExoBuilder do
     # Construire le fichier
     File.write(exo_file_path, code)
 
-    exo
+    {:ok, exo}
   end
 
-  def end_build_file_exo(_exo) do
-    "👍 Fichier de l'exercice construit avec succès."
+  def build_section_errors(errors) do
+    "<div class=\"warning\">#{errors}</div>"
   end
-
+  
+  defp traite_line_type_code(dline) do
+    {_line_type, line_content, _line_param} = dline
+    line_content
+    |> String.replace("<", "&lt;")
+    |> String.replace("\t", "  ")
+    |> String.replace([" ", " "], "&nbsp;")
+    # |> IO.inspect(label: "\nString de code")
+  end
+  
 
   ################################################################################
   #

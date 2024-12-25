@@ -7,7 +7,7 @@ defmodule ExoConteneur do
 
   @types_conteneur %{
     raw:        "Bloc raw",
-    steps:      "Liste d'étapes numérotées",
+    etapes:      "Liste d'étapes numérotées",
     blockcode:  "Bloc de codes",
     table:      "Table"
   }
@@ -60,3 +60,10 @@ defmodule ExoLine do
   end
 
 end #/defmodule ExoLine
+
+
+defmodule ExoSeparator do
+  defstruct [
+    type: :separator
+  ]
+end #/defmodule ExoSeparator

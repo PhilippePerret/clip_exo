@@ -20,21 +20,37 @@ defmodule ExoParser do
     code = code <> "\n" # pour fermer l'éventuel conteneur
     accumulateur = %{current_conteneur: nil, elements: [], errors: []}
 
-    code 
-    |> String.split("\n")
-    |> Enum.reduce(accumulateur, fn line, accumulateur ->
-      res = parse_line(line, accumulateur.current_conteneur)
-      # |> IO.inspect(label: "\nRES")
-
-      case res do
-      {:ok, res} ->
-        # Une ligne parsée avec succès
-        add_line_or_conteneur(res, accumulateur) # => updated_accumulator
-      {:error, err_msg} ->
-        # Une erreur rencontrée
-        %{accumulateur | errors: accumulateur.errors ++ [err_msg]}
-      end
-    end)
+    final_accumateur = 
+      code 
+      |> String.split("\n")
+      |> Enum.reduce(accumulateur, fn line, accumulateur ->
+          res = parse_line(line, accumulateur.current_conteneur)
+          # |> IO.inspect(label: "\nRES")
+          case res do
+          {:ok, res} ->
+            # Une ligne parsée avec succès
+            add_line_or_conteneur(res, accumulateur) # => updated_accumulator
+          {:error, err_msg} ->
+            # Une erreur rencontrée
+            %{accumulateur | errors: accumulateur.errors ++ [err_msg]}
+          end
+        end)
+      
+    elements_reduits = 
+      final_accumateur.elements
+        |> Enum.map(fn element -> 
+            cond do
+            # %ExoConteneur{} == element -> element
+            is_list(element) and (Keyword.get(element, :type) == :separator) -> %ExoSeparator{}
+            is_list(element) and Keyword.get(element, :line) -> Keyword.get(element, :line)
+            true -> element
+            end
+          end)
+    %{
+      errors: final_accumateur.errors,
+      elements: elements_reduits
+    }
+    |> IO.inspect(label: "\n\nFINAL_ACCUMULATEUR RETOURNÉ PAR PARSE_CODE (pour réduction)")
 
   end
 
@@ -77,10 +93,10 @@ defmodule ExoParser do
   rub: Paragraphe         Paragraphe normal avec une class CSS appliquée
   rub.main: Paragraphe    Paragraphe avec deux classe CSS appliquées
   :<conteneur>            Si +conteneur+ est vide, c'est le début d'un nouveau conteneur.
-                          On peut trouver les conteneur :raw, :table, :steps, :blockcode, etc.
+                          On peut trouver les conteneur :raw, :table, :etapes, :blockcode, etc.
   :   Paragraphe          Un paragraphe à mettre dans le conteneur courant. Le conteneur courant
                           doit être défini.
-  :=> Paragraphe          Un résultat dans un conteneur :steps par exemple
+  :=> Paragraphe          Un résultat dans un conteneur :etapes par exemple
   :+  Paragraphe          Une ligne de code à mettre en exergue dans un conteneur de type :blockcode
   
   +conteneur+

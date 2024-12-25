@@ -98,19 +98,19 @@ defmodule ClipExo.BaseTest do
       assert attendu == actual
     end
 
-    test "une ligne de steps de résultat (=>)" do
+    test "une ligne d'etapes de résultat (=>)" do
       provided = ":=> Ligne de résultat"
       line = %ExoLine{content: "Ligne de résultat", tline: "=>", classes: nil, preline: " "}
-      attendu = {:ok, [conteneur: %ExoConteneur{type: :steps, lines: [line], options: []}]}
-      actual  = ExoParser.parse_line(provided, %ExoConteneur{type: :steps, lines: []})
+      attendu = {:ok, [conteneur: %ExoConteneur{type: :etapes, lines: [line], options: []}]}
+      actual  = ExoParser.parse_line(provided, %ExoConteneur{type: :etapes, lines: []})
       assert attendu == actual
     end
 
-    test "une ligne de steps de résultat avec classe css" do
+    test "une ligne d'etapes de résultat avec classe css" do
       provided = ":=> red:Un résultat rouge"
       exoline = %ExoLine{content: "Un résultat rouge", tline: "=>", preline: " ", classes: ["red"]}
-      attendu = {:ok, [conteneur: %ExoConteneur{type: :steps, lines: [exoline]}]}
-      actual  = ExoParser.parse_line(provided, %ExoConteneur{type: :steps})
+      attendu = {:ok, [conteneur: %ExoConteneur{type: :etapes, lines: [exoline]}]}
+      actual  = ExoParser.parse_line(provided, %ExoConteneur{type: :etapes})
     end
 
     test "une ligne définissant une option de conteneur, sans conteneur (erreur)" do
@@ -136,7 +136,6 @@ defmodule ClipExo.BaseTest do
       provided = ":raw\n: Une première ligne\n: Une deuxième ligne\n"
       obtenu = ExoParser.parse_code(provided)
       assert obtenu.errors == []
-      assert obtenu.current_conteneur == nil
       elements_obtenus = obtenu.elements
       assert elements_obtenus = [
         %ExoConteneur{
@@ -147,7 +146,7 @@ defmodule ClipExo.BaseTest do
             %ExoLine{type: :line, content: "Une deuxième ligne", classes: nil, preline: " "},
           ]
         },
-        [type: :separator, conteneur: nil]
+        %ExoSeparator{type: :separator}
       ] #/fin de la liste des éléments
 
     end
@@ -163,13 +162,12 @@ defmodule ClipExo.BaseTest do
           ],
           options: []
         },
-        [type: :separator, conteneur: nil]
+        %ExoSeparator{type: :separator}
       ]
       obtenu = ExoParser.parse_code(provided)
       elements_actual = obtenu.elements
       assert elements_attendus == elements_actual
       assert obtenu.errors == []
-      assert obtenu.current_conteneur == nil
     end
 
     test "Des lignes de code avec des erreurs" do
@@ -177,6 +175,13 @@ defmodule ClipExo.BaseTest do
       actual   = ExoParser.parse_code(provided)
       IO.inspect(actual, label: "\nACTUAL")
       assert nil != actual
+    end
+
+    test "Toutes sortes de lignes" do
+      provided = "Une première ligne isolée\n\n:etapes\n: Première étape\n: Deuxième étape\n\nAutre ligne isolée"
+      obtenu = ExoParser.parse_code(provided)
+      IO.inspect(obtenu, label: "\nOBTENU")
+      assert true == true
     end
 
   end #/describe "Parseur de code"
