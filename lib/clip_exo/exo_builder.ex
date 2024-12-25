@@ -2,24 +2,41 @@ defmodule ClipExo.ExoBuilder do
 
   alias ClipExo.Exo
 
+  def build_exo(%Exo{} = exo) do
+    IO.puts "Construction d'un exercice à partir de %Exo{}"
+    IO.inspect(exo, label: "\nEXO")
+  end
+
+  def build_exo(path) when is_binary(path) do
+    IO.puts "Construction d'un exercice quand on fournit le path"
+  end
+
+  def build_exo(elements) when is_list(elements) do
+    IO.puts "Construction d'un exercice quand on fournit le résultat de ExoParser.parse_code"
+  end
+
+  def build_exo(%{errors: errors, elements: elements}) do
+    div_errors = Enum.any?(errors) && build_div_errors(errors) || ""
+
+    IO.puts "Construction d'un exercice à partir d'un accumulateur de ExoParser.parse_code"
+  end
+
+  def build_exo(foo) do
+    raise(ArgumentError, "La méthode build_exo attend un path ou une liste d'éléments (du parseur). Elle a reçu : " <> inspect(foo) <> ".")
+  end
+  def build_exo(), do: raise(ArgumentError, "La méthode build_exo attend un path ou une liste d'éléments (du parseur)")
+
+
+  def build_div_errors(errors) do
+    "<div class=\"warning\">#{errors}</div>"
+  end
+  ###################################################################################
+  #  FONCTIONS AVANT ExoParser
+
+  alias ClipExo.Exo
+
   @folder_html Path.absname("./_exercices/html")
   IO.inspect(@folder_html, label: "\nDossier html")
-
-  def start_building(file_name) do
-    "Début de la construction de l'exercice '#{file_name}'…"
-  end
-
-  def start_parse_file(file_name) do
-    "Parse du fichier '#{file_name}'…"
-  end
-  def parse_file(file_name) do
-    exo = Exo.parse_file(file_name)
-    IO.inspect(exo, label: "\nEXO (in parse_file)")
-    exo
-  end
-  def end_parse_file(exo) do
-    "👍 Fin du parsing du fichier '#{exo[:infos][:file_name]}'."
-  end
 
   ################################################################################
   #
@@ -27,9 +44,6 @@ defmodule ClipExo.ExoBuilder do
   #
   ################################################################################
 
-  def start_build_file_specs(_filename) do
-    "Début de la construction du fichier caractéristiques"
-  end
   def build_file_specs(exo) do
     # IO.inspect(exo, label: "\nEXO (in build_file_specs)")
     # template_path = Path.absname("./lib/clip_exo/exo_builder_assets/specs_file_template.html.eex")
@@ -40,7 +54,7 @@ defmodule ClipExo.ExoBuilder do
     code = ClipExoWeb.ExoBuilderView.build_file_specs(exo)
 
     # Nom de l'exercice
-    exo_name = exo[:infos][:name]
+    exo_name = exo.infos.name
 
     # Construire le dossier de l'exerice si nécessaire
     exo_folder = build_exo_folder_if_required(exo)
@@ -51,7 +65,7 @@ defmodule ClipExo.ExoBuilder do
     # Construire le fichier
     File.write(exo_file_specs, code)
 
-    exo # à la fin
+    {:ok, exo} # à la fin
   end
 
 
@@ -103,7 +117,7 @@ defmodule ClipExo.ExoBuilder do
   ################################################################################
 
   defp build_exo_folder_if_required(exo) do
-    exo_folder = Path.join([@folder_html, exo[:infos][:name]])
+    exo_folder = Path.join([@folder_html, exo.infos.name])
     if not File.exists?(exo_folder) do
       File.mkdir(exo_folder)
     end

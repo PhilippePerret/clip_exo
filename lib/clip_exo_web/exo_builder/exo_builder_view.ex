@@ -87,16 +87,16 @@ defmodule ClipExoWeb.ExoBuilderView do
   def build_file_specs(exo) do
     assigns = [
       infos: [
-        %{label: "Référence", value: exo[:infos][:reference]},
-        %{label: "Nom", value: exo[:infos][:name]},
-        %{label: "Niveau", value: exo[:infos][:niveau]},
-        %{label: "Compétences", value: formated_liste_string_to_ul(exo[:infos][:competences])},
-        %{label: "Logiciels", value: formated_liste_string_to_ul(exo[:infos][:logiciels])},
+        %{label: "Référence", value: exo.infos.reference},
+        %{label: "Nom", value: exo.infos.name},
+        %{label: "Niveau", value: exo.infos.niveau},
+        %{label: "Compétences", value: formated_liste_string_to_ul(exo.infos.competences)},
+        %{label: "Logiciels", value: formated_liste_string_to_ul(exo.infos.logiciels)},
         %{label: "", value: ""},
-        %{label: "Auteur", value: exo[:infos][:auteur]},
-        %{label: "Révision", value: exo[:infos][:revisions]},
+        %{label: "Auteur", value: exo.infos.auteur},
+        %{label: "Révisions", value: exo.infos.revisions},
       ],
-      exo_titre: exo[:infos][:titre] |> String.replace(~r/\\n/, "<br />")
+      exo_titre: exo.infos.titre |> String.replace(~r/\\n/, "<br />")
     ]
     render_to_string(ClipExoWeb.ExoBuilderView, "specs_file.html", assigns)
     |> IO.inspect(label: "Code retourné par la vue")

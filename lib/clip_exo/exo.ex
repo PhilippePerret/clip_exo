@@ -9,7 +9,7 @@ defmodule ClipExo.Exo do
       titre: "",
       auteur: "",
       created_at: Date.utc_today(),
-      revised_at: [],
+      revisions: [],
       competences: [],
       niveau: "",
       duree: "",
@@ -17,6 +17,8 @@ defmodule ClipExo.Exo do
     body: "<corps de l'exercice>",
     rubriques: []
   ]
+
+  alias ClipExo.ExoBuilder, as: Builder
 
   @folder "./_exercices/clipexo/"
 
@@ -30,7 +32,10 @@ defmodule ClipExo.Exo do
   end
 
   @doc """
+  @main
+
   Construction de l'exercice définit dans +exo+
+  Function principale appelée par le bouton pour construire l'exercice
 
   Pour le moment, +exo+ ne contient que "file_path", le chemin
   d'accès relatif au fichier. Par défaut, on le cherche dans @folfder
@@ -39,47 +44,69 @@ defmodule ClipExo.Exo do
     case get_path_exo(exo) do
     {:ok, path} ->
       IO.puts("Parsing du fichier '#{path}'…")
-      {:ok, path}
+      case parse_whole_file(path) do
+      {:ok, exo}  -> 
+        # Si on a pu récupérer toutes les données (infos et body) du fichier .clip.exo,
+        # on peut construire les deux fichiers
+        build_two_files(exo)
+      {:error, msg} -> 
+        # On n'a pas pu récupérer les données du fichier .clip.exo, on retourne
+        # l'erreur rencontrée.
+        {:error, msg}
+      end
     {:error, error} ->
       IO.puts error
       {:error, error}
     end
   end
 
-  def parse_file(path) do
-    case parse_code(File.read!(path)) do
+  def parse_whole_file(path) do
+    case parse_whole_file_code(File.read!(path)) do
     {:ok, exo} ->
-      exo_infos = Map.get(exo, :infos)
+      exo_infos = exo.infos
       exo_infos = Map.merge(exo_infos, %{file_name: Path.basename(path)})
-      Map.put(exo, :infos, exo_infos)
-    {:error, msg} -> {:error, msg}
+      {:ok, Map.put(exo, :infos, exo_infos)}
+    {:error, msg} -> 
+      {:error, msg}
     end
   end
+
+  @doc """
+  Demande de construction des deux fichiers de l'exercice .clip.exo
+  """
+  def build_two_files(%ClipExo.Exo{} = exo) do
+    IO.puts "Je vais construire les deux fichiers de '#{exo.infos.name}'"
+    Builder.build_file_specs(exo)
+    |> IO.inspect(label: "\nRetour de build_file_specs")
+  end
+
+  ###################################################################
 
   @doc """
   Méthode qui prend le code +code+, en supposant qu'il est
   au format clip.exo et le transforme en table (liste) façon
   AST pour produire le document HTML.
   """
-  def parse_code(code) do
+  def parse_whole_file_code(code) do
     code
-    |> decompose_header_body()
+    |> decompose_header_and_body()
   end
 
   @reg_front_matter ~r/(^|\n)---\n(?<front_matter>(?:.|\n)*)\n---\n(?<body>(.|\n)*)\z/Um
-  defp decompose_header_body(code) do
+  defp decompose_header_and_body(code) do
     if Regex.match?(@reg_front_matter, code) do
       resultat = Regex.named_captures(@reg_front_matter, code)
 
       infos = get_infos_from_front_matter(resultat["front_matter"])
-      bodys = get_body_from(resultat["body"])
+      body  = resultat["body"]
+      ok = (elem(infos, 0) == :ok && body != "") && :ok || :error
 
-      ok = (elem(infos, 0) == :ok && elem(bodys, 0) == :ok) && :ok || :error
-      resultat = %{
-        infos:  elem(infos, 1),
-        body:   elem(bodys, 1),
-      }
-      {ok, resultat}
+      infos = Map.merge(%ClipExo.Exo{}.infos, elem(infos, 1))
+      |> IO.inspect(label: "\nINFOS")
+
+      # --- Instanciation de Exo ---
+      exo = %ClipExo.Exo{infos: infos, body: body}
+      {ok, exo}
     else
       {:error, "Le fichier est mal formaté {TODO: Lien d'aide}"}
     end
@@ -104,74 +131,6 @@ defmodule ClipExo.Exo do
           Map.put(acc, elem(tup, 0), elem(tup, 1))
         end)
     {:ok, infos}
-  end
-
-  defp get_body_from(raw_body) do
-    liste_bodys =
-      String.split(raw_body, "\n")
-      |> Enum.map(&analyse_body_lines(&1))
-      # |> Enum.reject(fn x -> elem(x,1) == "" end) # Non, on garde les lignes vides
-
-    cond do
-    is_list(liste_bodys)    -> {:ok, liste_bodys}
-    is_binary(liste_bodys)  -> {:error, liste_bodys}
-    end
-  end
-
-  # Méthode qui analyse une ligne unique du corps de l'exercice
-  defp analyse_body_lines(line) do
-    line
-    # |> String.trim() # Non, car pour le code on garde les espaces
-    |> separe_tag_from_content()
-    # --- à partir d'ici, on a un Tuple {tag, content, params} --
-  end
-
-  @doc """
-  Méthode qui reçoit la ligne de body (par exemple :
-    "Ma simple phrase" ou
-    "balise: Simple phrase avec balise" ou
-    "function(true): Phrase avec balise et paramètres"
-    )
-  … et retourne un tuple contenant :
-    { :tag|nil, "<contenu textuel>", [params]|nil }
-  """
-  @reg_tag_params_content ~r/^(?:(?<tag>[^\(\:)]*)(\((?<params>.*)\))? *:)?(?<content>.*)$/m
-  def separe_tag_from_content(line) do
-    Regex.named_captures(@reg_tag_params_content, line)
-    |> rationnalise_captures_line_body
-  end
-
-  defp rationnalise_captures_line_body(captures) do
-    {
-      rationnalise_balise_bodyline(captures["tag"]),
-      rationnalise_content_bodyline(captures["content"]),
-      rationnalise_params_bodyline(captures["params"])
-    }
-  end
-  defp rationnalise_balise_bodyline(tag) do
-    case tag do
-    "" -> nil
-    tag -> tag |> String.trim() |> String.downcase |> String.to_atom()
-    end
-  end
-  defp rationnalise_content_bodyline(content) do
-    # String.trim(content) Non car on en a besoin pour certains code
-    content
-  end
-
-  @reg_virgule ~r/,/
-  defp rationnalise_params_bodyline(params) do
-    case params do
-    "" -> nil
-    params -> 
-      if Regex.match?(@reg_virgule, params) do
-        params
-        |> String.split(",")
-        |> Enum.map(fn x -> safe_eval(String.trim(x)) end)
-      else
-        safe_eval(params)
-      end
-    end
   end
 
   defp safe_eval(maybe_string) do

@@ -26,15 +26,14 @@ defmodule ExoParser do
       res = parse_line(line, accumulateur.current_conteneur)
       # |> IO.inspect(label: "\nRES")
 
-      accumulateur =
-        case res do
-        {:ok, res} ->
-          # Une ligne parsée avec succès
-          add_line_or_conteneur(res, accumulateur) # => updated_accumulator
-        {:error, err_msg} ->
-          # Une erreur rencontrée
-          %{accumulateur | errors: accumulateur.errors ++ [err_msg]}
-        end
+      case res do
+      {:ok, res} ->
+        # Une ligne parsée avec succès
+        add_line_or_conteneur(res, accumulateur) # => updated_accumulator
+      {:error, err_msg} ->
+        # Une erreur rencontrée
+        %{accumulateur | errors: accumulateur.errors ++ [err_msg]}
+      end
     end)
 
   end
