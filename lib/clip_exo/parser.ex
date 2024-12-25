@@ -17,13 +17,6 @@ defmodule ExoParser do
 
   """
 
-  @types_conteneur %{
-    raw:        "Bloc raw",
-    steps:      "Liste d'étapes numérotées",
-    blockcode:  "Bloc de codes",
-    table:      "Table"
-  }
-
   def parse_code(code) do
     accumulateur = %{current_conteneur: nil, lines: [], blocs: []}
 
@@ -81,20 +74,24 @@ defmodule ExoParser do
     Structure   %ExoConteneur{type: <type>, lines: [<lignes>], options: [<options>]}
 
   """
+  @reg_cssed_paragraph ~r/^(?<classes>[a-zA-Z\.0-9_\-]+)\:(?<content>.+)$/
   @reg_exo_line ~r/
   ^ # début
-  (?<line_classes>[a-zA-Z\.0-9_\-]+)? # une ou plusieurs classes
-  \:
-  (?:(?<type_line>[a-z]{1,3}|=>|\+)(?<pre_line>[ \t]+))?  # définition de la ligne dans le conteneur p.e. cr
+  \: # commence par deux points
+  (?:(?<type_line>[a-z]{1,3}|=>|\+)?(?<pre_line>[ \t]+))? # définition de la ligne dans le conteneur p.e. cr
+                                                          # et espace entre deux points et contenu ligne
   (?<options>\:)? # éventuellement une option
-  (?<type_cont>[a-z]+)? # le type du conteneur
+  (?<type_cont>[a-z]+)? # le type du conteneur ou le début de ligne de conteneur
   (?<rest>.*) # tout ce qui reste
   $ # jusqu'à la fin
   /x
   def parse_line(line, conteneur) do
-    if line == "" do
-      {:ok, [type: :separator, conteneur: nil]}
-    else
+    cond do
+    line == "" ->
+       {:ok, [type: :separator, conteneur: nil]}
+    Regex.match?(@reg_cssed_paragraph, line) ->
+      {:ok, [line: exo_line_from_cssed_line(line), conteneur: nil]}
+    true ->
       case Regex.named_captures(@reg_exo_line, line) do
       nil ->
         # Une ligne sans ":", donc simple (note : elle annule le conteneur)
@@ -105,8 +102,25 @@ defmodule ExoParser do
     end
   end
 
+  # Traitement éventuel d'une ligne de format : «««css.css: Contenu»»»
+  defp exo_line_from_cssed_line(line) do
+    case Regex.named_captures(@reg_cssed_paragraph, line) do
+    nil -> 
+      %ExoLine{type: :line, content: line, classes: nil}
+    captures ->
+      %{
+        "classes" => classes, 
+        "content" => content
+      } = captures
+      %ExoLine{
+        type: :line, 
+        content: String.trim(content),
+        classes: String.split(classes, ".")
+        }
+    end
+  end
+
   defp check_captures(%{
-    "line_classes"  => line_classes,
     "type_line"     => type_line,
     "pre_line"      => pre_line,
     "options"       => options, # ne contiendra que ":" mais signifiera que +rest+ est l'option
@@ -114,8 +128,6 @@ defmodule ExoParser do
     "rest"          => rest
   }, conteneur, line) do
     cond do
-      line_classes != "" ->
-        {:ok, [line: %ExoLine{type: :paragraph, content: String.trim(rest), classes: String.split(line_classes, ".")}, conteneur: nil]}
       options != "" -> # une option "::" de conteneur
         if conteneur do
           conteneur = Map.put(conteneur, :options, Map.get(conteneur, :options) ++ [type_cont <> rest])
@@ -123,7 +135,7 @@ defmodule ExoParser do
         else
           {:error, "Option de conteneur sans conteneur : '#{type_cont <> rest}'"}
         end
-      type_cont != "" and type_line == "" ->
+      type_cont != "" and type_line == "" and pre_line == "" ->
         if type_cont_valid?(type_cont) do
           if rest == "" do
             {:ok, [type: :conteneur, conteneur: %ExoConteneur{type: String.to_atom(type_cont)}]}
@@ -136,9 +148,12 @@ defmodule ExoParser do
       type_line != "" || rest != "" ->
         if conteneur do
           # Je dois mettre la ligne dans le conteneur
-          tline = (type_line != "") && String.trim(type_line) || nil
-          content = pre_line <> type_cont <> rest
-          conteneur = Map.put(conteneur, :lines, conteneur.lines ++ [%ExoLine{type: :line, content: content, tline: tline}])
+          tline = if (type_line != ""), do: String.trim(type_line), else: nil
+          # IO.inspect(type_cont <> rest, label: "\nLine envoyée")
+          # IO.inspect(pre_line, label: "\nPré-line")
+          exoline = exo_line_from_cssed_line(type_cont <> rest)
+          exoline = Map.merge(exoline, %{preline: pre_line, tline: tline})
+          conteneur = Map.put(conteneur, :lines, conteneur.lines ++ [exoline])
           {:ok, [conteneur: conteneur]}
         else
           {:error, "Ligne de conteneur sans conteneur : '#{line}'"}
@@ -151,7 +166,7 @@ defmodule ExoParser do
 
   # Return le conteneur mais seulement s'il est connu
   defp type_cont_valid?(type_cont) do
-    Map.get(@types_conteneur, String.to_atom(type_cont), false) != false
+    Map.get(ExoConteneur.get_types_conteneur(), String.to_atom(type_cont), false) != false
   end
 
 

@@ -13,6 +13,18 @@ defmodule ClipExo.BaseTest do
       assert attendu == obtenu
     end
 
+    test "parse une ligne de conteneur avec des classes css" do
+      provided = ":  cs.css: Ma ligne de conteneur avec css"
+      conteneur = %ExoConteneur{type: :raw}
+      exoline = %ExoLine{
+        type: :line, content: "Ma ligne de conteneur avec css", 
+        tline: nil, classes: ["cs", "css"], preline: "  "
+        }
+      attendu  = {:ok, [conteneur: Map.put(conteneur, :lines, [exoline])]}
+      obtenu = ExoParser.parse_line(provided, conteneur)
+      assert attendu == obtenu
+    end
+
     test "une ligne vide annule le conteneur courant" do
       provided = ""
       obtenu   = ExoParser.parse_line(provided, %ExoConteneur{type: :raw})
@@ -29,14 +41,14 @@ defmodule ClipExo.BaseTest do
 
     test "une ligne avec simple classe" do
       provided = "rub: Une ligne avec classe 'rub'"
-      attendu  = {:ok, [line: %ExoLine{type: :paragraph, content: "Une ligne avec classe 'rub'", classes: ["rub"]}, conteneur: nil]}
+      attendu  = {:ok, [line: %ExoLine{type: :line, content: "Une ligne avec classe 'rub'", classes: ["rub"]}, conteneur: nil]}
       obtenu   = ExoParser.parse_line(provided, %ExoConteneur{})
       assert attendu == obtenu
     end
     
     test "une ligne avec deux classes css" do
       provided = "rub.sub: Une ligne avec classe 'rub' et 'sub'   "
-      attendu  = {:ok, [line: %ExoLine{type: :paragraph, content: "Une ligne avec classe 'rub' et 'sub'", classes: ["rub", "sub"]}, conteneur: nil]}
+      attendu  = {:ok, [line: %ExoLine{type: :line, content: "Une ligne avec classe 'rub' et 'sub'", classes: ["rub", "sub"]}, conteneur: nil]}
       obtenu   = ExoParser.parse_line(provided, %ExoConteneur{})
       assert attendu == obtenu
     end
@@ -64,7 +76,8 @@ defmodule ClipExo.BaseTest do
 
     test "une ligne simple de conteneur avec un conteneur" do
       provided = ": Ligne simple"
-      attendu  = {:ok, [conteneur: %ExoConteneur{type: :raw, lines: [%ExoLine{type: :line, content: " Ligne simple"}]}]}
+      exoline  = %ExoLine{type: :line, content: "Ligne simple", preline: " "}
+      attendu  = {:ok, [conteneur: %ExoConteneur{type: :raw, lines: [exoline]}]}
       obtenu   = ExoParser.parse_line(provided, %ExoConteneur{type: :raw})
       assert attendu == obtenu
     end
@@ -78,7 +91,8 @@ defmodule ClipExo.BaseTest do
 
     test "une ligne de conteneur avec un type de ligne (tline)" do
       provided = ":+ Ligne de code ajoutée"
-      line = %ExoLine{type: :line, content: " Ligne de code ajoutée", tline: "+", classes: nil}
+      line = %ExoLine{
+        type: :line, content: "Ligne de code ajoutée", tline: "+", classes: nil, preline: " "}
       attendu  = {:ok, [conteneur: %ExoConteneur{type: :blockcode, lines: [line], options: []}]}
       actual   = ExoParser.parse_line(provided, %ExoConteneur{type: :blockcode})
       assert attendu == actual
@@ -86,10 +100,17 @@ defmodule ClipExo.BaseTest do
 
     test "une ligne de steps de résultat (=>)" do
       provided = ":=> Ligne de résultat"
-      line = %ExoLine{type: :line, content: " Ligne de résultat", tline: "=>", classes: nil}
+      line = %ExoLine{content: "Ligne de résultat", tline: "=>", classes: nil, preline: " "}
       attendu = {:ok, [conteneur: %ExoConteneur{type: :steps, lines: [line], options: []}]}
       actual  = ExoParser.parse_line(provided, %ExoConteneur{type: :steps, lines: []})
       assert attendu == actual
+    end
+
+    test "une ligne de steps de résultat avec classe css" do
+      provided = ":=> red:Un résultat rouge"
+      exoline = %ExoLine{content: "Un résultat rouge", tline: "=>", preline: " ", classes: ["red"]}
+      attendu = {:ok, [conteneur: %ExoConteneur{type: :steps, lines: [exoline]}]}
+      actual  = ExoParser.parse_line(provided, %ExoConteneur{type: :steps})
     end
 
     test "une ligne définissant une option de conteneur, sans conteneur (erreur)" do
@@ -118,8 +139,8 @@ defmodule ClipExo.BaseTest do
           type: :raw, 
           options: [],
           lines: [
-            %ExoLine{type: :line, content: " Une première ligne", classes: nil},
-            %ExoLine{type: :line, content: " Une deuxième ligne", classes: nil},
+            %ExoLine{type: :line, content: "Une première ligne", classes: nil, preline: " "},
+            %ExoLine{type: :line, content: "Une deuxième ligne", classes: nil, preline: " "},
           ]
         }
       ]
@@ -133,8 +154,8 @@ defmodule ClipExo.BaseTest do
         %ExoConteneur{
           type: :blockcode,
           lines: [
-            %ExoLine{type: :line, content: "  Première ligne de code", classes: nil},
-            %ExoLine{type: :line, content: " deuxième ligne de code", classes: nil, tline: "+"},
+            %ExoLine{type: :line, content: "Première ligne de code", classes: nil, preline: "  "},
+            %ExoLine{type: :line, content: "deuxième ligne de code", classes: nil, tline: "+", preline: " "},
           ],
           options: []
         }

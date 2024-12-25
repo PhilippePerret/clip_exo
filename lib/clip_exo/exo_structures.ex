@@ -1,5 +1,18 @@
 defmodule ExoConteneur do
-  defstruct type: nil, lines: [], options: []
+  defstruct [
+    type:     nil,  # le type de conteneur (cf @types_conteneur)
+    lines:    [],   # Liste des %ExoLine
+    options:  []
+  ]
+
+  @types_conteneur %{
+    raw:        "Bloc raw",
+    steps:      "Liste d'étapes numérotées",
+    blockcode:  "Bloc de codes",
+    table:      "Table"
+  }
+
+  def get_types_conteneur(), do: @types_conteneur
 
   # Formatage d'un conteneur
   # ------------------------
@@ -29,7 +42,13 @@ defmodule ExoConteneur do
 end #/defmodule ExoConteneur
 
 defmodule ExoLine do
-  defstruct type: nil, content: nil, classes: nil, tline: nil
+  defstruct [
+    type:     :line,  # toujours ? :line
+    content:  nil, 
+    classes:  nil,    # ou liste des css
+    tline:    nil,    # ou le type de line (caractères juste après ":")
+    preline:  nil     # ou les espaces/tabulations avant
+  ]
 
   # Formatage d'une ligne dans un conteneur
   def to_html(%ExoLine{} = exo, %ExoConteneur{} = _conteneur) do
