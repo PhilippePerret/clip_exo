@@ -12,45 +12,59 @@ defmodule ExoParser do
   Voir les deux structures dans le fichier exo_structures.ex
 
   TODO
-    * parser les lignes des lignes de conteneur qui peuvent aussi
-      être définies par des "css.css: La ligne" pour ajouter des classes CSS
+
 
   """
 
   def parse_code(code) do
-    accumulateur = %{current_conteneur: nil, lines: [], blocs: []}
+    code = code <> "\n" # pour fermer l'éventuel conteneur
+    accumulateur = %{current_conteneur: nil, elements: [], errors: []}
 
-    final_accumulateur =
     code 
     |> String.split("\n")
     |> Enum.reduce(accumulateur, fn line, accumulateur ->
       res = parse_line(line, accumulateur.current_conteneur)
-      new_conteneur = elem(res, 1)[:conteneur]
-      
-      updated_accumulateur =
-        cond do
-        new_conteneur == nil and accumulateur.current_conteneur ->
-          # On doit consigner ce conteneur
-          %{
-            accumulateur |
-            current_conteneur: nil,
-            lines: [], # on ne met pas la ligne courante, qui a été mise dans le conteneur courant
-            blocs: accumulateur.blocs ++ [accumulateur.current_conteneur]
-          }
-        new_conteneur == nil ->
-          %{
-            accumulateur |
-            current_conteneur: nil,
-            lines: [res]          }
-        new_conteneur ->
-          %{
-            accumulateur |
-            current_conteneur: new_conteneur,
-            lines: []          }
+      # |> IO.inspect(label: "\nRES")
+
+      accumulateur =
+        case res do
+        {:ok, res} ->
+          # Une ligne parsée avec succès
+          add_line_or_conteneur(res, accumulateur) # => updated_accumulator
+        {:error, err_msg} ->
+          # Une erreur rencontrée
+          %{accumulateur | errors: accumulateur.errors ++ [err_msg]}
         end
-      updated_accumulateur
     end)
-    final_accumulateur.blocs
+
+  end
+
+  defp add_line_or_conteneur(res, accumulateur) do
+    new_conteneur = res[:conteneur] # peut être nil
+    
+    # updated_accumulateur =
+    cond do
+    new_conteneur == nil and accumulateur.current_conteneur ->
+      # On doit consigner ce conteneur
+      %{
+        accumulateur |
+        current_conteneur: nil,
+        elements: accumulateur.elements ++ [accumulateur.current_conteneur]
+      }
+    new_conteneur == nil ->
+      %{
+        accumulateur |
+        current_conteneur: nil,
+        elements: accumulateur.elements ++ [res]
+      }
+    new_conteneur ->
+      %{
+        accumulateur |
+        current_conteneur: new_conteneur
+      }
+    end
+    |> IO.inspect(label: "\nACCU ACTUALISÉ")
+    # updated_accumulateur
   end
 
 

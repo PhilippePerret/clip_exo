@@ -134,7 +134,11 @@ defmodule ClipExo.BaseTest do
 
     test "Un bloc raw" do
       provided = ":raw\n: Une première ligne\n: Une deuxième ligne\n"
-      attendu  = [
+      obtenu = ExoParser.parse_code(provided)
+      assert obtenu.errors == []
+      assert obtenu.current_conteneur == nil
+      elements_obtenus = obtenu.elements
+      assert elements_obtenus = [
         %ExoConteneur{
           type: :raw, 
           options: [],
@@ -142,15 +146,15 @@ defmodule ClipExo.BaseTest do
             %ExoLine{type: :line, content: "Une première ligne", classes: nil, preline: " "},
             %ExoLine{type: :line, content: "Une deuxième ligne", classes: nil, preline: " "},
           ]
-        }
-      ]
-      obtenu = ExoParser.parse_code(provided)
-      assert attendu == obtenu
+        },
+        [type: :separator, conteneur: nil]
+      ] #/fin de la liste des éléments
+
     end
 
     test "Un bloc blockcode avec des lignes" do
       provided = ":blockcode\n:  Première ligne de code\n:+ deuxième ligne de code\n"
-      attendu  = [
+      elements_attendus  = [
         %ExoConteneur{
           type: :blockcode,
           lines: [
@@ -158,10 +162,22 @@ defmodule ClipExo.BaseTest do
             %ExoLine{type: :line, content: "deuxième ligne de code", classes: nil, tline: "+", preline: " "},
           ],
           options: []
-        }
+        },
+        [type: :separator, conteneur: nil]
       ]
-      actual = ExoParser.parse_code(provided)
-      assert attendu == actual
+      obtenu = ExoParser.parse_code(provided)
+      elements_actual = obtenu.elements
+      assert elements_attendus == elements_actual
+      assert obtenu.errors == []
+      assert obtenu.current_conteneur == nil
     end
+
+    test "Des lignes de code avec des erreurs" do
+      provided = ":mauvaisbloc\n: Première ligne de mauvais bloc\n\nParagraphe régulier."
+      actual   = ExoParser.parse_code(provided)
+      IO.inspect(actual, label: "\nACTUAL")
+      assert nil != actual
+    end
+
   end #/describe "Parseur de code"
 end 
