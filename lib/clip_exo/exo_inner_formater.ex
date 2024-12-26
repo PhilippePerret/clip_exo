@@ -28,8 +28,7 @@ defmodule ExoInnerFormater do
     ExoConteneur.Builder.to_html(conteneur)
   end
   def build_element(%ExoLine{} = exoline) do
-    exoline = %{exoline | fcontent: StringTo.html(exoline.content)}
-    ExoLine.Builder.to_html(exoline)
+    ExoLine.Builder.to_html(exoline_with_formated_content(exoline))
   end
   def build_element(%ExoSeparator{} = _separator) do
     "<div class=\"separator\"></div>"
@@ -39,7 +38,27 @@ defmodule ExoInnerFormater do
   end
 
   def build_element(%ExoLine{} = exoline, %ExoConteneur{} = conteneur) do
-    ExoLine.Builder.to_html(exoline, conteneur)
+    ExoLine.Builder.to_html(exoline_with_formated_content(exoline), conteneur)
+  end
+
+  defp exoline_with_formated_content(exoline) do
+    fcontent = 
+      exoline.content
+      |> StringTo.html()
+      |> add_pictos_if_required(exoline)
+    %{exoline | fcontent: fcontent}
+  end
+
+  defp add_pictos_if_required(content, %ExoLine{tline: nil}) do
+    content
+  end
+  @liste_pictos_actions ["clavier", "cle", "clic", "coche", "menu", "mesure", "radio", "repete", "souris"]
+  defp add_pictos_if_required(content, %ExoLine{:tline => tline}) do
+    if Enum.member?(@liste_pictos_actions, tline) do
+      "<div class=\"picto #{tline}\"></div><span class=\"text-picto\">#{content}</span>"
+    else
+      content
+    end
   end
 
 

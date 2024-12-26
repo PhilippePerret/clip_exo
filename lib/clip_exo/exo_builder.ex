@@ -107,13 +107,10 @@ defmodule ClipExo.ExoBuilder do
     @liste_required_files
     |> Enum.map(fn original -> 
         file_in_exo = Path.join([exo.infos.htm_folder,Path.basename(original)])
-        |> IO.inspect(label: "\nCopie vers")
         if File.exists?(file_in_exo) do
           File.rm(file_in_exo)
         end
-        IO.puts "Copie de\n\t#{original}\nvers\n\t#{file_in_exo}"
-        File.cp!(original, file_in_exo)
-        |> IO.inspect(label: "\nRetour de File.cp")
+        File.cp!(original, file_in_exo) # => :ok ou raise
       end)
       IO.puts "<-- copy_required_files"
       {:ok, exo}

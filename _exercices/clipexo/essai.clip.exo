@@ -14,7 +14,7 @@ Une première ligne normale.
 
 :etapes
 :souris	  Une étape à faire à la souris
-:clavier	Une étape à faire au clavier
+:clavier	Une étape à faire au clavier, avec un très long texte pour voir où il va passer, sous le picto ou à côté, personne ne peut le savoir à priori.
 :menu	    Une étape à faire avec un menu
 :clic	    Une étape à faire en cliquant quelque part
 :cle	    Une étape avec une clé usb

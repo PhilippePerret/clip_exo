@@ -79,6 +79,7 @@ defmodule ExoParser do
           end)
     # ---
     
+    IO.inspect(elements_reduits, label: "\nELEMENTS")
     IO.puts "<-- parse_code"
 
     %{

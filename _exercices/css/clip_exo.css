@@ -51,6 +51,7 @@ section#exercice {
 
 section.conteneur,  table.conteneur {
   margin: 0.75cm 0;
+  position: relative;
 }
 
 section.blockcode {
@@ -145,10 +146,27 @@ div.reference:before {
 
 section.etapes {
   counter-reset: compteurPas;
-  margin-left: 1em;
+  margin-left: 2em;
 }
 
+
 /* Pas d'un scénario (étapes) */
+section.etapes div.pas {
+  line-height: 1.2em;
+  margin-top: 8px;
+}
+section.etapes div.pas.picto {
+  margin-left: 1em;
+}
+/* Pour les tests qui suivent un picto (si formaté comme dans :etapes */
+span.text-picto {
+  display:inline-block;
+  margin-left: 2em;
+}
+div.picto {
+  position:absolute;
+  left: 0;
+}
 section.etapes div.pas:not(resultat) {
   counter-increment: compteurPas;
 }
@@ -156,6 +174,8 @@ section.etapes div.pas:before {
   content: counter(compteurPas) ". ";
   display:inline-block;
   width:28px;
+  position: absolute;
+  left: -1.2em;
 }
 section.etapes div.resultat:before {
   content: "=> ";
@@ -244,9 +264,10 @@ pre.warning {
 
 div.picto {
   vertical-align: bottom;
-  display:inline-block;
+  display: inline-block;
   background-image: url(icones-actions-sprite.png);
-  zoom: 80%: /* pour modifier la taille de façon fine */
+  transform: scale(80%); /* pour ajuster de façon fine */
+  margin-right: 8px;
 }
 
 div.picto.souris {
