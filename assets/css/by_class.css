@@ -1,6 +1,10 @@
+nav {display:block}
+
 .block {display:block}
 .inline {display:inline}
 .hidden {display:none;}
 .smaller {
   font-size:0.9em;
 }
+
+.right {text-align: right}

@@ -14,7 +14,10 @@
   <body class="bg-white">
     <header>
       <a href={~p"/"}>CLIP-EXO - Éditeur d'exercices pour le CLIP</a>
-    </header>    
+    </header>
+    <nav class="right">
+      <a href={~p"/formatage"}>Aide au formatage</a>
+    </nav>
     <.flash_group flash={@flash} />
     <section id="content">
       <%= @inner_content %>

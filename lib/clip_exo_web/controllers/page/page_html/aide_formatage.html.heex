@@ -1,0 +1,84 @@
+<link rel="stylesheet" href="css/clip_exo.css" />
+<h1>Aide au formatage</h1>
+<blockquote>Cette page rassemble tous les formatages utilisable dans les exercices CLIP.</blockquote>
+
+<h2>STYLISATION DES PARAGRAPHES</h2>
+
+<p>Pour styliser un paragraphe avec des styles connus, il suffit d'utiliser l'empreinte :</p>
+<pre><code>&lt;class_css>.&lt;class_css>: Le paragraphe avec les classes css.</code></pre>
+<p>Les paragraphes existants sont les suivants (on peut combiner une ou plusieurs classes en les séparant par des points — et seulement des points) :</p>
+<%= for classe <- @liste_classes_paragraphe do %>
+  <div class={classe}><code><%= classe %>:</code>  Un paragraphe dans ce style.</div>
+<% end %>
+
+<h2>LISTE D'ÉTAPES</h2>
+
+<pre><code>:etapes
+: Première étape
+: Deuxième étape
+etc.
+
+# -- Résultat --
+:=> Cette ligne ne sera pas chiffrée, elle affichera un résultat
+
+# -- Étapes avec picto devant --
+:souris   Étape avec la souris
+:clavier  Étape avec le clavier
+:cle      Étape pour une sauvegarde sur clé USB.
+:mesure   Étape où il faut faire une mesure
+:clic     Étape où il faut cliquer quelque part
+:menu     Étape où il faut choisir un menu
+:repete   Une répétition à faire
+:coche    Une case à cocher pour continuer
+:radio    Un bouton radio à choisir pour continuer.
+</code></pre>
+
+<h2>Bloc de code</h2>
+
+<pre><code>:blockcode
+: Première ligne de code
+: Deuxième ligne de code
+etc.
+:+ Ligne de code à marquer "ajouté" (signe "+")
+</code></pre>
+
+<h2>TABLE</h2>
+
+<pre><code>:table
+::cols_width(c1, c2..., cN)
+  Largeur des colonnes. Une valeur "_" s'adaptera à ce qui reste
+  S'il y en a une seule, toutes les colonnes auront cette largeur
+::cols_align(c1, c2..., cN)
+::cols_pad(c1, c2..., cN)     
+::cols_class(c1, c2..., cN)
+::cols_libelle(c1, c2..., cN)
+: Première cellule, Deuxième cellule, ..., Cellule N
+: Cellule avec \, une virgule, la bonne deuxième, ..., Cellule N
+: css:Cellule stylisée, ..., Cellule N
+
+    Laisser toujours une ligne vide après les blocs
+</code></pre>
+
+<h2>Q.C.M</h2>
+
+<em>Un bloc pour les QCM, les Questionnaires à choix multiples.</em>
+
+<pre><code>:qcm
+:Qc Une première question, avec des choix multiple (cases à cocher)
+:r Une réponse comme case à cocher
+:r Une autre réponse comme case à cocher
+etc.
+:Qr Une deuxième question avec un choix unique (bouton radio)
+:r Une première réponse
+:r Une autre réponse
+etc.
+:Qc Troisième question, en donnant la valeur de points des réponses
+:r0 C'est une mauvaise réponse
+:r1 C'est une réponse à 1 point
+:r4 C'est une réponse à 4 points
+etc.
+:Qr Quatrième question avec des réponses pointées
+:r0 Pas de point pour ce choix
+:r5 5 point pour celui qui choisit ce bouton
+:r2  Entre les deux eaux.
+</code></pre>

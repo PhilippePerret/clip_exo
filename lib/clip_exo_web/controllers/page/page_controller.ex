@@ -15,4 +15,13 @@ defmodule ClipExoWeb.PageController do
     end
   end
 
+  def aide_formatage(conn, _params) do
+    # Pour être toujours à la page, on fait une copie du fichier 
+    # clip_exo.css dans le dossier /priv/static/css
+    File.cp!("./_exercices/css/clip_exo.css", "./priv/static/css/clip_exo.css")
+    render(conn, :aide_formatage, %{
+      liste_classes_paragraphe: ["rub", "rubi", "cadre"]
+    })
+  end
+
 end
