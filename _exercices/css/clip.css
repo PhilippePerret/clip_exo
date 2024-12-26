@@ -246,6 +246,7 @@ div.picto {
   vertical-align: bottom;
   display:inline-block;
   background-image: url(icones-actions-sprite.png);
+  zoom: 80%: /* pour modifier la taille de façon fine */
 }
 
 div.picto.souris {

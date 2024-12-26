@@ -7,7 +7,7 @@ defmodule PPString do
     :trim     Si true, on retourne la chaine trimée
               Default: nil
   """
-  def nil_if_empty(string, options \\ %{}) do
+  def nil_if_empty(string, options \\ %{trim: false}) do
     trimed_string = String.trim(string)
     if trimed_string == "" do
       nil

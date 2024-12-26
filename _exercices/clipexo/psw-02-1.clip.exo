@@ -20,24 +20,16 @@ Un page `HTML` — ou « page web » —, c'est d'abord un fichier portant l'
 On peut voir une page HTML comme un ensemble de boites imbriquées les unes dans les autres. On les appelle des « conteneurs ».
 Un conteneur est définie par une balise (« tag » en anglais). Pour définir la boite, on a une balise d'ouverture (qui commence par « `&lt;` ») et une balise de fermeture (qui commence par « `&lt;/` ») :
 
-<div class="picto souris"></div> La souris
-
-<div class="picto clavier"></div> Le clavier
-
-<div class="picto menu"></div> Le menu
-
-<div class="picto clic"></div> Un click
-
-<div class="picto cle_usb"></div> Une clé USB
-
-<div class="picto mesure"></div> Une mesure quelconque
-
-<div class="picto repete"></div> Une répétition
-
-<div class="picto radio"></div> Un bouton radio
-
-<div class="picto coche"></div> Une case à cocher
-
+:etapes
+:souris	Une étape à faire à la souris
+:clavier	 Une étape à faire au clavier
+:menu	Une étape à faire avec un menu
+:clic	Une étape à faire en cliquant quelque part
+:cle	Une étape avec une clé usb
+:mesure	Une étape pour mesurer
+:repete	Une étape où l'on doit répéter
+:radio	Une étape avec bouton radio
+:coche	Une étape avec une case à cocher
 
 :blockcode
 :		<boite>

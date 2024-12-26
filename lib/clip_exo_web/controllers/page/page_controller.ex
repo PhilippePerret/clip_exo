@@ -11,7 +11,7 @@ defmodule ClipExoWeb.PageController do
     {:ok, content} ->
       send_resp(conn, 200, content)
     {:error, err_msg} ->
-      send_resp(conn, 404, "Fichier introuvable")
+      send_resp(conn, 404, err_msg)
     end
   end
 

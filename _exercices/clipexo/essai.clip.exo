@@ -1,58 +1,22 @@
 ---
-name: PSW-00-0
-reference: PSW-00-0
-titre: Un exercice pour voir\nsur deux lignes
+name: essai
+reference: TRY-01
+titre: Pour faire des essais
 auteur: Philippe PERRET
-created_at: 23-12-2024
+created_at: 26-12-2024
 niveau: Grand débutant
 competences: ["Prise en main de l'application", "Adjonction des couleurs", "Manipulation des blocs"]
 logiciels: ["Traitement de texte", "IDE"]
 duree: [15, 45]
 ---
-rub:Mission
-La mission de l'exercice va consister à le réussir.
-C'est une mission assez importante.
-
-rub:Scénario
-cadre: Suivez ce scénario à la lettre pour pouvoir réaliser l'exercice.
-
-:etapes(num)
-:   Faire la première action
-:cr Faire la deuxième action
-:   Faire la troisième action
-:=> Ça produit le résultat attendu.
 
 :etapes
-::no_num
-:   Un nouveau comptage
-:   Un deuxième nouveau pas
-:=> Ça produit ça.
-
-:blockcode(num)
-:   <html>
-:+    <head>
-:+    <head>
-:   </html>
-
-:blockcode(num)
-:+  <body>
-:     <div>Mon div</div>
-:   </body>
-
-:table
-:Table, sans, options
-:options, sans, table
-
-:table
-::borders(h)
-::cols_label(Nom, Prénom)
-::cols_width(20%, _)
-::cols_align(center, center)
-::cols_class(libelle, value)
-:Table : ,  borders(h)
-:Deuxième libellé, Deuxième valeur
-:Troisième libellé, Troisième valeur
-
-:table
-::borders(v)
-: Table : ,  borders(v)
+:souris	Une étape à faire à la souris
+:clavier	 Une étape à faire au clavier
+:menu	Une étape à faire avec un menu
+:clic	Une étape à faire en cliquant quelque part
+:cle	Une étape avec une clé usb
+:mesure	Une étape pour mesurer
+:repete	Une étape où l'on doit répéter
+:radio	Une étape avec bouton radio
+:coche	Une étape avec une case à cocher

@@ -161,9 +161,9 @@ defmodule ExoParser do
   @reg_exo_line ~r/
   ^ # début
   \: # commence par deux points
-  (?:(?<type_line>[a-z]{1,3}|=>|\+)?(?<pre_line>[ \t]+))? # définition de la ligne dans le conteneur p.e. cr
+  (?:(?<type_line>[a-z]{1,7}|=>|\+)?(?<pre_line>[ \t]+))? # définition de la ligne dans le conteneur p.e. cr
                                                           # et espace entre deux points et contenu ligne
-  (?<options>\:)? # éventuellement une option
+  (?<options>\:)? # une option éventuelle
   (?<type_cont>[a-z]+)? # le type du conteneur ou le début de ligne de conteneur
   (?<rest>.*) # tout ce qui reste
   $ # jusqu'à la fin
@@ -259,7 +259,7 @@ defmodule ExoParser do
         #          directement dans le conteneur
         if conteneur do
           exoline = parse_cssed_line_content(type_cont <> rest)
-          tline = PPString.nil_if_empty(type_line, trim: true)
+          tline = PPString.nil_if_empty(type_line, %{trim: true})
           exoline = Map.merge(exoline, %{preline: String.replace(pre_line, "\t", "  "), tline: tline})
           conteneur = %{conteneur | lines: conteneur.lines ++ [exoline]}
           {:ok, [conteneur: conteneur]}
