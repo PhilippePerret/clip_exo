@@ -17,6 +17,11 @@ defmodule StringTo do
     "[\"Un\", \"deux\"]"    => ["Un", "deux"]
 
   """
+  @reg_atom ~r/^\:[a-z_]+$/
+  @reg_instring ~r/^"(.*)"$/
+  @reg_integer ~r/^[0-9]+$/
+  @reg_float ~r/^[0-9.]+$/
+  @reg_const ~r/(true|false|nil)/
   def list(str) when is_binary(str) do
     if String.trim(str) == "" do
       []
@@ -31,15 +36,44 @@ defmodule StringTo do
             |> String.replace("__VIRG__", ",")
             |> String.trim()
           cond do
-          x =~ ~r/^\:[a-z_]+$/      -> elem(Code.eval_string(x),0)  # :atom
-          x =~ ~r/^"(.*)"$/         -> elem(Code.eval_string(x),0)  # String
-          x =~ ~r/^[0-9]+$/         -> String.to_integer(x) # Integer
-          x =~ ~r/^[0-9.]+$/        -> String.to_float(x)   # Float
-          x =~ ~r/(true|false|nil)/ -> elem(Code.eval_string(x),0)
+          x =~ @reg_atom      -> elem(Code.eval_string(x),0)  # :atom
+          x =~ @reg_instring  -> elem(Code.eval_string(x),0)  # String
+          x =~ @reg_integer   -> String.to_integer(x) # Integer
+          x =~ @reg_float     -> String.to_float(x)   # Float
+          x =~ @reg_const     -> elem(Code.eval_string(x),0)
           true -> x # comme string
           end
         end)
     end
   end
 
+  # Fait les transformation d'usage dans les strings.
+  # à savoir :
+  #   - les backstick par deux sont remplacés par des <code>
+  #
+  @reg_candidats_html ~r/[\`\*_\-]/
+
+  @reg_backsticks ~r/\`(.+)\`/U; @remp_backsticks "<code>\\1</code>"
+  @reg_bold_ital ~r/\*\*\*(.+)\*\*\*/U; @remp_bold_ital "<b><em>\\1</em></b>"
+  @reg_bold ~r/\*\*(.+)\*\*/U; @remp_bold "<b>\\1</b>"
+  @reg_ital ~r/\*([^ ].+)\*/U; @remp_ital "<em>\\1</em>"
+  @reg_underscore ~r/__(.+)__/U; @remp_underscore "<u>\\1</u>"
+  @reg_substitute ~r/\-\-(.+)\/\/(.+)\-\-/U; @remp_substitute "<del>\\1</del> <ins>\\2</ins>"
+  @reg_strike ~r/\-\-(.+)\-\-/U; @remp_strike "<del>\\1</del>"
+
+  def html(str, options \\ %{}) do
+    if Regex.match?(@reg_candidats_html, str) do
+      str
+      |> String.replace(@reg_backsticks, @remp_backsticks)
+      |> String.replace(@reg_bold_ital, @remp_bold_ital)
+      |> String.replace(@reg_bold, @remp_bold)
+      |> String.replace(@reg_ital, @remp_ital)
+      |> String.replace(@reg_underscore, @remp_underscore)
+      |> String.replace(@reg_substitute, @remp_substitute)
+      |> String.replace(@reg_strike, @remp_strike)
+
+    else
+      str
+    end
+  end
 end
