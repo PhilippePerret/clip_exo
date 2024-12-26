@@ -67,9 +67,12 @@ defmodule ClipExo.Exo do
     {:ok, exo} ->
       exo_infos = exo.infos
       exo_infos = Map.merge(exo_infos, %{file_name: Path.basename(path)})
-      if is_nil(exo_infos[:name]) do
-        exo_infos = %{exo_infos | name: get_name_from_path(path)}
-      end
+      exo_infos =
+        if is_nil(exo_infos[:name]) do
+          %{exo_infos | name: get_name_from_path(path)}
+        else
+          exo_infos
+        end
       {:ok, %{exo | infos: exo_infos}}
     {:error, msg} -> 
       {:error, msg}
