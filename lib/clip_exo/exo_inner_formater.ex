@@ -28,6 +28,7 @@ defmodule ExoInnerFormater do
     ExoConteneur.Builder.to_html(conteneur)
   end
   def build_element(%ExoLine{} = exoline) do
+    exoline = %{exoline | fcontent: StringTo.html(exoline.content)}
     ExoLine.Builder.to_html(exoline)
   end
   def build_element(%ExoSeparator{} = _separator) do
@@ -70,7 +71,7 @@ defmodule ExoLine.Builder do
             nil -> ""
             _   -> " class=\"#{Enum.join(exo_cel.classes, " ")}\""
             end
-          "<td#{td_class}>#{String.trim(cel)}</td>"
+          "<td#{td_class}>#{String.trim(StringTo.html(cel))}</td>"
         end)
       |> Enum.join("")
       |> String.replace("__VIRG__", "\\,")
@@ -78,7 +79,7 @@ defmodule ExoLine.Builder do
   end
   # - etapes -
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :etapes} = conteneur) do
-    "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.content}</div>"
+    "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
   end
   # - raw -
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :raw} = conteneur) do
@@ -91,7 +92,7 @@ defmodule ExoLine.Builder do
 
   # Formatage d'une ligne hors conteneur
   def to_html(%ExoLine{} = exoline) do
-    "<div class=\"#{ExoLine.classes_css(exoline)}\">#{exoline.content}</div>"
+    "<div class=\"#{ExoLine.classes_css(exoline)}\">#{exoline.fcontent}</div>"
   end
 
   defp traite_line_type_code(exoline) do

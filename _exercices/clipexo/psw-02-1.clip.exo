@@ -16,17 +16,24 @@ Après avoir lu l'explication préliminaire ci-dessous, créer une page HTML aff
 Si vous ne parvenez pas à réaliser la page après lecture de l'explication préliminaire, suivre le « Scénario d'aide » plus bas.
 
 rub:Explication préliminaire
-Un page HTML, c'est d'abord un fichier portant l'extension `.html` ou `.htm.` Par exemple `ma_page.html`. Un fichier qui contient le code HTML de la page.
-On peut voir une page HTML comme un ensemble de boites les unes dans les autres. On les appelle des « conteneurs ».
-Un conteneur est définie par une balise (tag) d'ouverture et une balise de fermeture :
+Un page `HTML` — ou « page web » —, c'est d'abord un fichier portant l'extension `.html` ou `.htm.` Par exemple `ma_page.html`. Ce fichier contient le code HTML de la page.
+On peut voir une page HTML comme un ensemble de boites imbriquées les unes dans les autres. On les appelle des « conteneurs ».
+Un conteneur est définie par une balise (« tag » en anglais). Pour définir la boite, on a une balise d'ouverture (qui commence par « `&lt;` ») et une balise de fermeture (qui commence par « `&lt;/` ») :
 
 :blockcode
 :		<boite>
 :
-:			Contenu du conteneur
+:			Contenu de la boite, du conteneur.
 :
 :		</boite>
 
-(le mot `boite` peut être remplacé `div` ou `ul` ou `section`, ou plein d'autres choses)
-Une page web est une page HTML dont le conteneur principal est une balise html.
+Ci-dessus, le mot `boite` est donné seulement pour l'exemple.
 
+Une page web est une page HTML dont le conteneur principal est une balise de nom `html`.
+
+:blockcode
+:	<html>
+:
+:		Contenu de la page web
+:
+:	</html>

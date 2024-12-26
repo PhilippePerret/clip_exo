@@ -53,6 +53,7 @@ defmodule ExoLine do
   defstruct [
     type:     :line,  # toujours ? :line
     content:  nil, 
+    fcontent: nil,    # Contenu formaté
     classes:  nil,    # ou liste des css
     tline:    nil,    # ou le type de line (caractères juste après ":")
     preline:  nil     # ou les espaces/tabulations avant
