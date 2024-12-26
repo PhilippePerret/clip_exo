@@ -260,7 +260,7 @@ defmodule ExoParser do
         if conteneur do
           exoline = parse_cssed_line_content(type_cont <> rest)
           tline = PPString.nil_if_empty(type_line, trim: true)
-          exoline = Map.merge(exoline, %{preline: pre_line, tline: tline})
+          exoline = Map.merge(exoline, %{preline: String.replace(pre_line, "\t", "  "), tline: tline})
           conteneur = %{conteneur | lines: conteneur.lines ++ [exoline]}
           {:ok, [conteneur: conteneur]}
         else
