@@ -18,7 +18,8 @@ defmodule ClipExo.Exo do
     },
     body:       "contenu brut de l'exercice",
     body_html:  nil,  # le contenu formaté
-    rubriques:  []
+    rubriques:  [],   # pour les rubriques des infos
+    suivi: nil        # Pour le suivi de la construction
   ]
 
   alias ClipExo.ExoBuilder, as: Builder
@@ -45,16 +46,14 @@ defmodule ClipExo.Exo do
   d'accès relatif au fichier. Par défaut, on le cherche dans @folfder
   """
   def build(params_exo) do
-    IO.inspect(get_path_exo(params_exo), label: "\nRETOUR DE get_path_exo")
-
     with  {:ok, path} <- get_path_exo(params_exo),
           {:ok, exo}  <- parse_whole_file(path),
-          {:ok, exo}  <- open_exo_html_folder(exo),
-          {:ok, exo}  <- copy_required_files(exo) do
+          {:ok, exo}  <- build_two_files(exo),
+          {:ok, exo}  <- copy_required_files(exo),
+          {:ok, exo}  <- open_exo_html_folder(exo) do
             {:ok, exo}
     else
       {:error, message_erreur} ->
-        IO.puts message_erreur
         {:error, message_erreur}
     end
   end
@@ -65,22 +64,25 @@ defmodule ClipExo.Exo do
   end
 
   def parse_whole_file(path) do
+    IO.puts "--> parse_whole_file"
     case parse_whole_file_code(File.read!(path)) do
     {:ok, exo} ->
       exo_infos = exo.infos
+      exo_infos =
+        if is_nil(exo_infos.name) do
+          %{exo_infos | name: get_name_from_path(path)}
+        else
+          exo_infos
+        end
       exo_infos = Map.merge(exo_infos, %{
         file_name: Path.basename(path),
         path: path,
         folder: Path.dirname(path),
         htm_folder: Path.join([@html_folder, exo.infos.name])
       })
-      exo_infos =
-        if is_nil(exo_infos[:name]) do
-          %{exo_infos | name: get_name_from_path(path)}
-        else
-          exo_infos
-        end
-      {:ok, %{exo | infos: exo_infos}}
+      exo = %{exo | infos: exo_infos}
+      IO.puts "<-- parse_whole_file"
+      {:ok, exo}
     {:error, msg} -> 
       {:error, msg}
     end
@@ -99,8 +101,8 @@ defmodule ClipExo.Exo do
   Demande de construction des deux fichiers de l'exercice .clip.exo
   """
   def build_two_files(%ClipExo.Exo{} = exo) do
-    IO.puts "Je vais construire les deux fichiers de '#{exo.infos.name}'"
-    suivi = ["Début de la construction"]
+    IO.puts "--> build_two_files"
+    suivi = exo.suivi || ["Début de la construction"]
 
     suivi = suivi ++ [case Builder.build_file_specs(exo) do
       {:ok, _exo} -> "👍 Construction du fichier des caractéristiques"
@@ -112,7 +114,10 @@ defmodule ClipExo.Exo do
       {:error, msg} -> "💣 Échec de la construction du fichier de l'exercice : " <> msg
     end]
 
-    {:ok, suivi}
+    exo = %{exo | suivi: suivi}
+
+    IO.puts "<-- build_two_files"
+    {:ok, exo}
   end
 
   ###################################################################
@@ -137,7 +142,7 @@ defmodule ClipExo.Exo do
       ok = (elem(infos, 0) == :ok && body != "") && :ok || :error
 
       infos = Map.merge(%ClipExo.Exo{}.infos, elem(infos, 1))
-      |> IO.inspect(label: "\nINFOS")
+      # |> IO.inspect(label: "\nINFOS")
 
       # --- Instanciation de Exo ---
       exo = %ClipExo.Exo{infos: infos, body: body}

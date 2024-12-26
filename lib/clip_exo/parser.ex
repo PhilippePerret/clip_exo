@@ -22,7 +22,7 @@ defmodule ExoParser do
   """
 
   def parse_code(code) do
-    
+    IO.puts "--> parse_code"
     # pour fermer l'éventuel conteneur courant en fin de parse
     # du fichier
     code = code <> "\n" 
@@ -77,6 +77,10 @@ defmodule ExoParser do
               end
             end
           end)
+    # ---
+    
+    IO.puts "<-- parse_code"
+
     %{
       errors: final_collector.errors,
       elements: elements_reduits

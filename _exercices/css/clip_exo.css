@@ -27,9 +27,9 @@ header {
 
 img#logo {
   position:absolute;
-  top: 0cm;
+  top: -0.5cm;
   left: 0cm;
-  width: 2.5cm;
+  width: 3.5cm;
 }
 
 div.titre {

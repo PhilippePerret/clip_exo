@@ -15,6 +15,7 @@ defmodule ClipExo.ExoBuilder do
 
 
   def build_file_specs(exo) do
+    IO.puts "--> build_file_specs"
     # IO.inspect(exo, label: "\nEXO (in build_file_specs)")
     # template_path = Path.absname("./lib/clip_exo/exo_builder_assets/specs_file_template.html.eex")
     # assigns = %{exo: exo}
@@ -35,6 +36,7 @@ defmodule ClipExo.ExoBuilder do
     # Construire le fichier
     File.write(exo_file_specs, code)
 
+    IO.puts "<-- build_file_specs"
     {:ok, exo} # à la fin
   end
 
@@ -46,6 +48,7 @@ defmodule ClipExo.ExoBuilder do
 
   # Méthode qui construit l'exercice proprement dit
   def build_file_exo(exo) do
+    IO.puts "--> build_file_exo"
 
     # Parser le body de l'exo
     collector = ExoParser.parse_code(exo.body)
@@ -77,6 +80,8 @@ defmodule ClipExo.ExoBuilder do
     # Construire le fichier
     File.write(exo_file_path, code)
 
+    IO.puts "<-- build_file_exo"
+
     {:ok, exo}
   end
 
@@ -97,6 +102,7 @@ defmodule ClipExo.ExoBuilder do
   ]
 
   def copy_required_files(exo) do
+    IO.puts "--> copy_required_files"
     build_exo_folder_if_required(exo)
     @liste_required_files
     |> Enum.map(fn original -> 
@@ -109,7 +115,8 @@ defmodule ClipExo.ExoBuilder do
         File.cp!(original, file_in_exo)
         |> IO.inspect(label: "\nRetour de File.cp")
       end)
-    {:ok, exo}
+      IO.puts "<-- copy_required_files"
+      {:ok, exo}
   end
 
 

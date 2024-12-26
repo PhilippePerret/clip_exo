@@ -11,7 +11,7 @@ defmodule ClipExoWeb.PageController do
     {:ok, content} ->
       send_resp(conn, 200, content)
     {:error, err_msg} ->
-      send_resp(conn, 404, err_msg)
+      send_resp(conn, 200, "<div class=\"warning\">#{err_msg}</div>")
     end
   end
 

@@ -10,13 +10,17 @@ logiciels: ["Traitement de texte", "IDE"]
 duree: [15, 45]
 ---
 
+Une première ligne normale.
+
 :etapes
-:souris	Une étape à faire à la souris
-:clavier	 Une étape à faire au clavier
-:menu	Une étape à faire avec un menu
-:clic	Une étape à faire en cliquant quelque part
-:cle	Une étape avec une clé usb
-:mesure	Une étape pour mesurer
-:repete	Une étape où l'on doit répéter
-:radio	Une étape avec bouton radio
-:coche	Une étape avec une case à cocher
+:souris	  Une étape à faire à la souris
+:clavier	Une étape à faire au clavier
+:menu	    Une étape à faire avec un menu
+:clic	    Une étape à faire en cliquant quelque part
+:cle	    Une étape avec une clé usb
+:mesure	  Une étape pour mesurer
+:repete	  Une étape où l'on doit répéter
+:radio	  Une étape avec bouton radio
+:coche	  Une étape avec une case à cocher
+
+Une dernière ligne normale.
