@@ -36,7 +36,7 @@ defmodule ClipExo.Exo do
   @doc """
   @main
 
-  Construction de l'exercice définit dans +exo+
+  Construction de l'exercice définit dans +exo+ (%ClipExo.Exo)
   Function principale appelée par le bouton pour construire l'exercice
 
   Pour le moment, +exo+ ne contient que "file_path", le chemin
@@ -67,10 +67,22 @@ defmodule ClipExo.Exo do
     {:ok, exo} ->
       exo_infos = exo.infos
       exo_infos = Map.merge(exo_infos, %{file_name: Path.basename(path)})
-      {:ok, Map.put(exo, :infos, exo_infos)}
+      if is_nil(exo_infos[:name]) do
+        exo_infos = %{exo_infos | name: get_name_from_path(path)}
+      end
+      {:ok, %{exo | infos: exo_infos}}
     {:error, msg} -> 
       {:error, msg}
     end
+  end
+
+  # Retourne le nom de l'exercice tiré de +path+
+  # Note : On ne le cherche que s'il n'est pas défini dans
+  #        le fichier.
+  defp get_name_from_path(path) do
+    Path.basename(path)
+    |> String.split(".")
+    |> Enum.at(0)
   end
 
   @doc """
