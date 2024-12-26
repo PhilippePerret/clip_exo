@@ -175,7 +175,7 @@ section.etapes div.pas:before {
   display:inline-block;
   width:28px;
   position: absolute;
-  left: -1.2em;
+  left: -1.4em;
 }
 section.etapes div.resultat:before {
   content: "=> ";
@@ -276,7 +276,7 @@ div.picto.souris {
   height: 20px;
 }
 
-div.picto.cle_usb {
+div.picto.cle {
   background-position: 30px 0px;
   width: 30px;
   height: 20px;

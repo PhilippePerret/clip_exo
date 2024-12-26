@@ -18,6 +18,7 @@ Une première ligne normale.
 :menu	    Une étape à faire avec un menu
 :clic	    Une étape à faire en cliquant quelque part
 :cle	    Une étape avec une clé usb
+: Une étape normale, sans pictogramme, mais suffisamment longue pour qu'on puisse voir comment elle va se comporter.
 :mesure	  Une étape pour mesurer
 :repete	  Une étape où l'on doit répéter
 :radio	  Une étape avec bouton radio
