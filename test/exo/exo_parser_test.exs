@@ -194,8 +194,14 @@ defmodule ClipExo.BaseTest do
       : </html>
       """
       obtenu = ExoParser.parse_code(provided)
-      IO.inspect(obtenu)
-      assert true == true
+      # IO.inspect(obtenu)
+      assert Enum.count(obtenu) == 2
+      conteneur = Enum.at(obtenu.elements, 0)
+      # |> IO.inspect(label: "\nconteneur")
+      assert conteneur.type == :blockcode
+      assert Enum.count(conteneur.lines) == 5
+      deuxieme = Enum.at(conteneur.lines, 1)
+      assert deuxieme == %ExoLine{type: :line, content: "", classes: nil, tline: nil, preline: nil}
     end
 
   end #/describe "Parseur de code"
