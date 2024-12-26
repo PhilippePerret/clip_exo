@@ -5,7 +5,9 @@
   # ensuite d'exporter en PDF les exercices pour pouvoir les imprimer
   # ou les publier.
 
-  file_name = @exo["file_path"]
+  file_name = @exo.infos.name
+  exo_relative_path = ClipExo.ExoBuilder.exo_html_file( @exo, :relative )
+  IO.inspect(exo_relative_path, label: "\nexo_relative_path")
 %>
 <div>
   Exercice à construire : <%= file_name %>.
@@ -21,5 +23,9 @@
   </form>
 </div>
 
-<pre><code>
-</code></pre>
+<iframe 
+  src="/exercice/psw-02-1/psw-02-1.html"
+  width="1200"
+  height="1000"
+  frameborder="1"
+  ></iframe>

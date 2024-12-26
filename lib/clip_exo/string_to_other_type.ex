@@ -61,7 +61,7 @@ defmodule StringTo do
   @reg_substitute ~r/\-\-(.+)\/\/(.+)\-\-/U; @remp_substitute "<del>\\1</del> <ins>\\2</ins>"
   @reg_strike ~r/\-\-(.+)\-\-/U; @remp_strike "<del>\\1</del>"
 
-  def html(str, options \\ %{}) do
+  def html(str, _options \\ %{}) do
     if Regex.match?(@reg_candidats_html, str) do
       str
       |> String.replace(@reg_backsticks, @remp_backsticks)

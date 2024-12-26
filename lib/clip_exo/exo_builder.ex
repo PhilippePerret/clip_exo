@@ -2,7 +2,8 @@ defmodule ClipExo.ExoBuilder do
 
   # alias ClipExo.Exo
 
-  @folder_html Path.absname("./_exercices/html")
+  @folder_html_relative "./_exercices/html"
+  @folder_html Path.absname(@folder_html_relative)
   # IO.inspect(@folder_html, label: "\nDossier html")
 
 
@@ -37,7 +38,6 @@ defmodule ClipExo.ExoBuilder do
     {:ok, exo} # à la fin
   end
 
-
   ################################################################################
   #
   # CONSTRUCTION DU FICHIER DE L'EXERCICE PROPREMENT DIT 
@@ -68,14 +68,11 @@ defmodule ClipExo.ExoBuilder do
 
     code = ClipExoWeb.ExoBuilderView.build_file_exo(exo)
 
-    # Nom de l'exercice
-    exo_name = exo.infos.name
-
     # Construction du dossier de l'exercice
-    exo_folder = build_exo_folder_if_required(exo)
+    _exo_folder = build_exo_folder_if_required(exo)
 
     # Chemin d'accès au fichier des caractéristiques
-    exo_file_path = Path.join([exo_folder, "#{exo_name}.html"])
+    exo_file_path = exo_html_file(exo)
 
     # Construire le fichier
     File.write(exo_file_path, code)
@@ -93,12 +90,29 @@ defmodule ClipExo.ExoBuilder do
   #
   ################################################################################
 
+  # Retourne le chemin d'accès au fichier html de l'exercice
+  def exo_html_file(exo) do
+    Path.join([exo_html_folder(exo), exo_html_file_name(exo)])
+  end
+
+  def exo_html_file(exo, :relative) do
+    Path.join([@folder_html_relative, exo.infos.name, exo_html_file_name(exo)])
+  end
+
+  def exo_html_file_name(exo) do
+    "#{exo.infos.name}.html"
+  end
+  
   defp build_exo_folder_if_required(exo) do
-    exo_folder = Path.join([@folder_html, exo.infos.name])
+    exo_folder = exo_html_folder(exo)
     if not File.exists?(exo_folder) do
       File.mkdir(exo_folder)
     end
     exo_folder
+  end
+
+  def exo_html_folder(exo) do
+    Path.join([@folder_html, exo.infos.name])
   end
 
 end

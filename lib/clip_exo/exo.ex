@@ -50,7 +50,12 @@ defmodule ClipExo.Exo do
       {:ok, exo}  -> 
         # Si on a pu récupérer toutes les données (infos et body) du fichier .clip.exo,
         # on peut construire les deux fichiers
-        build_two_files(exo)
+        case build_two_files(exo) do
+        {:ok, _} ->
+          open_exo_html_folder(exo)
+          {:ok, exo}
+        {:error, err_msg} -> {:error, err_msg}
+        end
       {:error, msg} -> 
         # On n'a pas pu récupérer les données du fichier .clip.exo, on retourne
         # l'erreur rencontrée.
@@ -159,6 +164,13 @@ defmodule ClipExo.Exo do
           Map.put(acc, elem(tup, 0), elem(tup, 1))
         end)
     {:ok, infos}
+  end
+
+  @doc """
+  Ouvre le dossier html de l'exercice dans le finder
+  """
+  def open_exo_html_folder(exo) do
+    System.shell("open \"#{Path.expand(Builder.exo_html_folder(exo))}\"")
   end
 
   defp build_path_from(nil), do: nil
