@@ -5,6 +5,7 @@ defmodule ClipExo.Exo do
     infos: %{
       name: "",
       path:  "",
+      folder: "",
       reference: "",
       titre: "",
       auteur: "",
@@ -23,6 +24,7 @@ defmodule ClipExo.Exo do
   alias ClipExo.ExoBuilder, as: Builder
 
   @folder "./_exercices/clipexo/"
+  @html_folder "./_exercices/html"
 
   @doc """
   Retourne le contenu de l'exercice clip.exo +path+
@@ -42,36 +44,36 @@ defmodule ClipExo.Exo do
   Pour le moment, +exo+ ne contient que "file_path", le chemin
   d'accès relatif au fichier. Par défaut, on le cherche dans @folfder
   """
-  def build(exo) do
-    case get_path_exo(exo) do
-    {:ok, path} ->
-      IO.puts("Parsing du fichier '#{path}'…")
-      case parse_whole_file(path) do
-      {:ok, exo}  -> 
-        # Si on a pu récupérer toutes les données (infos et body) du fichier .clip.exo,
-        # on peut construire les deux fichiers
-        case build_two_files(exo) do
-        {:ok, _} ->
-          open_exo_html_folder(exo)
-          {:ok, exo}
-        {:error, err_msg} -> {:error, err_msg}
-        end
-      {:error, msg} -> 
-        # On n'a pas pu récupérer les données du fichier .clip.exo, on retourne
-        # l'erreur rencontrée.
-        {:error, msg}
-      end
-    {:error, error} ->
-      IO.puts error
-      {:error, error}
+  def build(params_exo) do
+    IO.inspect(get_path_exo(params_exo), label: "\nRETOUR DE get_path_exo")
+
+    with  {:ok, path} <- get_path_exo(params_exo),
+          {:ok, exo}  <- parse_whole_file(path),
+          {:ok, exo}  <- open_exo_html_folder(exo),
+          {:ok, exo}  <- copy_required_files(exo) do
+            {:ok, exo}
+    else
+      {:error, message_erreur} ->
+        IO.puts message_erreur
+        {:error, message_erreur}
     end
+  end
+
+  def copy_required_files(exo) do
+    Builder.copy_required_files(exo)
+    # => {:ok, exo} ou {:error, erreur}
   end
 
   def parse_whole_file(path) do
     case parse_whole_file_code(File.read!(path)) do
     {:ok, exo} ->
       exo_infos = exo.infos
-      exo_infos = Map.merge(exo_infos, %{file_name: Path.basename(path)})
+      exo_infos = Map.merge(exo_infos, %{
+        file_name: Path.basename(path),
+        path: path,
+        folder: Path.dirname(path),
+        htm_folder: Path.join([@html_folder, exo.infos.name])
+      })
       exo_infos =
         if is_nil(exo_infos[:name]) do
           %{exo_infos | name: get_name_from_path(path)}
@@ -171,6 +173,7 @@ defmodule ClipExo.Exo do
   """
   def open_exo_html_folder(exo) do
     System.shell("open \"#{Path.expand(Builder.exo_html_folder(exo))}\"")
+    {:ok, exo}
   end
 
   defp build_path_from(nil), do: nil
@@ -187,9 +190,9 @@ defmodule ClipExo.Exo do
 
   # Pour définir précisément le chemin d'accès au fichier de l'exercice, qui n'existe
   # pas forcément encore
-  defp get_path_exo(exo) do
-    if exo["file_path"] do
-      { :ok, Path.join([@folder, add_extensions_if_needed(exo["file_path"])]) }
+  defp get_path_exo(params_exo) do
+    if params_exo["file_path"] do
+      { :ok, Path.join([@folder, add_extensions_if_needed(params_exo["file_path"])]) }
     else
       { :error, "Il faut définir au moins le nom du fichier."}
     end

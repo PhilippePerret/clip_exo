@@ -86,6 +86,35 @@ defmodule ClipExo.ExoBuilder do
   
   ################################################################################
   #
+  # COPY DES FICHIERS REQUIS DANS LE DOSSIER DE L'EXERCICE
+  #
+  ################################################################################
+
+  @liste_required_files [
+    "./_exercices/css/clip_exo.css",
+    "./_exercices/images/Icones-actions-sprite.png",
+    "./_exercices/images/logo-clip-alpha.png"
+  ]
+
+  def copy_required_files(exo) do
+    build_exo_folder_if_required(exo)
+    @liste_required_files
+    |> Enum.map(fn original -> 
+        file_in_exo = Path.join([exo.infos.htm_folder,Path.basename(original)])
+        |> IO.inspect(label: "\nCopie vers")
+        if File.exists?(file_in_exo) do
+          File.rm(file_in_exo)
+        end
+        IO.puts "Copie de\n\t#{original}\nvers\n\t#{file_in_exo}"
+        File.cp!(original, file_in_exo)
+        |> IO.inspect(label: "\nRetour de File.cp")
+      end)
+    {:ok, exo}
+  end
+
+
+  ################################################################################
+  #
   # FONCTIONS GÉNÉRALISTES
   #
   ################################################################################
