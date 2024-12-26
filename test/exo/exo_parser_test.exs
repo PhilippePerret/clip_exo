@@ -184,5 +184,19 @@ defmodule ClipExo.BaseTest do
       assert true == true
     end
 
+    test "Conteneur avec des lignes vides" do
+      provided = """
+      :blockcode
+      : <html>
+      :
+      :   Contenu page
+      :
+      : </html>
+      """
+      obtenu = ExoParser.parse_code(provided)
+      IO.inspect(obtenu)
+      assert true == true
+    end
+
   end #/describe "Parseur de code"
 end 
