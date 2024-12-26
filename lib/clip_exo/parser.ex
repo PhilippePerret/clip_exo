@@ -183,7 +183,7 @@ defmodule ExoParser do
     trimed_line == ":" and conteneur ->
       # La ligne ne contient que ":" en début de ligne. C'est donc
       # une ligne vide dans le conteneur.
-      new_exoline = %ExoLine{type: :line, content: ""}
+      new_exoline = %ExoLine{type: :line, content: " "}
       conteneur = %{conteneur | lines: conteneur.lines ++ [new_exoline]}
       {:ok, [type: :conteneur, conteneur: conteneur]}
 
@@ -279,7 +279,7 @@ defmodule ExoParser do
   # Note
   # Cette ligne peut se rencontrer sur une ligne ou dans un autre
   # élément comme un conteneur.
-  defp parse_cssed_line_content(line) do
+  def parse_cssed_line_content(line) do
     case Regex.named_captures(@reg_cssed_paragraph, line) do
     nil -> 
       %ExoLine{type: :line, content: line, classes: nil}
@@ -334,7 +334,7 @@ defmodule ExoParser do
         end
         coptions # l'collector
       end)
-      |> IO.inspect(label: "\nOPTIONS APRÈS ÉVALUATION")
+      # |> IO.inspect(label: "\nOPTIONS APRÈS ÉVALUATION")
   end
 
   # Dans le code du fichier, les paramètres string ne sont mis entre

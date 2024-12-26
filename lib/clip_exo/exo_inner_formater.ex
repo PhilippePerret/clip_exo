@@ -21,7 +21,8 @@ defmodule ExoInnerFormater do
   end
 
   @doc """
-  Function qui construit l'élément
+  Function qui construit l'élément en fonction de son exo-type
+  (%ExoConteneur, %ExoLine, etc.)
   """
   def build_element(%ExoConteneur{} = conteneur) do
     ExoConteneur.Builder.to_html(conteneur)
@@ -61,8 +62,15 @@ defmodule ExoLine.Builder do
       |> String.replace("\\,", "__VIRG__")
       |> String.split(",")
       |> Enum.map(fn cel -> 
-          # TODO elles peuvent être stylé avec «««css: Le texte»»»
-          "<td>#{String.trim(cel)}</td>"
+          # La cellule être stylée avec «««css: Le texte»»»
+          exo_cel = cel |> String.trim() |> ExoParser.parse_cssed_line_content()
+          # => %ExoLine{}
+          td_class =
+            case exo_cel.classes do
+            nil -> ""
+            _   -> " class=\"#{Enum.join(exo_cel.classes, " ")}\""
+            end
+          "<td#{td_class}>#{String.trim(cel)}</td>"
         end)
       |> Enum.join("")
       |> String.replace("__VIRG__", "\\,")
@@ -85,7 +93,6 @@ defmodule ExoLine.Builder do
   def to_html(%ExoLine{} = exoline) do
     "<div class=\"#{ExoLine.classes_css(exoline)}\">#{exoline.content}</div>"
   end
-  
 
   defp traite_line_type_code(exoline) do
     exoline.content
@@ -108,8 +115,8 @@ defmodule ExoConteneur.Builder do
     css = ExoConteneur.classes_css(conteneur)
     "<#{cont_tag} class=\"#{css}\">"
     <> (conteneur.lines
-    |> Enum.map(&ExoInnerFormater.build_element(&1, conteneur))
-    |> Enum.join(""))
+        |> Enum.map(&ExoInnerFormater.build_element(&1, conteneur))
+        |> Enum.join(""))
     <> "</#{cont_tag}>"
   end
 end # /module ExoConteneur.Builder

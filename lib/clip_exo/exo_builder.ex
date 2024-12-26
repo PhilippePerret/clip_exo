@@ -48,21 +48,21 @@ defmodule ClipExo.ExoBuilder do
   def build_file_exo(exo) do
 
     # Parser le body de l'exo
-    accumulateur = ExoParser.parse_code(exo.body)
-    # |> IO.inspect(label: "\nACCUMULATEUR")
+    collector = ExoParser.parse_code(exo.body)
+    # |> IO.inspect(label: "\nCOLLECTEUR")
 
     inner = [] 
     
     inner = inner ++ [
-      if Enum.any?(accumulateur.errors) do
-        build_section_errors(accumulateur.errors)
+      if Enum.any?(collector.errors) do
+        build_section_errors(collector.errors)
       else
         ""
       end
     ]
 
     # Le corps de l'exercice
-    inner = inner ++ [ExoInnerFormater.build(accumulateur.elements, exo)]
+    inner = inner ++ [ExoInnerFormater.build(collector.elements, exo)]
 
     exo = %{exo | body_html: Enum.join(inner, "")}
 
