@@ -166,7 +166,7 @@ defmodule ExoParser do
   @reg_exo_line ~r/
   ^ # début
   \: # commence par deux points
-  (?:(?<type_line>[a-z]{1,7}|=>|\+)?(?<pre_line>[ \t]+))? # définition de la ligne dans le conteneur p.e. cr
+  (?:(?<type_line>[a-z0-9]{1,7}|=>|\+)?(?<pre_line>[ \t]+))? # définition de la ligne dans le conteneur p.e. cr
                                                           # et espace entre deux points et contenu ligne
   (?<options>\:)? # une option éventuelle
   (?<type_cont>[a-z]+)? # le type du conteneur ou le début de ligne de conteneur

@@ -266,7 +266,7 @@ pre.warning {
 div.picto {
   vertical-align: bottom;
   display: inline-block;
-  background-image: url(icones-actions-sprite.png);
+  background-image: url(z_icones-actions-sprite.png);
   transform: scale(80%); /* pour ajuster de façon fine */
   margin-right: 8px;
 }

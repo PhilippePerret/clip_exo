@@ -128,7 +128,7 @@ defmodule ClipExo.ExoBuilder do
         # la date de modification du fichier original poru savoir
         # s'il est nécessaire de l'actualiser
         if File.exists?(file_in_exo) do
-          if File.Stat.mtime(file_in_exo) < File.Stat.mtime(original) do
+          if File.stat!(file_in_exo).mtime < File.stat!(original).mtime do
             File.rm(file_in_exo)
           end
         end
