@@ -2,19 +2,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="clip_exo.css" />
+    <link rel="stylesheet" href="z_clip_exo.css" />
   </head>
   <body>
     <header>
-			<img id="logo" src="logo-clip-alpha.png" />
-			<titre><%= raw @exo_titre %></titre>
+			<img id="logo" src="z_logo-clip-alpha.png" />
+      <div class="titre"><%= raw @exo_titre %></div>
 		</header>
 
     <.table_specs id={"infos"} rows={@infos} class="table_specs">
-      <:col :let={data}>
+      <:col :let={data} label="Donnée">
         {data.label}
       </:col>
-      <:col :let={data}>
+      <:col :let={data} label="Valeur">
         {raw data.value}
       </:col>
     </.table_specs>

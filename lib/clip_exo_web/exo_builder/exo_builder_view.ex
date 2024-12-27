@@ -27,19 +27,28 @@ defmodule ClipExoWeb.ExoBuilderView do
   ##############################################################
   def build_file_specs(exo) do
     assigns = [
+      exo: exo,
       infos: [
         %{label: "Référence", value: exo.infos.reference},
         %{label: "Nom", value: exo.infos.name},
         %{label: "Niveau", value: exo.infos.niveau},
-        %{label: "Compétences", value: exo.infos.competences || ""},
-        %{label: "Logiciels", value: exo.infos.logiciels || ""},
+        %{label: "Compétences", value: met_en_forme_liste(exo.infos.competences)},
+        %{label: "Logiciels", value: met_en_forme_liste(exo.infos.logiciels)},
         %{label: "", value: ""},
         %{label: "Auteur", value: exo.infos.auteur},
-        %{label: "Révisions", value: exo.infos.revisions},
+        %{label: "Révisions", value: met_en_forme_liste(exo.infos.revisions)},
       ],
       exo_titre: exo.infos.titre |> String.replace(~r/\\n/, "<br />")
     ]
     render_to_string(ClipExoWeb.ExoBuilderView, "specs_file.html", assigns)
+  end
+
+  def met_en_forme_liste(liste) do
+    cond do
+    is_nil(liste) -> "---"
+    Enum.count(liste) == 1 -> Enum.at(liste, 0)
+    true -> (Enum.map(liste, fn x -> "<li>#{x}</li>" end) |> Enum.join(""))
+    end
   end
 
   slot :col, doc: "Columns with column labels" do
