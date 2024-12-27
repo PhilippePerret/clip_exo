@@ -30,28 +30,29 @@ defmodule StringTo do
     Ou autres unités : "po", "inc", "mm", "px"
 
   """
-  def value(x) do
+  def value(x) when is_binary(x) do
     cond do
     x =~ @reg_atom      -> elem(Code.eval_string(x),0)  # :atom
     x =~ @reg_instring  -> elem(Code.eval_string(x),0)  # String
-    Regex.match?(@reg_range, x) ->                      # Range
-      elem(Code.eval_string(x),0)
+    x =~ @reg_range     -> elem(Code.eval_string(x),0)  # Range
     x =~ @reg_integer   -> String.to_integer(x)         # Integer
     x =~ @reg_float     -> String.to_float(x)           # Float
     x =~ @reg_const     -> elem(Code.eval_string(x),0)  # true, false,...
-    x = Regex.run(@reg_pourcent_int, x) -> 
-      x = x |> Enum.at(1)
-      %{type: :pourcent, value: String.to_integer(x)}
-    x = Regex.run(@reg_pourcent_float, x) -> 
-      x = x |> Enum.at(1)
-      %{type: :pourcent, value: String.to_float(x)}
-    x = Regex.named_captures(@reg_size_int, x) ->
-      %{type: :size, value: String.to_integer(x["value"]), unity: x["unity"]}
-    x = Regex.named_captures(@reg_size_float, x) ->
-      %{type: :size, value: String.to_float(x["value"]), unity: x["unity"]}
-    true -> x # comme string
+    xr = Regex.run(@reg_pourcent_int, x) -> 
+      xr = xr |> Enum.at(1)
+      %{type: :pourcent, value: String.to_integer(xr), raw_value: x}
+    xr = Regex.run(@reg_pourcent_float, x) -> 
+      xr = xr |> Enum.at(1)
+      %{type: :pourcent, value: String.to_float(xr), raw_value: x}
+    xr = Regex.named_captures(@reg_size_int, x) ->
+      %{type: :size, value: String.to_integer(xr["value"]), unity: xr["unity"], raw_value: x}
+    xr = Regex.named_captures(@reg_size_float, x) ->
+      %{type: :size, value: String.to_float(xr["value"]), unity: xr["unity"], raw_value: x}
+    true -> x # comme string ou autre
     end
   end
+  def value(x), do: x
+
 
   @doc """
   Function qui reçoit un string est retourne une liste
@@ -76,16 +77,20 @@ defmodule StringTo do
     else
       String.trim(str)
       |> String.replace(~r/^\[(.*)\]$/, "\\1")
-      |> String.replace("\\,", "__VIRG__")
+      |> String.replace("\\,", "__VIRGU__")
       |> String.split(",")
       # - Une liste à partir d'ici -
       |> Enum.map(fn x -> 
-          x = x
-            |> String.replace("__VIRG__", ",")
-            |> String.trim()
-            |> value()
+          x
+          |> String.replace("__VIRGU__", ",")
+          |> String.trim()
+          |> StringTo.value()
         end)
     end
+  end
+  def list(foo) do
+    IO.inspect(foo, label: "\nN'est pas un string envoyé à StringTo.list")
+    foo
   end
 
   # Fait les transformation d'usage dans les strings.

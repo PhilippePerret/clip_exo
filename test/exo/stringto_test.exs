@@ -14,7 +14,7 @@ defmodule ClipExo.StringToTest do
       espere = (espere == "_") && fourni || espere
       obtenu = StringTo.value(fourni)
       assert espere == obtenu, 
-        "Transformation StringTo.html a échoué.\nEn fournissant : #{if String.length(fourni) > 30, do: "\n\t"}#{inspect(fourni)}\non aurait dû obtenir : #{if String.length(inspect(espere)) > 30, do: "\n\t"}#{inspect(espere)}\non a obtenu : #{if String.length(inspect(obtenu)) > 30, do: "\n\t"}#{inspect(obtenu)}"
+        "Transformation StringTo.html a échoué.\nEn fournissant : #{if String.length(inspect(fourni)) > 30, do: "\n\t"}#{inspect(fourni)}\non aurait dû obtenir : #{if String.length(inspect(espere)) > 30, do: "\n\t"}#{inspect(espere)}\non a obtenu : #{if String.length(inspect(obtenu)) > 30, do: "\n\t"}#{inspect(obtenu)}"
     end)
   end
 
@@ -96,6 +96,15 @@ defmodule ClipExo.StringToTest do
       test_with_list([
         {"Oui\\, c'est bon, Non\\, tu crois ?", ["Oui, c'est bon", "Non, tu crois ?"]},
         {"[Oui\\, c'est bon, Non\\, tu crois ?]", ["Oui, c'est bon", "Non, tu crois ?"]},
+      ])
+    end
+
+    test " liste avec valeurs entre string : ««« [12, string, \"string\"]" do
+      test_with_list([
+        {"[oui, \"non\"]", ["oui", "non"]},
+        {"oui, \"non\"", ["oui", "non"]},
+        {"[oui, \"20%\"]", ["oui", "20%"]},
+        {"oui, \"20%\"", ["oui", "20%"]},
       ])
     end
 
@@ -185,19 +194,22 @@ defmodule ClipExo.StringToTest do
         {"nil", nil},
         {":atom", :atom},
         {":pas un atom", "_"},
-        {"50%", %{type: :pourcent, value: 50}},
+        {"50%", %{type: :pourcent, value: 50, raw_value: "50%"}},
         {"50% mais string", "_"},
-        {"50.5%", %{type: :pourcent, value: 50.5}},
-        {"50px", %{type: :size, value: 50, unity: "px"}},
+        {"50.5%", %{type: :pourcent, value: 50.5, raw_value: "50.5%"}},
+        {"50px", %{type: :size, value: 50, unity: "px", raw_value: "50px"}},
         {"50 px", "_"},
-        {"50.2px", %{type: :size, value: 50.2, unity: "px"}},
-        {"40cm", %{type: :size, value: 40, unity: "cm"}},
-        {"30mm", %{type: :size, value: 30, unity: "mm"}},
-        {"30.3mm", %{type: :size, value: 30.3, unity: "mm"}},
-        {"20po", %{type: :size, value: 20, unity: "po"}},
-        {"15inc", %{type: :size, value: 15, unity: "inc"}},
-        {"10pt", %{type: :size, value: 10, unity: "pt"}},
-        {"1..10", 1..10}
+        {"50.2px", %{type: :size, value: 50.2, unity: "px", raw_value: "50.2px"}},
+        {"40cm", %{type: :size, value: 40, unity: "cm", raw_value: "40cm"}},
+        {"30mm", %{type: :size, value: 30, unity: "mm", raw_value: "30mm"}},
+        {"30.3mm", %{type: :size, value: 30.3, unity: "mm", raw_value: "30.3mm"}},
+        {"20po", %{type: :size, value: 20, unity: "po", raw_value: "20po"}},
+        {"15inc", %{type: :size, value: 15, unity: "inc", raw_value: "15inc"}},
+        {"10pt", %{type: :size, value: 10, unity: "pt", raw_value: "10pt"}},
+        {"1..10", 1..10},
+        {100, 100},
+        {true, true},
+        {nil, nil}
       ])
     end
   end #/describe "StringTo.value"

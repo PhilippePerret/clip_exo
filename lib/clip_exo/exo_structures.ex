@@ -1,12 +1,21 @@
 defmodule ExoOptionsConteneur do
   defstruct [
     borders:    ["h", "v"],  # les bordures des tables par défaut
-    cols_label: [],  # label des colonnes de table par défaut
-    cols_width: [],  # largeur des colonnes de table par défaut
-    cols_class: [],  # classes CSS des colonnes de table par défaut
-    cols_align: [],  # alignement des colones de table par défaut
-    cols_pad:   [],  # padding pour chaque colonnes
-    no_num:     false, # Pour les étapes et les codes, suppression des numéros
+    cols_label: [],     # label des colonnes de table par défaut
+    cols_width: [],     # largeur des colonnes de table par défaut
+    cols_class: [],     # classes CSS des colonnes de table par défaut
+    cols_align: [],     # alignement des colones de table par défaut
+    cols_pad:   [],     # padding pour chaque colonnes
+    legende:    nil,    # la légende
+    define_cols: false, # sera mis à true si les colonnes sont définis
+    cols_count: nil,    # Nombre de colonnes
+    cols_flex:  false,  # Mis à true en interne quand une colonne 
+                        # définit la largeur "_". Ça permet de mettre
+                        # le style de la table à width:100%
+    cols:       "",     # Pour la construction interne du colgroup
+    section_header: "", # À ajouter juste après <section...> ou <table...>
+    section_footer: "", # À ajouter juste avant </section> ou </table>
+    no_num:     false   # Pour les étapes et les codes, suppression des numéros
   ]
 end
 

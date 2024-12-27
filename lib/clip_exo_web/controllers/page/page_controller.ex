@@ -1,7 +1,7 @@
 defmodule ClipExoWeb.PageController do
   use ClipExoWeb, :controller
 
-  import ExoInnerFormater
+  alias ExoInnerFormater
   
   def home(conn, _params) do
     render(conn, :home)

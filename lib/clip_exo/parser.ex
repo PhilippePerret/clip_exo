@@ -79,7 +79,7 @@ defmodule ExoParser do
           end)
     # ---
     
-    IO.inspect(elements_reduits, label: "\nELEMENTS")
+    # IO.inspect(elements_reduits, label: "\nELEMENTS")
     IO.puts "<-- parse_code"
 
     %{
@@ -321,57 +321,22 @@ defmodule ExoParser do
           case captures do
           nil ->
             # Option simple ou liste d'options simple (p.e. no_num, no_bg)
-            stringify_parameters(x) |> Enum.map(fn x -> 
-              opt_name = String.to_atom(x) 
+            StringTo.list(x) |> Enum.map(fn x -> 
+              opt_name = String.to_atom(x)
+              Map.has_key?(coptions, opt_name) || raise("Clé inconnue : #{opt_name}") # TODO: Plus tard, remonter une erreur, car là, c'est l'user qui produit une erreur en mettant mal les options
               %{coptions | opt_name => true}
             end)
           _ ->
             # Option complexe
             %{"fun" => fun, "parameters" => parameters} = captures
-            values = 
-              if parameters == "" do
-                []
-              else
-                stringify_parameters(parameters)
-              end
+            values = StringTo.list(parameters)
             opt_name = String.to_atom(fun)
+            Map.has_key?(coptions, opt_name) || raise("Clé inconnue dans : #{opt_name}") # TODO: Plus tard, remonter une erreur, car là, c'est l'user qui produit une erreur en mettant mal les options
             %{coptions | opt_name => values }
         end
         coptions # l'collector
       end)
       # |> IO.inspect(label: "\nOPTIONS APRÈS ÉVALUATION")
   end
-
-  # Dans le code du fichier, les paramètres string ne sont mis entre
-  # guillemets que lorsqu'il y a des espaces. Dans le cas contraire, ils
-  # sont mis tel quel. Pour pouvoir en faire des paramètres, il faut
-  # donc les entourer de guillemets avant de les évaluer
-  #
-  defp stringify_parameters(params) do
-    if Regex.match?(~r/[^0-9]/, params) && not Regex.match?(~r/"/, params) do
-      String.split(params, ",") |> Enum.map(fn x -> String.trim(x) end)
-    else
-      safe_eval("[" <> params <> "]") # => par exemple [12]
-    end
-  end
-  
-  # Quand une valeur est donnée en paramètre (par exemple «««mafonction(valeur)»»» ), on
-  # doit l'évaluer avec prudence. Si ça produit une erreur, on considère que c'est
-  # une valeur string
-  defp safe_eval(maybe_string) do
-    try do
-      elem(Code.eval_string(maybe_string), 0)
-    rescue 
-      _e -> maybe_string
-    end
-  end
-  # defp safe_eval(maybe_string, bind) do
-  #   try do
-  #     elem(Code.eval_string(maybe_string, bind), 0)
-  #   rescue 
-  #     _e -> maybe_string
-  #   end
-  # end
-
 
 end # module ExoParser

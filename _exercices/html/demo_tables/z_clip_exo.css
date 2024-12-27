@@ -323,3 +323,25 @@ div.picto.repete {
   width: 30px;
   height: 20px;
 }
+
+
+
+/* 
+  ---------- Styles généraux ------------
+*/
+.left {text-align: left}
+.center {text-align: center}
+.right {text-align: right}
+
+.bg_purple, td.bg_purple {
+  background-color: purple; 
+  color: white;
+}
+
+.bg_blue, td.bg_blue {
+  background-color: blue; 
+  color: white;
+}
+.bg_lightgrey, td.bg_lightgrey {
+  background-color: lightgrey;
+}

@@ -93,24 +93,49 @@ defmodule ExoLine.Builder do
     "<div class=\"#{css}\">#{ExoLine.pre_line_in_blockcode(exoline)}#{traite_line_type_code(exoline)}</div>"
   end
   # - ligne de TABLE -
-  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :table} = _conteneur) do
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :table} = conteneur) do
+    options = conteneur.options
     row =
       exoline.content
-      |> String.replace("\\,", "__VIRG__")
-      |> String.split(",")
-      |> Enum.map(fn cel -> 
+      |> StringTo.list()
+      |> Enum.with_index()
+      |> Enum.map(fn {cel, index} -> 
           # La cellule être stylée avec «««css: Le texte»»»
-          exo_cel = cel |> String.trim() |> ExoParser.parse_cssed_line_content()
+          exo_cel = cel 
+            |> String.trim() 
+            |> ExoParser.parse_cssed_line_content()
           # => %ExoLine{}
-          td_class =
-            case exo_cel.classes do
-            nil -> ""
-            _   -> " class=\"#{Enum.join(exo_cel.classes, " ")}\""
+
+          # On récolte les classes qui peuvent être dans les options
+          # de colonnes.
+          classes = []
+          # Des classes peuvent venir des cols_class ou cols_align
+          classes = 
+            for property <- [:cols_class, :cols_align] do
+              classes = 
+              case Enum.at(Map.get(options, property), index) do
+              nil -> classes
+              col_attr -> classes ++ [col_attr]
+              end
             end
-          "<td#{td_class}>#{String.trim(StringTo.html(cel))}</td>"
+
+          # classes =
+          # case Enum.at(options.cols_class, index) do
+          # nil -> classes
+          # col_attr -> classes ++ [col_attr]
+          # end
+          # classes =
+          # case Enum.at(options.cols_align, index) do
+          # nil -> classes
+          # col_attr -> classes ++ [col_attr]
+
+          td_class =
+            if Enum.any?(classes) do
+              " class=\"#{Enum.join(classes, " ")}\""
+            else "" end
+          "<td#{td_class}>#{String.trim(StringTo.html(exo_cel.content))}</td>"
         end)
       |> Enum.join("")
-      |> String.replace("__VIRG__", "\\,")
     "<tr>" <> row <> "</tr>"
   end
   # - Ligne d'ÉTAPES -
@@ -155,24 +180,99 @@ defmodule ExoConteneur.Builder do
     if Enum.any?(options.cols_label) do
       IO.puts "Il faut construire une première ligne de labels"
     end
-    if Enum.any?(options.cols_width) do
-      IO.puts "Il faut définir la largeur des colonnes."
+
+    options = 
+    if Enum.empty?(options.cols_width) do
+      options
+    else
+      # Des largeurs de colonnes sont définies. Il y a deux choses à
+      # faire :
+      #   1) s'assurer que les unités de chaque colonne soient 
+      #      bien définies (car on peut donner les nombre de 
+      #      pixels seulement)
+      #   2) remplacer l'éventuelle valeur "_" par le reste.
+      #
+      collector = # %{total: 0, unite: nil, flex_value: false}
       options.cols_width
-      |> Enum.map(fn x -> 
-          x = StringTo.value(x)
+      |> Enum.reduce(%{total: 0, unite: nil, flex_value: false, values: []}, fn x, acc -> 
+          # IO.inspect(x, label: "Traitement de x")
+          xx = StringTo.value(x)
+          # IO.inspect(xx, label: "XX")
+          cond do
+          is_integer(xx) || is_float(xx) -> 
+            Map.merge(acc, %{
+              total: acc.total + xx,
+              values: acc.values ++ ["#{xx}px"]
+            })
+          x == "_" -> 
+            Map.merge(acc, %{
+              flex_value: true,
+              values: acc.values ++ ["_"]
+            })
+          %{type: :pourcent} = xx  ->
+            Map.merge(acc, %{
+              unite: :pourcent,
+              total: acc.total + xx.value,
+              values: acc.values ++ [xx.raw_value]
+            })
+          %{type: :size}     = xx  ->
+            Map.merge(acc, %{
+              unite: xx.unity,
+              total: acc.total + xx.value,
+              values: acc.values ++ [xx.raw_value]
+            })
+          true -> 
+            %{ acc | values: acc.values ++ [xx] }
+          end
         end)
-    end
+        # |> IO.inspect(label: "/nRésultat de Enum.Reduce")
+
+      final_cols_width = 
+      collector.values
+      |> Enum.map(fn val -> 
+          case val do
+          "_" -> # valeur à estimer
+            case collector.unite do
+            :pourcent -> "#{100 - collector.total}%"
+            _ -> "#{800 - collector.total}px"
+            end
+          _ -> # valeur autre
+            val
+          end
+        end)
+        # |> IO.inspect(label: "/nValeurs calculées")
+      Map.merge(options, %{
+        define_cols: true,
+        cols_width: final_cols_width,
+        cols_flex:  collector.flex_value
+      })
+    end # fin de if cols_width
+
+    options = 
     if Enum.any?(options.cols_class) do
-      IO.puts "Il faut définir les classes des colonnes"
+      %{ options | define_cols: true }
+    else
+      options
     end
+
+    options = 
     if Enum.any?(options.cols_align) do
-      IO.puts "Il faut définir l'alignement des colonnes"
+      %{ options | define_cols: true}
+    else
+      options
     end
+
     if Enum.any?(options.cols_pad) do
       IO.puts "Il faut définir le padding des colonnes"
     end
 
-    IO.inspect(conteneur, label: "\nTABLE À CONSTRUIRE")
+    IO.inspect(options, label: "\nOPTIONS après transformations")
+    
+    # On met les nouvelles options dans le conteneur
+    conteneur = %{conteneur | options: options }
+    # |> IO.inspect(label: "\nTABLE À CONSTRUIRE")
+
+    conteneur = define_conteneur_header_and_footer(conteneur)
     get_structure_section(conteneur, "table")
   end
 
@@ -180,12 +280,86 @@ defmodule ExoConteneur.Builder do
     get_structure_section(conteneur, "section")
   end
 
+  # Construction des header/footer pour un conteneur TABLE
+  defp define_conteneur_header_and_footer(%ExoConteneur{type: :table} = conteneur) do
+    new_options = conteneur.options
+
+    # On définit les colonnes
+    new_options = 
+    if new_options.define_cols do
+      first_line = 
+      conteneur.lines
+      |> Enum.at(0)
+      nombre_colonnes = 
+        first_line.content
+        |> StringTo.list()
+        |> Enum.count
+      
+      new_options = %{new_options | cols_count: nombre_colonnes}
+      colgroup = "<colgroup>"
+      <> build_col_in_colgroup(new_options, nombre_colonnes).cols
+      <> "</colgroup>"
+
+      %{new_options | section_header: colgroup}
+    else
+      new_options
+    end
+
+
+    %{conteneur | options: new_options}
+  end
+  # L'autre type de conteneur : section
+  defp define_conteneur_header_and_footer(conteneur), do: conteneur
+  
+  # Construction (récursive) des <col> de <colgroup>
+  defp build_col_in_colgroup(options, reste) when reste > 0 do
+    icol = options.cols_count - reste
+
+    styles = []
+
+    styles =
+      case Enum.at(options.cols_align, icol) do
+        nil -> styles
+        col_attr -> styles ++ ["text-align: #{col_attr};"]
+        end
+
+    styles = 
+      case Enum.at(options.cols_width, icol) do
+      nil -> styles
+      col_attr -> styles ++ ["width:#{col_attr};"]
+      end
+
+    styles =
+      if Enum.any?(styles) do
+        " style=\"#{Enum.join(styles)}\""
+      else "" end
+    
+    col_class =
+      case Enum.at(options.cols_class, icol) do
+      nil -> ""
+      col_class -> " class=\"#{col_class}\""
+      end
+    
+    col = "<col#{col_class}#{styles} />"
+    options = %{ options | cols: options.cols <> col }
+    build_col_in_colgroup(options, reste - 1)
+  end
+  defp build_col_in_colgroup(options, 0), do: options
+
+
+
   defp get_structure_section(conteneur, main_tag) do
+    flex = conteneur.options.cols_flex # table à colonne variable
+
+    # Classes css pour le conteneur
     css = ExoConteneur.classes_css(conteneur)
-    "<#{main_tag} class=\"#{css}\">"
+
+    "<#{main_tag} class=\"#{css}\" style=\"#{if flex, do: "width:100%;"}\">"
+    <> conteneur.options.section_header
     <> (conteneur.lines
         |> Enum.map(&ExoInnerFormater.build_element(&1, conteneur))
         |> Enum.join(""))
+    <> conteneur.options.section_footer
     <> "</#{main_tag}>"
   end
 end # /module ExoConteneur.Builder

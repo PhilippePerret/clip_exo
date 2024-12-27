@@ -1,0 +1,20 @@
+<!-- <ClipExoWeb.ExoBuilderView.exo_file.html> lib/clip_exo_web/exo_builder/templates/exo_file.html.heex:1 (clip_exo) --><!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="z_clip_exo.css">
+
+  </head>
+  <body>
+    <header>
+			<img id="logo" src="z_logo-clip-alpha.png">
+      <div class="titre">Pour présenter les effets des tables</div>
+      <div class="reference">TRY-01</div>
+		</header>
+
+    <section id="exercice">
+<div class="separator"></div><div class="line">Cet « exercice » présente l'utilisation des tables avec <code>:table</code>.</div><div class="separator"></div><div class="line rub">Table sans options (naturelle)</div><div class="separator"></div><table class="conteneur table borders-hv" style=""><tr><td class=" ">Ligne 1 - Colonne 1</td><td class=" ">Ligne 1 - Colonne 2</td><td class=" ">Ligne 1 - Colonne 3</td></tr><tr><td class=" ">Ligne 2 - Colonne 1</td><td class=" ">Ligne 2 - Colonne 2</td><td class=" ">Ligne 2 - Colonne 3</td></tr><tr><td class=" ">Ligne 3 - Colonne 1</td><td class=" ">Ligne 3 - Colonne 2</td><td class=" ">Ligne 3 - Colonne 3</td></tr></table><div class="line rub">Table définissant la largeur de ses colonnes</div><div class="separator"></div><table class="conteneur table borders-hv" style=""><colgroup><col style="width:100px;" /><col style="width:600px;" /></colgroup><tr><td class=" ">Libellé</td><td class=" ">La valeur plus longue (obtenue avec <code>::cols_width(100, 600)</code>)</td></tr><tr><td class=" ">Libé</td><td class=" ">L'autre valeur plus longue</td></tr></table><div class="line rub">Calcul automatique de largeur</div><div class="separator"></div><table class="conteneur table borders-hv" style="width:100%;"><colgroup><col style="width:80%;" /><col style="width:20%;" /></colgroup><tr><td class=" ">Première cellule large obtenue avec <code>::cols_width(_, 20%)</code></td><td class=" ">Petite</td></tr><tr><td class=" ">Calculée avec '_'</td><td class=" ">cellule</td></tr></table><div class="line rub">Des classes CSS pour les background</div><div class="separator"></div><table class="conteneur table borders-hv" style=""><colgroup><col class="bg_lightgrey" /><col class="bg_purple" /><col class="bg_blue" /></colgroup><tr><td class="bg_lightgrey ">Libellé</td><td class="bg_purple ">Cellule sur fond pourpre</td><td class="bg_blue ">Cellule sur fond bleu. Le background étant défini dans cols_class, certains attributs ne s'appliquent pas, comme la couleur de police.</td></tr><tr><td class="bg_lightgrey ">Libella</td><td class="bg_purple ">Autre celle fond pourpre</td><td class="bg_blue ">Autre cellule fond bleu</td></tr></table><div class="line rub">Trois alignements</div><div class="separator"></div><table class="conteneur table borders-hv" style="width:100%;"><colgroup><col style="text-align: left;width:33%;" /><col style="text-align: center;width:34%;" /><col style="text-align: right;width:33%;" /></colgroup><tr><td class=" left">Cellule à gauche</td><td class=" center">Cellule au centre</td><td class=" right">Cellule à droite</td></tr><tr><td class=" left">Défini avec :</td><td class=" center">::cols_align(left, center, right)</td><td class=" right">en options</td></tr><tr><td class=" left">Largeurs définies par :</td><td class=" center">::cols_width(33%, _, 33%)</td><td class=" right">en options</td></tr></table>
+    </section>
+    
+  </body>
+</html><!-- </ClipExoWeb.ExoBuilderView.exo_file.html> -->
