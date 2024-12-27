@@ -34,7 +34,7 @@ defmodule ClipExoWeb.ExoBuilderView do
         %{label: "Niveau", value: exo.infos.niveau},
         %{label: "Compétences", value: met_en_forme_liste(exo.infos.competences)},
         %{label: "Logiciels", value: met_en_forme_liste(exo.infos.logiciels)},
-        %{label: "", value: ""},
+        %{label: "", value: "", class: "separator"},
         %{label: "Auteur", value: exo.infos.auteur, class: "smaller"},
         %{label: "Créé le", value: exo.infos.created_at, class: "smaller"},
         %{label: "Révisions", value: exo.infos.revisions, class: "smaller"},
