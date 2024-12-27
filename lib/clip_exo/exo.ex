@@ -11,7 +11,7 @@ defmodule ClipExo.Exo do
       auteur: "",
       created_at: Date.utc_today(),
       logiciels: "",
-      revisions: [],
+      revisions: nil, # ou string jj/mm/aaaa (Prénom NOM), etc.
       competences: [],
       niveau: "",
       duree: "",
@@ -188,7 +188,6 @@ defmodule ClipExo.Exo do
     "css_files"     -> StringTo.list(value)
     "competences"   -> StringTo.list(value)
     "logiciels"     -> StringTo.list(value)
-    "revisions"     -> StringTo.list(value)
       _ -> value
     end
   end

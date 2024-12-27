@@ -95,12 +95,11 @@ defmodule ClipExo.ExoBuilder do
   #
   ################################################################################
 
-  @doc """
-  Liste des fichiers requis
 
-  Si la propriété exo.infos.css_files est définie, c'est un fichier styles
-  à ajouter à l'exercice. Cf. copy_required_files/1
-  """
+  # Liste des fichiers requis
+  #
+  # Si la propriété exo.infos.css_files est définie, c'est un fichier styles
+  # à ajouter à l'exercice. Cf. copy_required_files/1
   @liste_required_files [
     "./_exercices/css/clip_exo.css",
     "./_exercices/images/Icones-actions-sprite.png",

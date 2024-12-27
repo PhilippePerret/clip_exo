@@ -35,8 +35,9 @@ defmodule ClipExoWeb.ExoBuilderView do
         %{label: "Compétences", value: met_en_forme_liste(exo.infos.competences)},
         %{label: "Logiciels", value: met_en_forme_liste(exo.infos.logiciels)},
         %{label: "", value: ""},
-        %{label: "Auteur", value: exo.infos.auteur},
-        %{label: "Révisions", value: met_en_forme_liste(exo.infos.revisions)},
+        %{label: "Auteur", value: exo.infos.auteur, class: "smaller"},
+        %{label: "Créé le", value: exo.infos.created_at, class: "smaller"},
+        %{label: "Révisions", value: exo.infos.revisions, class: "smaller"},
       ],
       exo_titre: exo.infos.titre |> String.replace(~r/\\n/, "<br />")
     ]
@@ -60,7 +61,7 @@ defmodule ClipExoWeb.ExoBuilderView do
   def table_specs(assigns) do
     ~H"""
     <table class="table_specs">
-      <tr :for={row <- @rows}>
+      <tr :for={row <- @rows} class={row[:class]}>
         <td :for={col <- @col}>{render_slot(col, row)}</td>
       </tr>
     </table>

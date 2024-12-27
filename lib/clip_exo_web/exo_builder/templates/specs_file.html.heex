@@ -10,6 +10,10 @@
       <div class="titre"><%= raw @exo_titre %></div>
 		</header>
 
+    <style type="text/css">
+      table tr.smaller td {font-size: 0.85em;}
+    </style>
+
     <.table_specs id={"infos"} rows={@infos} class="table_specs">
       <:col :let={data} label="Donnée">
         {data.label}
