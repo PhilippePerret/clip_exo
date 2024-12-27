@@ -107,6 +107,14 @@ defmodule ClipExo.ExoBuilder do
     "./_exercices/images/logo-clip-alpha.png"
   ]
 
+  @doc """
+  Copie des fichiers requis dans le dossier de l'exercice.
+
+  Les exercices (dossier) sont pensés pour être totalement autonomes
+  c'est-à-dire pour être transmis "as-is" et fonctionner. Pour cela,
+  (et aussi pour simplifier les problèmes de path), on copie toujours
+  les fichiers requis dans le dossier de l'exercice créé.
+  """
   def copy_required_files(exo) do
     IO.puts "--> copy_required_files"
     # Peut-être des fichiers propres à l'exercice
@@ -114,11 +122,19 @@ defmodule ClipExo.ExoBuilder do
     # Boucle sur tous les fichiers à donner
     @liste_required_files ++ customs_files
     |> Enum.map(fn original -> 
-        file_in_exo = Path.join([exo.infos.htm_folder,Path.basename(original)])
+        file_in_exo = Path.join([exo.infos.htm_folder, "z_" <> Path.basename(original)])
+        # Le fichier existe-t-il déjà ?
+        # Si c'est le cas, on compare sa date de fabrication avec
+        # la date de modification du fichier original poru savoir
+        # s'il est nécessaire de l'actualiser
         if File.exists?(file_in_exo) do
-          File.rm(file_in_exo)
+          if File.Stat.mtime(file_in_exo) < File.Stat.mtime(original) do
+            File.rm(file_in_exo)
+          end
         end
-        File.cp!(original, file_in_exo) # => :ok ou raise
+        if not File.exists?(file_in_exo) do
+          File.cp!(original, file_in_exo) # => :ok ou raise
+        end
       end)
       IO.puts "<-- copy_required_files"
       {:ok, exo}
