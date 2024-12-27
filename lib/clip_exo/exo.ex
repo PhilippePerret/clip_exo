@@ -3,18 +3,18 @@ defmodule ClipExo.Exo do
 
   defstruct [
     infos: %{
-      name: "",
-      path:  "",
-      folder: "",
-      reference: "",
-      titre: "",
-      auteur: "",
+      name: nil,
+      path:  nil,
+      folder: nil,
+      reference: nil,
+      titre: nil,
+      auteur: nil,
       created_at: Date.utc_today(),
-      logiciels: "",
+      logiciels: nil,
       revisions: nil, # ou string jj/mm/aaaa (Prénom NOM), etc.
       competences: [],
-      niveau: "",
-      duree: "",
+      niveau: nil,
+      duree: nil,
       css_files: nil
     },
     body:       "contenu brut de l'exercice",

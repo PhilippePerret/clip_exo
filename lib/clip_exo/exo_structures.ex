@@ -35,7 +35,8 @@ defmodule ExoConteneur do
     raw:        "Bloc raw",
     etapes:      "Liste d'étapes numérotées",
     blockcode:  "Bloc de codes",
-    table:      "Table"
+    table:      "Table",
+    qcm:        "Questionnaire à Choix Multiple"
   }
 
   def get_types_conteneur(), do: @types_conteneur

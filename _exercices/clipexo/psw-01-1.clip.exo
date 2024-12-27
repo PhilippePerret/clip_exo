@@ -1,7 +1,8 @@
 ---
 name: psw-01-1
 reference: PSW-01
-titre: Les Termes importants\ndu Web\nQCM
+titre: Les Termes importants\ndu Web – QCM
+logiciels: Navigateur internet
 auteur: Philippe PERRET
 competences: [Connaitre le sens et l'utilisation des termes les plus importants du web]
 niveau: Grand débutant
@@ -14,17 +15,20 @@ rub: Mission
 Réussissez à remplir le QCM ci-dessous en vous aidant du texte d'explication PSW-01-2.
 
 :qcm
-:Qr Que signifie le terme WEB ?
+:qr Que signifie le terme WEB ?
 :r0 Ce sont les initiales de« World Enable Booster », c'est-à-dire « Amplification d'activité mondiale »
 :r0 C'est un petit nom qui veut dire « Chien de compagnie », parce que le web permet de parler de ses animaux préférés
 :r5 Ça signifie « Toile » comme dans « Toile d'araignée »
-
-:Qr Pourquoi parle-t-on d'une « toile » quand on parle de l'Internet ?
+:qr Pourquoi parle-t-on d'une « toile » quand on parle de l'Internet ?
 :r0 Parce qu'on s'y fait prendre comme dans une toile, en l'utilisant trop souvent.
 :r5 Parce que tous les ordinateurs sont reliés entre eux, comme les nœuds d'une *toile* d'araignée.
 :r0 Parce que « Internet », en anglais, signifie « Toile ».
-
-:Qr Qu'est-ce que le protocole HTTP ?
+:qr Qu'est-ce que le protocole HTTP ?
 :r5 C'est un protocole qui permet de transmettre des pages web.
 :r0 C'est un protocole qui permet de fabriquer des pages web.
 :r0 C'est un organisme qui veille au bon formatage des pages web.
+:qc Que peut-on faire sur le web ?
+:r1 Rencontrer des gens
+:r1 Se cultiver sur tous les sujets
+:r1 Aller (virtuellement) sur la Lune
+:r1 Réparer un plomb

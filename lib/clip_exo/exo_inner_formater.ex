@@ -147,8 +147,22 @@ defmodule ExoLine.Builder do
     "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{traite_line_type_code(exoline)}</div>"
   end
   # - Ligne de QCM -
+  #
+  # Les lignes d'un QCM ont un type (tline) qui peut commencer par :
+  #   Q<type de réponses> Pour la question
+  #   r<nombre point>     Pour la réponse
+  # C'est donc la première lettre qui désigne le type
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :qcm} = conteneur) do
-    "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
+    if is_nil(exoline.tline) do
+      raise "Il faut impérativement définir le tline de #{exoline.content} (#{inspect(exoline)})"
+    end
+    is_question = String.at(exoline.tline, 0) == "q"
+    main_class = is_question && "question" || "reponse"
+    type_question = is_question && String.at(exoline.tline, 1) == "r"
+
+    
+
+    "<div class=\"#{main_class} #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
   end
   # Erreur : mauvais conteneur
   def to_html(%ExoLine{} = exoline, %ExoConteneur{} = conteneur) do
@@ -274,6 +288,35 @@ defmodule ExoConteneur.Builder do
 
     conteneur = define_conteneur_header_and_footer(conteneur)
     get_structure_section(conteneur, "table")
+  end
+
+  def to_html(%ExoConteneur{type: :qcm} = conteneur) do
+    IO.puts "Je passe pour un QCM"
+
+    # Il faut définir le type (radio ou checkbox) de chaque question
+    # Ce type dépend de la second lettre de la question qui précède.
+    # Il suffit donc de parcourir les lines, de prendre le type quand
+    # on rencontre une question, et de l'affecter aux questions qui
+    # suivent
+    collector = 
+      conteneur.lines
+      |> Enum.reduce(%{type_courant: nil, lines: []}, fn line, collector -> 
+          collector =
+          if String.at(line.tline, 0) == "q" do
+            # Pour une question
+            qtype = (String.at(line.tline, 1) == "r") && "radio" || "checkbox"
+            %{collector | type_courant: qtype}
+            line
+          else
+            # Pour une réponse
+            %{ line | classes: [collector.type_courant] }
+          end
+          %{ collector | lines: collector.lines ++ [line]}
+        end)
+    new_lines = collector.lines
+
+    conteneur = %{conteneur | lines: new_lines}
+    get_structure_section(conteneur, "section")
   end
 
   def to_html(conteneur) do
