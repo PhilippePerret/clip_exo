@@ -7,11 +7,22 @@
 <p>Pour styliser un paragraphe avec des styles connus, il suffit d'utiliser l'empreinte :</p>
 <pre><code>&lt;class_css>.&lt;class_css>: Le paragraphe avec les classes css.</code></pre>
 <p>Les paragraphes existants sont les suivants (on peut combiner une ou plusieurs classes en les séparant par des points — et seulement des points) :</p>
-<%= for classe <- @liste_classes_paragraphe do %>
+
+<pre><code><%= 
+  for duo <- @liste_classes_paragraphe do %><% {classe, description} = duo %><%= 
+    String.pad_trailing(classe, 10) %> : <%= description 
+  %>
+  <% end 
+%></code></pre>
+<h4>Aperçu des paragraphes stylés</h4>
+
+<blockquote>(ceux décrit ci-dessus)</blockquote>
+<%= for duo <- @liste_classes_paragraphe do %>
+  <% {classe, description} = duo %>
   <div class={classe}><code><%= classe %>:</code>  Un paragraphe dans ce style.</div>
 <% end %>
 
-<h3>Styles "inline"</h3>
+<h3>Styles "en line"</h3>
 
 <pre><code>
 *texte en italique*     => <i>texte en italique</i>
@@ -20,6 +31,15 @@
 __souligné__            => <u>souligné</u>
 --barré--               => <del>barré</del>
 --barré//remplacé--     => <del>barré</del> <ins>remplacé</ins>
+</code></pre>
+
+<h3>Mises en forme "en ligne"</h3>
+
+<pre><code>
+2^e                     => 2<sup>e</sup>
+1^er                    => 1<sup>er</sup>
+note^*                  => note<sup>*</sup>
+note^12                 => note<sup>12</sup>
 </code></pre>
 
 <h2>LISTE D'ÉTAPES</h2>

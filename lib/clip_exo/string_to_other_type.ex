@@ -49,9 +49,18 @@ defmodule StringTo do
 
   # Fait les transformation d'usage dans les strings.
   # à savoir :
-  #   - les backstick par deux sont remplacés par des <code>
+  #   les backstick par deux sont remplacés par des <code>
+  #   1^er  en exposant
+  #   *italique*
+  #   **gras**
+  #   __souligné__
+  #   --barré--
+  #   --barré//remplacé--
   #
-  @reg_candidats_html ~r/[\`\*_\-]/
+
+  # Ne pas oublier de mettre ici tous les "candidats", c'est-à-dire
+  # tous les textes qui peuvent déclencher la correction.
+  @reg_candidats_html ~r/[\`\*_\-\^]/
 
   @reg_backsticks ~r/\`(.+)\`/U; @remp_backsticks "<code>\\1</code>"
   @reg_bold_ital ~r/\*\*\*(.+)\*\*\*/U; @remp_bold_ital "<b><em>\\1</em></b>"
@@ -60,8 +69,11 @@ defmodule StringTo do
   @reg_underscore ~r/__(.+)__/U; @remp_underscore "<u>\\1</u>"
   @reg_substitute ~r/\-\-(.+)\/\/(.+)\-\-/U; @remp_substitute "<del>\\1</del> <ins>\\2</ins>"
   @reg_strike ~r/\-\-(.+)\-\-/U; @remp_strike "<del>\\1</del>"
+  @reg_exposant ~r/\^(.+)(\W|$)/U; @remp_exposant "<sup>\\1</sup>\\2"
 
   def html(str, _options \\ %{}) do
+    # Il faut que le string contienne un "candidat" pour que
+    # la correction soit amorcée.
     if Regex.match?(@reg_candidats_html, str) do
       str
       |> String.replace(@reg_backsticks, @remp_backsticks)
@@ -71,6 +83,7 @@ defmodule StringTo do
       |> String.replace(@reg_underscore, @remp_underscore)
       |> String.replace(@reg_substitute, @remp_substitute)
       |> String.replace(@reg_strike, @remp_strike)
+      |> String.replace(@reg_exposant, @remp_exposant)
 
     else
       str

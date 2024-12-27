@@ -9,6 +9,23 @@ defmodule ExoInnerFormater do
   """
 
   @doc """
+  Liste des classes CSS qu'on peut appliquer aux paragraphes.
+
+  Dans l'idée, on peut avoir n'importe quelle classe à partir du
+  moment où elle est définie dans clip_exo.css ou dans le fichier
+  CSS propre à l'exercice (non encore implémenté)
+  """
+  @liste_classes_paragraphe [
+    {"rub", "Titre de rubrique (p.e. « Mission » ou « Aide »)" },
+    {"rubi", "Pour 'rub inline'. Comme si dessus, mais sur une seule ligne"},
+    {"cadre", "Pour un paragraphe dans un cadre"}
+  ]
+
+  def get_paragraph_styles() do
+    @liste_classes_paragraphe 
+  end
+
+  @doc """
   Function principal qui construit l'exercice à partir de la liste 
   d'élément +element+ retourné par l'accumulateur de 
   ExoParser.parse_code

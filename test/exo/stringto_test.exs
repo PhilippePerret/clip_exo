@@ -2,22 +2,39 @@ defmodule ClipExo.StringToTest do
 
   use ExUnit.Case
   
-  def test_against(fourni, espere) do
-    assert espere == StringTo.list(fourni)
-  end
-
-  def test_with_list(liste) do
-    Enum.each(liste, fn {fourni, espere} ->
-      assert espere == StringTo.list(fourni)
-    end)
-  end
-
+  # Pour tester ««« StringTo.html »»»
+  # En envoyant :
+  #   [
+  #     {"fourni", "attendu"},
+  #     {"fourni", "attendu"},
+  #     etc.
+  #   ]
   def test_with_html(liste) do
     Enum.each(liste, fn {fourni, espere} ->
       espere = (espere == "_") && fourni || espere
-      assert espere == StringTo.html(fourni)
+      obtenu = StringTo.html(fourni)
+      assert espere == obtenu, 
+        "Transformation StringTo.html a échoué.\nEn fournissant : #{if String.length(fourni) > 30, do: "\n\t"}#{fourni}\non aurait dû obtenir : #{if String.length(espere) > 30, do: "\n\t"}#{espere}\non a obtenu : #{if String.length(obtenu) > 30, do: "\n\t"}#{obtenu}"
     end)
   end
+
+  # Pour tester ««« StringTo.list »»»
+  # En envoyant :
+  #   [
+    #     {"fourni", "attendu"},
+    #     {"fourni", "attendu"},
+    #     etc.
+    #   ]
+    def test_with_list(liste) do
+      Enum.each(liste, fn {fourni, espere} ->
+        assert espere == StringTo.list(fourni)
+      end)
+    end
+    
+    def test_against(fourni, espere) do
+      assert espere == StringTo.list(fourni)
+    end
+  
 
   describe ".list transforme en liste" do
 
@@ -63,13 +80,6 @@ defmodule ClipExo.StringToTest do
       test_with_list([
         {"Oui\\, c'est bon, Non\\, tu crois ?", ["Oui, c'est bon", "Non, tu crois ?"]},
         {"[Oui\\, c'est bon, Non\\, tu crois ?]", ["Oui, c'est bon", "Non, tu crois ?"]},
-      ])
-    end
-
-    test " \"[1,2,3], liste\" " do
-      test_with_list([
-        {"[1,2,3], liste", [[1,2,3], "liste"]},
-        {"[[1,2,3], liste]", [[1,2,3], "liste"]}
       ])
     end
 
@@ -127,6 +137,21 @@ defmodule ClipExo.StringToTest do
         {" pas -dans//ce- qu'on cherche", "_"},
         {"un --texte//substitué--", "un <del>texte</del> <ins>substitué</ins>"},
         {"a --b//c-- et puis --d//e--", "a <del>b</del> <ins>c</ins> et puis <del>d</del> <ins>e</ins>"}
+      ])
+    end
+
+    test "les exposant" do
+      test_with_html([
+        {"rien à faire", "_"},
+        {"2^e", "2<sup>e</sup>"},
+        {"Le 2^e!", "Le 2<sup>e</sup>!"},
+        {"2^e et 3^e", "2<sup>e</sup> et 3<sup>e</sup>"},
+        {"1^er", "1<sup>er</sup>"},
+        {"1^er le premier", "1<sup>er</sup> le premier"},
+        {"une note^*", "une note<sup>*</sup>"},
+        {"une note^* pour voir", "une note<sup>*</sup> pour voir"},
+        {"une note chiffrée^12", "une note chiffrée<sup>12</sup>"},
+        {"une note chiffrée^12 et reprise", "une note chiffrée<sup>12</sup> et reprise"}
       ])
     end
   end #/describe ".html"

@@ -1,6 +1,8 @@
 defmodule ClipExoWeb.PageController do
   use ClipExoWeb, :controller
 
+  import ExoInnerFormater
+  
   def home(conn, _params) do
     render(conn, :home)
   end
@@ -15,12 +17,13 @@ defmodule ClipExoWeb.PageController do
     end
   end
 
+  
   def aide_formatage(conn, _params) do
     # Pour être toujours à la page, on fait une copie du fichier 
     # clip_exo.css dans le dossier /priv/static/css
     File.cp!("./_exercices/css/clip_exo.css", "./priv/static/css/clip_exo.css")
     render(conn, :aide_formatage, %{
-      liste_classes_paragraphe: ["rub", "rubi", "cadre"]
+      liste_classes_paragraphe: ExoInnerFormater.get_paragraph_styles()
     })
   end
 
