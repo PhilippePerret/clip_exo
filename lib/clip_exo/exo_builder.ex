@@ -95,6 +95,12 @@ defmodule ClipExo.ExoBuilder do
   #
   ################################################################################
 
+  @doc """
+  Liste des fichiers requis
+
+  Si la propriété exo.infos.css_files est définie, c'est un fichier styles
+  à ajouter à l'exercice. Cf. copy_required_files/1
+  """
   @liste_required_files [
     "./_exercices/css/clip_exo.css",
     "./_exercices/images/Icones-actions-sprite.png",
@@ -103,8 +109,10 @@ defmodule ClipExo.ExoBuilder do
 
   def copy_required_files(exo) do
     IO.puts "--> copy_required_files"
-    build_exo_folder_if_required(exo)
-    @liste_required_files
+    # Peut-être des fichiers propres à l'exercice
+    customs_files = if exo.infos.css_files, do: exo.infos.css_files, else: []
+    # Boucle sur tous les fichiers à donner
+    @liste_required_files ++ customs_files
     |> Enum.map(fn original -> 
         file_in_exo = Path.join([exo.infos.htm_folder,Path.basename(original)])
         if File.exists?(file_in_exo) do

@@ -100,10 +100,11 @@ div.rubi {
   display:inline-block;
 }
 
-div.info, div.infos {
+div.cadre {
   border: 1px solid;
   padding: 0.5em;
   font-size: 0.85em;
+  margin:1em;
 }
 
 /* 

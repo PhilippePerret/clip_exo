@@ -15,6 +15,7 @@ defmodule ClipExo.Exo do
       competences: [],
       niveau: "",
       duree: "",
+      css_files: nil
     },
     body:       "contenu brut de l'exercice",
     body_html:  nil,  # le contenu formaté
@@ -135,15 +136,22 @@ defmodule ClipExo.Exo do
   @reg_front_matter ~r/(^|\n)---\n(?<front_matter>(?:.|\n)*)\n---\n(?<body>(.|\n)*)\z/Um
   defp decompose_header_and_body(code) do
     if Regex.match?(@reg_front_matter, code) do
+
+      # On découpe le code brut du fichier (en front-matter et body)
       resultat = Regex.named_captures(@reg_front_matter, code)
 
+      # On récupère les informations du front-matter
       infos = get_infos_from_front_matter(resultat["front_matter"])
+      |> IO.inspect(label: "\nINFOS de front-matter")
+      
+      # On prend le body du résultat
       body  = resultat["body"]
+      
       ok = (elem(infos, 0) == :ok && body != "") && :ok || :error
-
+      
+      # Tout est OK, on peut merger les informations
       infos = Map.merge(%ClipExo.Exo{}.infos, elem(infos, 1))
-      # |> IO.inspect(label: "\nINFOS")
-
+      
       # --- Instanciation de Exo ---
       exo = %ClipExo.Exo{infos: infos, body: body}
       {ok, exo}
@@ -162,7 +170,7 @@ defmodule ClipExo.Exo do
         captures ->
           {
             captures["property"] |> String.trim() |> String.downcase() |> String.to_atom(),
-            captures["value"] |> String.trim()
+            captures["value"] |> String.trim() |> transform_value_by_property(captures["property"])
           }
         end
         end)
@@ -172,6 +180,19 @@ defmodule ClipExo.Exo do
         end)
     {:ok, infos}
   end
+
+  # Transformation de certains valeurs du front-matter (principale-
+  # ment de string vers liste)
+  defp transform_value_by_property(value, property) do
+    case property do
+    "css_files"     -> StringTo.list(value)
+    "competences"   -> StringTo.list(value)
+    "logiciels"     -> StringTo.list(value)
+    "revisions"     -> StringTo.list(value)
+      _ -> value
+    end
+  end
+
 
   @doc """
   Ouvre le dossier html de l'exercice dans le finder

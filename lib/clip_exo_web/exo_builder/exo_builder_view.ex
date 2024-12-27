@@ -31,8 +31,8 @@ defmodule ClipExoWeb.ExoBuilderView do
         %{label: "Référence", value: exo.infos.reference},
         %{label: "Nom", value: exo.infos.name},
         %{label: "Niveau", value: exo.infos.niveau},
-        %{label: "Compétences", value: formated_liste_string_to_ul(exo.infos.competences)},
-        %{label: "Logiciels", value: formated_liste_string_to_ul(exo.infos.logiciels)},
+        %{label: "Compétences", value: exo.infos.competences || ""},
+        %{label: "Logiciels", value: exo.infos.logiciels || ""},
         %{label: "", value: ""},
         %{label: "Auteur", value: exo.infos.auteur},
         %{label: "Révisions", value: exo.infos.revisions},
@@ -41,22 +41,6 @@ defmodule ClipExoWeb.ExoBuilderView do
     ]
     render_to_string(ClipExoWeb.ExoBuilderView, "specs_file.html", assigns)
   end
-
-  # Reçoit une liste de type «["item 1", "item 2", ... "item N"]» (String) et
-  # retourne la liste évaluée ["item 1", "item 2", ... "item N"] (List)
-  def formated_liste_string_to_ul(raw_liste) do
-    cond do
-    nil -> ""
-    is_binary(raw_liste) ->
-      StringTo.list(raw_liste)
-      |> Enum.map(fn com -> 
-        "<li>#{com}</li>"
-        end)
-      |> Enum.join("")
-    true -> raw_liste
-    end
-  end
-
 
   slot :col, doc: "Columns with column labels" do
     attr :label, :string, required: true, doc: "Column label"

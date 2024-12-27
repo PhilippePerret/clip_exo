@@ -5,9 +5,10 @@ titre: Pour faire des essais
 auteur: Philippe PERRET
 created_at: 26-12-2024
 niveau: Grand débutant
-competences: ["Prise en main de l'application", "Adjonction des couleurs", "Manipulation des blocs"]
-logiciels: ["Traitement de texte", "IDE"]
+competences: [Prise en main de l'application, Adjonction des couleurs, Manipulation des blocs]
+logiciels: [Traitement de texte, IDE]
 duree: [15, 45]
+css_files: _exercices/css/custom_essai.css
 ---
 
 Une première ligne normale.
@@ -25,3 +26,5 @@ Une première ligne normale.
 :coche	  Une étape avec une case à cocher
 
 Une dernière ligne normale.
+
+particular: Paragraphe dans le style particulier.
