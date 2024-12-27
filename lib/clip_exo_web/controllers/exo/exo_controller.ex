@@ -6,8 +6,7 @@ defmodule ClipExoWeb.ExoController do
   alias ClipExo.{Exo, ExoSchema}
 
   def build(conn, params) do
-    params_exo = params["exo"]
-    case Exo.build(params_exo) do
+    case Exo.build(params["exo"]) do
     {:ok, exo} ->
       render(conn, :builder, exo: exo)
     {:error, err_msg} ->
