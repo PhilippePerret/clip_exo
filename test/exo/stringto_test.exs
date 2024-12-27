@@ -1,7 +1,23 @@
 defmodule ClipExo.StringToTest do
 
   use ExUnit.Case
-  
+
+  # Pour tester ««« StringTo.value »»»
+  # En envoyant :
+  #   [
+  #     {"fourni", "attendu"},
+  #     {"fourni", "attendu"},
+  #     etc.
+  #   ]
+  def test_with_value(liste) do
+    Enum.each(liste, fn {fourni, espere} ->
+      espere = (espere == "_") && fourni || espere
+      obtenu = StringTo.value(fourni)
+      assert espere == obtenu, 
+        "Transformation StringTo.html a échoué.\nEn fournissant : #{if String.length(fourni) > 30, do: "\n\t"}#{inspect(fourni)}\non aurait dû obtenir : #{if String.length(inspect(espere)) > 30, do: "\n\t"}#{inspect(espere)}\non a obtenu : #{if String.length(inspect(obtenu)) > 30, do: "\n\t"}#{inspect(obtenu)}"
+    end)
+  end
+
   # Pour tester ««« StringTo.html »»»
   # En envoyant :
   #   [
@@ -154,5 +170,35 @@ defmodule ClipExo.StringToTest do
         {"une note chiffrée^12 et reprise", "une note chiffrée<sup>12</sup> et reprise"}
       ])
     end
-  end #/describe ".html"
+  end #/describe "StringTo.html"
+
+  describe ".value" do
+
+    test "les vrais string" do
+      test_with_value([
+        {"string", "_"},
+        {"C'est une phrase", "_"},
+        {"100", 100},
+        {"10.0", 10.0},
+        {"true", true},
+        {"false", false},
+        {"nil", nil},
+        {":atom", :atom},
+        {":pas un atom", "_"},
+        {"50%", %{type: :pourcent, value: 50}},
+        {"50% mais string", "_"},
+        {"50.5%", %{type: :pourcent, value: 50.5}},
+        {"50px", %{type: :size, value: 50, unity: "px"}},
+        {"50 px", "_"},
+        {"50.2px", %{type: :size, value: 50.2, unity: "px"}},
+        {"40cm", %{type: :size, value: 40, unity: "cm"}},
+        {"30mm", %{type: :size, value: 30, unity: "mm"}},
+        {"30.3mm", %{type: :size, value: 30.3, unity: "mm"}},
+        {"20po", %{type: :size, value: 20, unity: "po"}},
+        {"15inc", %{type: :size, value: 15, unity: "inc"}},
+        {"10pt", %{type: :size, value: 10, unity: "pt"}},
+        {"1..10", 1..10}
+      ])
+    end
+  end #/describe "StringTo.value"
 end

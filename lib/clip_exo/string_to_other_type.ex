@@ -1,5 +1,58 @@
 defmodule StringTo do
 
+  @reg_atom ~r/^\:[a-z_]+$/
+  @reg_instring ~r/^"(.*)"$/
+  @reg_integer ~r/^[0-9]+$/
+  @reg_float ~r/^[0-9.]+$/
+  @reg_const ~r/(true|false|nil)/
+  @reg_pourcent_int ~r/^([0-9]+)\%$/
+  @reg_pourcent_float ~r/^([0-9.]+)\%$/
+  @reg_size_int ~r/^(?<value>[0-9]+)(?<unity>cm|px|pt|cm|mm|po|inc)$/
+  @reg_size_float ~r/^(?<value>[0-9.]+)(?<unity>cm|px|pt|cm|mm|po|inc)$/
+  @reg_range ~r/^[0-9]+\.\.[0-9]+$/
+
+  @doc """
+  Function qui reçoit un string quelconque et retourne la
+  valeur correspondante en fonction de son contenu.
+
+  Transformations possibles :
+
+  "string"      => "string" (pas de transformation)
+  "200"         => 200
+  "1..100"      => 1..100
+  "20.0"        => 20.0
+  "true"        => true
+  "false"       => false
+  "nil"         => nil
+  "[<valeurs>]" => [<valeurs>] si possible
+  "50%"         => %{type: :pourcent, value: 50}
+  "50.2cm"      => %{type: :size, value: 50.2, unity: "cm"}
+    Ou autres unités : "po", "inc", "mm", "px"
+
+  """
+  def value(x) do
+    cond do
+    x =~ @reg_atom      -> elem(Code.eval_string(x),0)  # :atom
+    x =~ @reg_instring  -> elem(Code.eval_string(x),0)  # String
+    Regex.match?(@reg_range, x) ->                      # Range
+      elem(Code.eval_string(x),0)
+    x =~ @reg_integer   -> String.to_integer(x)         # Integer
+    x =~ @reg_float     -> String.to_float(x)           # Float
+    x =~ @reg_const     -> elem(Code.eval_string(x),0)  # true, false,...
+    x = Regex.run(@reg_pourcent_int, x) -> 
+      x = x |> Enum.at(1)
+      %{type: :pourcent, value: String.to_integer(x)}
+    x = Regex.run(@reg_pourcent_float, x) -> 
+      x = x |> Enum.at(1)
+      %{type: :pourcent, value: String.to_float(x)}
+    x = Regex.named_captures(@reg_size_int, x) ->
+      %{type: :size, value: String.to_integer(x["value"]), unity: x["unity"]}
+    x = Regex.named_captures(@reg_size_float, x) ->
+      %{type: :size, value: String.to_float(x["value"]), unity: x["unity"]}
+    true -> x # comme string
+    end
+  end
+
   @doc """
   Function qui reçoit un string est retourne une liste
 
@@ -17,11 +70,6 @@ defmodule StringTo do
     "[\"Un\", \"deux\"]"    => ["Un", "deux"]
 
   """
-  @reg_atom ~r/^\:[a-z_]+$/
-  @reg_instring ~r/^"(.*)"$/
-  @reg_integer ~r/^[0-9]+$/
-  @reg_float ~r/^[0-9.]+$/
-  @reg_const ~r/(true|false|nil)/
   def list(str) when is_binary(str) do
     if String.trim(str) == "" do
       []
@@ -35,14 +83,7 @@ defmodule StringTo do
           x = x
             |> String.replace("__VIRG__", ",")
             |> String.trim()
-          cond do
-          x =~ @reg_atom      -> elem(Code.eval_string(x),0)  # :atom
-          x =~ @reg_instring  -> elem(Code.eval_string(x),0)  # String
-          x =~ @reg_integer   -> String.to_integer(x) # Integer
-          x =~ @reg_float     -> String.to_float(x)   # Float
-          x =~ @reg_const     -> elem(Code.eval_string(x),0)
-          true -> x # comme string
-          end
+            |> value()
         end)
     end
   end

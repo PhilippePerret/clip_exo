@@ -92,7 +92,7 @@ defmodule ExoLine.Builder do
     css = "line#{if exoline.tline == "+", do: "m"}"
     "<div class=\"#{css}\">#{ExoLine.pre_line_in_blockcode(exoline)}#{traite_line_type_code(exoline)}</div>"
   end
-  # - table -
+  # - ligne de TABLE -
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :table} = _conteneur) do
     row =
       exoline.content
@@ -113,15 +113,19 @@ defmodule ExoLine.Builder do
       |> String.replace("__VIRG__", "\\,")
     "<tr>" <> row <> "</tr>"
   end
-  # - etapes -
+  # - Ligne d'ÉTAPES -
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :etapes} = conteneur) do
     "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
   end
-  # - raw -
+  # - Ligne de RAW -
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :raw} = conteneur) do
     "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{traite_line_type_code(exoline)}</div>"
   end
-
+  # - Ligne de QCM -
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :qcm} = conteneur) do
+    "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
+  end
+  # Erreur : mauvais conteneur
   def to_html(%ExoLine{} = exoline, %ExoConteneur{} = conteneur) do
     "<div class=\"warning\">Line dans CONTENEUR INCONNU (#{conteneur.type}) : #{exoline.content}</div>"
   end
@@ -144,16 +148,44 @@ end #/ExoLine.Builder
 
 
 defmodule ExoConteneur.Builder do
+
+  def to_html(%{type: :table} = conteneur) do
+    # Ici, on doit préparer la table en fonction de ses options
+    options = conteneur.options
+    if Enum.any?(options.cols_label) do
+      IO.puts "Il faut construire une première ligne de labels"
+    end
+    if Enum.any?(options.cols_width) do
+      IO.puts "Il faut définir la largeur des colonnes."
+      options.cols_width
+      |> Enum.map(fn x -> 
+          x = StringTo.value(x)
+        end)
+    end
+    if Enum.any?(options.cols_class) do
+      IO.puts "Il faut définir les classes des colonnes"
+    end
+    if Enum.any?(options.cols_align) do
+      IO.puts "Il faut définir l'alignement des colonnes"
+    end
+    if Enum.any?(options.cols_pad) do
+      IO.puts "Il faut définir le padding des colonnes"
+    end
+
+    IO.inspect(conteneur, label: "\nTABLE À CONSTRUIRE")
+    get_structure_section(conteneur, "table")
+  end
+
   def to_html(conteneur) do
-    cont_tag = case conteneur.type do
-      :table  -> "table"
-      _       -> "section"
-      end
+    get_structure_section(conteneur, "section")
+  end
+
+  defp get_structure_section(conteneur, main_tag) do
     css = ExoConteneur.classes_css(conteneur)
-    "<#{cont_tag} class=\"#{css}\">"
+    "<#{main_tag} class=\"#{css}\">"
     <> (conteneur.lines
         |> Enum.map(&ExoInnerFormater.build_element(&1, conteneur))
         |> Enum.join(""))
-    <> "</#{cont_tag}>"
+    <> "</#{main_tag}>"
   end
 end # /module ExoConteneur.Builder
