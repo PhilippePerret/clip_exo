@@ -117,5 +117,9 @@ h2 {
   margin-bottom: 1.5em;
   font-variant: all-small-caps;
   line-height: 1em;
-
+}
+h3 {
+  font-size:24pt;
+  margin-top:1.5em;
+  margin-bottom:1em;
 }

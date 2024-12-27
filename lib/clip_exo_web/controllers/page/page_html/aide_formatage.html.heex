@@ -11,7 +11,20 @@
   <div class={classe}><code><%= classe %>:</code>  Un paragraphe dans ce style.</div>
 <% end %>
 
+<h3>Styles "inline"</h3>
+
+<pre><code>
+*texte en italique*     => <i>texte en italique</i>
+**texte en gras**       => <b>texte en gras</b>
+***gras et italique***  => <b><i>gras et italique</i></b>
+__souligné__            => <u>souligné</u>
+--barré--               => <del>barré</del>
+--barré//remplacé--     => <del>barré</del> <ins>remplacé</ins>
+</code></pre>
+
 <h2>LISTE D'ÉTAPES</h2>
+
+<i>Les « liste d'étapes » est une liste numérotée.</i>
 
 <pre><code>:etapes
 : Première étape
@@ -32,6 +45,7 @@ etc.
 :coche    Une case à cocher pour continuer
 :radio    Un bouton radio à choisir pour continuer.
 </code></pre>
+
 
 <h2>Bloc de code</h2>
 
@@ -64,6 +78,8 @@ etc.
 <em>Un bloc pour les QCM, les Questionnaires à choix multiples.</em>
 
 <pre><code>:qcm
+::exergue   # Option pour mettre les bonnes réponses en exergue
+            # pour la version correcteur bien entendu.
 :Qc Une première question, avec des choix multiple (cases à cocher)
 :r Une réponse comme case à cocher
 :r Une autre réponse comme case à cocher
