@@ -3,8 +3,12 @@ nav {display:block}
 .block {display:block}
 .inline {display:inline}
 .hidden {display:none;}
+
+.italic {font-style: italic;}
+
 .smaller {
   font-size:0.9em;
 }
 
 .right {text-align: right}
+.left {text-align: left} /* dans un contexte right */

@@ -24,6 +24,7 @@ defmodule ClipExo.Exo do
   ]
 
   alias ClipExo.ExoBuilder, as: Builder
+  alias Jason
 
   @folder "./_exercices/clipexo/"
   @html_folder "./_exercices/html"
@@ -43,10 +44,20 @@ defmodule ClipExo.Exo do
   Construction de l'exercice définit dans +exo+ (%ClipExo.Exo)
   Function principale appelée par le bouton pour construire l'exercice
 
-  Pour le moment, +exo+ ne contient que "file_path", le chemin
-  d'accès relatif au fichier. Par défaut, on le cherche dans @folfder
+  Pour le moment, +params_exo+ ne contient que "file_path", le chemin
+  d'accès relatif au fichier. Par défaut, on le cherche dans @folfder.
+  Si cette donnée n'est pas donnée (champ laissé vide), on essaie de 
+  prendre le dernier traitement effectué.
   """
   def build(params_exo) do
+    IO.inspect(params_exo, label: "\nPARAMS_EXO")
+    params_exo =
+      if params_exo["file_path"] |> PPString.nil_if_empty() |> is_nil() do
+        rappel_last_traitement() || raise("Il faut donner le path du fichier exercice.")
+      else
+        memo_last_traitement(params_exo)
+      end
+
     with  {:ok, path} <- get_path_exo(params_exo),
           {:ok, exo}  <- parse_whole_file(path),
           {:ok, exo}  <- build_two_files(exo),
@@ -57,6 +68,15 @@ defmodule ClipExo.Exo do
       {:error, message_erreur} ->
         {:error, message_erreur}
     end
+  end
+
+  @path_memo_file ".last_traitement"
+  def rappel_last_traitement() do
+    @path_memo_file |> File.read!() |> Jason.decode!()
+  end
+  def memo_last_traitement(params) do
+    File.write(@path_memo_file, Jason.encode!(params))
+    params # pour simplifier le code appelant
   end
 
   def copy_required_files(exo) do
