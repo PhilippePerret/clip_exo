@@ -1,0 +1,27 @@
+---
+name: demo_table
+reference: TRY-01
+titre: Pour présenter les effets des tables
+auteur: Philippe PERRET
+created_at: 27-12-2024
+niveau: Grand débutant
+competences: ["Prise en main de ClipExo", "Manipulation des tables"]
+logiciels: "IDE"
+duree: [15, 45]
+---
+
+Cet « exercice » présente l'utilisation des tables avec `:table`.
+
+rub: Table sans options (naturelle)
+
+:table
+: Ligne 1 - Colonne 1, Ligne 1 - Colonne 2, Ligne 1 - Colonne 3
+: Ligne 2 - Colonne 1, Ligne 2 - Colonne 2, Ligne 2 - Colonne 3
+: Ligne 3 - Colonne 1, Ligne 3 - Colonne 2, Ligne 3 - Colonne 3
+
+rub: Table définissant la largeur de ses colonnes
+
+:table
+::cols_width(100, 600)
+: Libellé, La valeur plus longue
+: Libé, L'autre valeur plus longue
