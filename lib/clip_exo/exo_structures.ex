@@ -15,7 +15,8 @@ defmodule ExoOptionsConteneur do
     cols:       "",     # Pour la construction interne du colgroup
     section_header: "", # À ajouter juste après <section...> ou <table...>
     section_footer: "", # À ajouter juste avant </section> ou </table>
-    no_num:     false   # Pour les étapes et les codes, suppression des numéros
+    no_num:     false,  # Pour les étapes et les codes, suppression des numéros
+    extra_options: []   # Les options supplémentaires éventuelles
   ]
 end
 

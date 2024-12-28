@@ -321,20 +321,28 @@ defmodule ExoParser do
           case captures do
           nil ->
             # Option simple ou liste d'options simple (p.e. no_num, no_bg)
-            StringTo.list(x) |> Enum.map(fn x -> 
+            StringTo.list(x) |> Enum.reduce(coptions, fn x, coptions -> 
               opt_name = String.to_atom(x)
-              Map.has_key?(coptions, opt_name) || raise("Clé inconnue : #{opt_name}") # TODO: Plus tard, remonter une erreur, car là, c'est l'user qui produit une erreur en mettant mal les options
-              %{coptions | opt_name => true}
+              if Map.has_key?(coptions, opt_name) do
+                %{coptions | opt_name => true}
+              else
+                %{coptions | extra_options: coptions.extra_options ++ [opt_name]}
+              end
             end)
           _ ->
             # Option complexe
             %{"fun" => fun, "parameters" => parameters} = captures
             values = StringTo.list(parameters)
             opt_name = String.to_atom(fun)
-            Map.has_key?(coptions, opt_name) || raise("Clé inconnue dans : #{opt_name}") # TODO: Plus tard, remonter une erreur, car là, c'est l'user qui produit une erreur en mettant mal les options
-            %{coptions | opt_name => values }
+            if Map.has_key?(coptions, opt_name) do
+              # Option régulière (définie)
+              %{coptions | opt_name => values }
+            else
+              # Option extra
+              %{coptions | extra_options: coptions.extra_options ++ [{opt_name, values}]}
+            end
         end
-        coptions # l'collector
+        coptions # le collector
       end)
       # |> IO.inspect(label: "\nOPTIONS APRÈS ÉVALUATION")
   end
