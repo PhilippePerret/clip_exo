@@ -30,7 +30,7 @@ defmodule ClipExo.StringToTest do
       espere = (espere == "_") && fourni || espere
       obtenu = StringTo.html(fourni)
       assert espere == obtenu, 
-        "Transformation StringTo.html a échoué.\nEn fournissant : #{if String.length(fourni) > 30, do: "\n\t"}#{fourni}\non aurait dû obtenir : #{if String.length(espere) > 30, do: "\n\t"}#{espere}\non a obtenu : #{if String.length(obtenu) > 30, do: "\n\t"}#{obtenu}"
+        "Transformation StringTo.html a échoué.\nEn fournissant : #{if String.length(inspect(fourni)) > 30, do: "\n\t"}#{fourni}\non aurait dû obtenir : #{if String.length(espere) > 30, do: "\n\t"}#{inspect(espere)}\non a obtenu : #{if String.length(inspect(obtenu)) > 30, do: "\n\t"}#{obtenu}"
     end)
   end
 
@@ -114,6 +114,15 @@ defmodule ClipExo.StringToTest do
 
   describe ".html remplace par des entités html" do
 
+    test "sauf les caractères échappés" do
+      test_with_html([
+        {"\"bonjour\"", "« bonjour »"},
+        {"\"bonjour\" et \"au revoir\"", "« bonjour » et « au revoir »"},
+        {"\\\"bonjour\\\"", "\"bonjour\""},
+        {"j'ai dit 'bonjour'", "j’ai dit ’bonjour’"},
+        {"j'ai dit \\'bonjour\\'", "j’ai dit 'bonjour'"}
+      ])
+    end
     test "les backsticks" do
       test_with_html([
         {"normal", "_"},
@@ -159,7 +168,7 @@ defmodule ClipExo.StringToTest do
     test "les barrés insérés" do
       test_with_html([
         {" rien à faire ", "_"},
-        {" pas -dans//ce- qu'on cherche", "_"},
+        {" pas -dans//ce- on cherche", "_"},
         {"un --texte//substitué--", "un <del>texte</del> <ins>substitué</ins>"},
         {"a --b//c-- et puis --d//e--", "a <del>b</del> <ins>c</ins> et puis <del>d</del> <ins>e</ins>"}
       ])

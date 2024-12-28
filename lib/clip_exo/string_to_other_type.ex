@@ -106,7 +106,7 @@ defmodule StringTo do
 
   # Ne pas oublier de mettre ici tous les "candidats", c'est-à-dire
   # tous les textes qui peuvent déclencher la correction.
-  @reg_candidats_html ~r/[\`\*_\-\^]/
+  @reg_candidats_html ~r/[\`\*_\-\^\\\"\']/
 
   @reg_backsticks ~r/\`(.+)\`/U; @remp_backsticks "<code>\\1</code>"
   @reg_bold_ital ~r/\*\*\*(.+)\*\*\*/U; @remp_bold_ital "<b><em>\\1</em></b>"
@@ -116,12 +116,23 @@ defmodule StringTo do
   @reg_substitute ~r/\-\-(.+)\/\/(.+)\-\-/U; @remp_substitute "<del>\\1</del> <ins>\\2</ins>"
   @reg_strike ~r/\-\-(.+)\-\-/U; @remp_strike "<del>\\1</del>"
   @reg_exposant ~r/\^(.+)(\W|$)/U; @remp_exposant "<sup>\\1</sup>\\2"
+  @reg_guillemets ~r/"(.+)"/U; @remp_guillemets "« \\1 »"
 
   def html(str, _options \\ %{}) do
     # Il faut que le string contienne un "candidat" pour que
     # la correction soit amorcée.
     if Regex.match?(@reg_candidats_html, str) do
-      str
+
+      {str, protecteds} = get_all_protected_cars(str)
+      
+      # if Enum.any?(protecteds) do
+      #   IO.inspect(protecteds, label: "\nLes protégés")
+      #   IO.inspect(str, label: "La chaine protégée")
+      # end
+      
+      str = str
+      |> String.replace("'", "’")
+      |> String.replace(@reg_guillemets, @remp_guillemets)
       |> String.replace(@reg_backsticks, @remp_backsticks)
       |> String.replace(@reg_bold_ital, @remp_bold_ital)
       |> String.replace(@reg_bold, @remp_bold)
@@ -131,8 +142,54 @@ defmodule StringTo do
       |> String.replace(@reg_strike, @remp_strike)
       |> String.replace(@reg_exposant, @remp_exposant)
 
+      if Enum.empty?(protecteds) do
+        str
+      else
+        reput_all_protected_cars(str, protecteds)
+      end
     else
       str
     end
   end
+
+  defp get_all_protected_cars(str) do
+    if not String.contains?(str, "\\") do
+      # IO.puts "pas d'échappements dans #{inspect(str)}"
+      {str, []}
+    else
+      # IO.puts "Il y a des échappements"
+      collector =
+        str
+        |> String.split("\\") # => liste de tous les segments
+        |> Enum.reduce(%{index: 0, remp: [], segments: []}, fn seg, coll ->
+          case seg do
+          "" ->
+            Map.merge(coll, %{segments: coll.segments ++ [""]})
+          _ ->
+            protected = String.at(seg, 0)
+            new_remp = "PPROTECTEDCARR#{coll.index}"
+            new_segment = String.replace_leading(seg, protected, new_remp)
+            Map.merge(coll, %{
+              remp:     coll.remp ++ [protected],
+              segments: coll.segments ++ [new_segment],
+              index:    coll.index + 1
+            })
+          end
+        end)
+
+      {
+        Enum.join(collector.segments, ""),
+        collector.remp
+      }
+    end
+  end
+
+  defp reput_all_protected_cars(str, protecteds) do
+    protecteds
+    |> Enum.with_index(0)
+    |> Enum.reduce(str, fn {protected, index}, str -> 
+        String.replace(str, "PPROTECTEDCARR#{index}", protected)
+      end)
+  end
+
 end
