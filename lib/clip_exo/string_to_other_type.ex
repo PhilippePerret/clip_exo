@@ -106,7 +106,7 @@ defmodule StringTo do
 
   # Ne pas oublier de mettre ici tous les "candidats", c'est-à-dire
   # tous les textes qui peuvent déclencher la correction.
-  @reg_candidats_html ~r/[\`\*_\-\^\\\"\']/
+  @reg_candidats_html ~r/[\`\*_\-\^\\\"\'\:\;\!\?]/
 
   @reg_backsticks ~r/\`(.+)\`/U; @remp_backsticks "<code>\\1</code>"
   @reg_bold_ital ~r/\*\*\*(.+)\*\*\*/U; @remp_bold_ital "<b><em>\\1</em></b>"
@@ -119,6 +119,7 @@ defmodule StringTo do
   @reg_guillemets ~r/"(.+)"/U; @remp_guillemets "« \\1 »"
   @reg_return ~r/( +)?\\n( +)?/; @remp_return "<br />"
   @reg_line ~r/(^|\r?\n)\-\-\-(\r?\n|$)/; @remp_line "\\1<hr />\\2"
+  @reg_ponct_nowrap ~r/\b([^ ]+)([  ])([!?:;])/U ; @temp_ponct_nowrap "<span class=\"nowrap\">\\1\\2\\3</span>"
 
   def html(str, _options \\ %{}) do
     # Il faut que le string contienne un "candidat" pour que
@@ -127,7 +128,7 @@ defmodule StringTo do
 
       str = str
       |> String.replace(@reg_return, @remp_return)
-
+      
       {str, protecteds} = get_all_protected_cars(str)
       
       str = str
@@ -142,6 +143,7 @@ defmodule StringTo do
       |> String.replace(@reg_substitute, @remp_substitute)
       |> String.replace(@reg_strike, @remp_strike)
       |> String.replace(@reg_exposant, @remp_exposant)
+      |> String.replace(@reg_ponct_nowrap, @temp_ponct_nowrap)
 
       if Enum.empty?(protecteds) do
         str

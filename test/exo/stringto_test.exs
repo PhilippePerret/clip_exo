@@ -144,6 +144,20 @@ defmodule ClipExo.StringToTest do
       ])
     end
 
+    test "la protection des ponctuations en fin de ligne" do
+      test_with_html([
+        {" une ponctuation :", " une <span class=\"nowrap\">ponctuation :</span>"},
+        {" une ponctuati :\n", " une <span class=\"nowrap\">ponctuati :</span>\n"},
+        {" une ponctuat !\n", " une <span class=\"nowrap\">ponctuat !</span>\n"},
+        {" une ponctua !\n", " une <span class=\"nowrap\">ponctua !</span>\n"},
+        {" une ponctu ?\n", " une <span class=\"nowrap\">ponctu ?</span>\n"},
+        {" une ponct ?\n", " une <span class=\"nowrap\">ponct ?</span>\n"},
+        {" une onctuation ;\n", " une <span class=\"nowrap\">onctuation ;</span>\n"},
+        {" une nctuation ;\n", " une <span class=\"nowrap\">nctuation ;</span>\n"},
+        {"une : et autre !", "<span class=\"nowrap\">une :</span> et <span class=\"nowrap\">autre !</span>"}
+      ])
+    end
+
     test "les gras" do
       test_with_html([
         {" un truc sans rien", "_"},
