@@ -15,6 +15,7 @@ rub: Mission
 Réussissez à remplir le QCM ci-dessous en vous aidant du texte d'explication PSW-01-2.
 
 :qcm
+::enable_dont_know
 :qr Que signifie le terme WEB ?
 :r0 Ce sont les initiales de« World Enable Booster », c'est-à-dire « Amplification d'activité mondiale »
 :r0 C'est un petit nom qui veut dire « Chien de compagnie », parce que le web permet de parler de ses animaux préférés

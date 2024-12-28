@@ -66,7 +66,10 @@ defmodule ExoLine do
     fcontent: nil,    # Contenu formaté
     classes:  nil,    # ou liste des css
     tline:    nil,    # ou le type de line (caractères juste après ":")
-    preline:  nil     # ou les espaces/tabulations avant
+    preline:  nil,    # ou les espaces/tabulations avant
+    data:     nil     # Pour mettre n'importe quelle donnée. Par
+                      # exemple, pour les QCM, on y met le nombre de 
+                      # points par réponse.
   ]
 
   def classes_css(exoline) do

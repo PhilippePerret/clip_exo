@@ -294,10 +294,10 @@ defmodule ExoConteneur.Builder do
     # Il faut définir le type (radio ou checkbox) de chaque question
     # Ce type dépend de la second lettre de la question qui précède.
     # Il suffit donc de parcourir les lines, de prendre le type quand
-    # on rencontre une question, et de l'affecter aux questions qui
+    # on rencontre une question, et de gjl'affecter aux questions qui
     # suivent.
     # On profite de ce premier "tour" sur les lignes pour supprimer les
-    # lignes vides
+    # lignes vides qui séparent, dans le texte, les questions
     collector = 
       conteneur.lines
       |> Enum.reject(fn line -> String.trim(line.content) == "" end)
@@ -311,7 +311,17 @@ defmodule ExoConteneur.Builder do
               line
             else
               # Pour une réponse
-              %{ line | classes: [collector.type_courant] }
+              # (on récupère son nombre de points — note : ce nombre
+              #  de points jouera aussi sur l'apparence de la réponse
+              #  lorsqu'il faudra la montrer :
+              #   à 0, la réponse est laissée telle quelle
+              #   de 1 à 5, elle est marquée de plus en plus juste
+              #   de 6 à 9, elle reste sur très juste — vert foncé
+              points = line.tline |> String.at(1) |> StringTo.value()
+              Map.merge(line, %{
+                classes: [collector.type_courant],
+                data:     %{points: points || 0}
+              })
             end
           %{ collector | lines: collector.lines ++ [line]}
         end)

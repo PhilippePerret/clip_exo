@@ -71,7 +71,7 @@ etc.
 </code></pre>
 
 
-<h2>Bloc de code</h2>
+<h2>BLOC DE CODE</h2>
 
 <pre><code>:blockcode
 : Première ligne de code
@@ -102,23 +102,42 @@ etc.
 <em>Un bloc pour les QCM, les Questionnaires à choix multiples.</em>
 
 <pre><code>:qcm
-::exergue   # Option pour mettre les bonnes réponses en exergue
-            # pour la version correcteur bien entendu.
-:Qc Une première question, avec des choix multiple (cases à cocher)
+::enable_dont_know     # ajoute le choix "Je ne sais pas" (1 point)
+:qc Une première question, avec des choix multiple (cases à cocher)
 :r Une réponse comme case à cocher
 :r Une autre réponse comme case à cocher
 etc.
-:Qr Une deuxième question avec un choix unique (bouton radio)
-:r Une première réponse
-:r Une autre réponse
+:
+:qr Une deuxième question avec un choix unique (bouton radio)
+:r0 Une première réponse
+:r5 Une autre réponse (la bonne, à 5)
 etc.
-:Qc Troisième question, en donnant la valeur de points des réponses
+:
+:qc Troisième question, en donnant la valeur de points des réponses
 :r0 C'est une mauvaise réponse
 :r1 C'est une réponse à 1 point
 :r4 C'est une réponse à 4 points
 etc.
-:Qr Quatrième question avec des réponses pointées
+:
+:qr Quatrième question avec des réponses pointées
 :r0 Pas de point pour ce choix
 :r5 5 point pour celui qui choisit ce bouton
 :r2  Entre les deux eaux.
 </code></pre>
+
+<p>Noter que :</p>
+
+<ul>
+  <li>les questions sont séparées par des lignes vides avec ":" (rappel : une ligne vraiment vide met fin au conteneur),</li>
+  <li>les réponses commencent toujours par "r" qui est toujours suivi par le nombre de points,</li>
+  <li>le nombre de points doit impérativement être entre 0 et 9</li>
+  <li>Justesse des réponses : <ul>
+    <li>une réponse à 0 est fausse</li>
+    <li>de 1 à 5, une réponse est de plus en plus juste</li>
+    <li>une réponse est considérée comme parfaitement juste à partir de 5</li>
+    <li>à partir de 5, la réponse est tout à fait juste</li>
+  </ul>
+  </li>
+  <li></li>
+  <li>les "q" et "r" désignant les questions et réponses sont obligatoirement en minuscules</li>
+</ul>
