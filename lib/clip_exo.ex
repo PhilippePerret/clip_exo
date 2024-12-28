@@ -15,7 +15,7 @@ defmodule ClipExo do
     },
     boutons: %{
       "editer"        => "Éditer l’exercice",
-      "preformatage"  => "Préformatage de l’exercice",
+      "preformatage"  => "Préformatage d’un nouvel exercice",
       "produire"      => "Produire le fichier de l'exercice"
     }
   }

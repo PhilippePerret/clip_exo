@@ -18,7 +18,7 @@
 
 <blockquote>(ceux décrit ci-dessus)</blockquote>
 <%= for duo <- @liste_classes_paragraphe do %>
-  <% {classe, description} = duo %>
+  <% {classe, _description} = duo %>
   <div class={classe}><code><%= classe %>:</code>  Un paragraphe dans ce style.</div>
 <% end %>
 

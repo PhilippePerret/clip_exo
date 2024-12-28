@@ -5,6 +5,10 @@ defmodule ClipExoWeb.ExoController do
 
   alias ClipExo.{Exo, ExoSchema}
 
+  def produire(conn, _params) do
+    render(conn, :produire, ui: ClipExo.ui_terms() )
+  end
+
   def build(conn, params) do
     case Exo.build(params["exo"]) do
     {:ok, exo} ->

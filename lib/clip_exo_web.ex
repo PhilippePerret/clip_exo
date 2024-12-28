@@ -86,6 +86,8 @@ defmodule ClipExoWeb do
       # Core UI components and translation
       import ClipExoWeb.CoreComponents
       import ClipExoWeb.Gettext
+      # Les miens pour l'application
+      import ClipExoWeb.AppComponents
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

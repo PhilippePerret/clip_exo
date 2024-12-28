@@ -112,7 +112,6 @@ defmodule ExoLine.Builder do
           # Des classes peuvent venir des cols_class ou cols_align
           classes = 
             for property <- [:cols_class, :cols_align] do
-              classes = 
               case Enum.at(Map.get(options, property), index) do
               nil -> classes
               col_attr -> classes ++ [col_attr]

@@ -25,10 +25,12 @@ nav#main {
   width: 100%;
   height:25px;
 }
-nav#main a {
+nav#main a, span.menu {
   font-family:arial, helvetica, geneva;
   font-variant: all-small-caps;
   font-size: 14pt;
+}
+nav#main a {
   margin-left: 1em;
   vertical-align:super;
   color: white;

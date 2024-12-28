@@ -77,11 +77,22 @@ defmodule ClipExo.Exo do
 
   @path_memo_file ".last_traitement"
   def rappel_last_traitement() do
-    @path_memo_file |> File.read!() |> Jason.decode!()
+    if File.exists?(@path_memo_file) do
+      @path_memo_file |> File.read!() |> Jason.decode!()
+    else nil end
   end
   def memo_last_traitement(params) do
     File.write(@path_memo_file, Jason.encode!(params))
     params # pour simplifier le code appelant
+  end
+
+  # Retourne le dernier file_path utilisé, if any
+  def last_file_path() do
+    if memo = rappel_last_traitement() do
+      memo["file_path"]
+    else
+      nil
+    end
   end
 
   def copy_required_files(exo) do

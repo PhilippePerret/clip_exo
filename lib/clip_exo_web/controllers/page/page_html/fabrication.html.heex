@@ -1,1 +1,12 @@
 <h1>Fabrication</h1>
+
+<p>Choisir l’opération à exécuter.</p>
+
+<center>
+<script type="text/javascript">
+  function goto(location){document.location = location;}
+</script>
+<button onclick="goto('/exo/preformater')"><%= @ui.boutons["preformatage"] %></button>
+<button onclick="goto('/exo/editer')"><%= @ui.boutons["editer"] %></button>
+<button onclick="goto('/exo/produire')"><%= @ui.boutons["produire"] %></button>
+</center>
