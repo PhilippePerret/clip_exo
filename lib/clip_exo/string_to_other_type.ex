@@ -117,22 +117,23 @@ defmodule StringTo do
   @reg_strike ~r/\-\-(.+)\-\-/U; @remp_strike "<del>\\1</del>"
   @reg_exposant ~r/\^(.+)(\W|$)/U; @remp_exposant "<sup>\\1</sup>\\2"
   @reg_guillemets ~r/"(.+)"/U; @remp_guillemets "« \\1 »"
+  @reg_return ~r/( +)?\\n( +)?/; @remp_return "<br />"
+  @reg_line ~r/(^|\r?\n)\-\-\-(\r?\n|$)/; @remp_line "\\1<hr />\\2"
 
   def html(str, _options \\ %{}) do
     # Il faut que le string contienne un "candidat" pour que
     # la correction soit amorcée.
     if Regex.match?(@reg_candidats_html, str) do
 
+      str = str
+      |> String.replace(@reg_return, @remp_return)
+
       {str, protecteds} = get_all_protected_cars(str)
-      
-      # if Enum.any?(protecteds) do
-      #   IO.inspect(protecteds, label: "\nLes protégés")
-      #   IO.inspect(str, label: "La chaine protégée")
-      # end
       
       str = str
       |> String.replace("'", "’")
       |> String.replace(@reg_guillemets, @remp_guillemets)
+      |> String.replace(@reg_line, @remp_line)
       |> String.replace(@reg_backsticks, @remp_backsticks)
       |> String.replace(@reg_bold_ital, @remp_bold_ital)
       |> String.replace(@reg_bold, @remp_bold)

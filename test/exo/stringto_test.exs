@@ -132,6 +132,18 @@ defmodule ClipExo.StringToTest do
       ])
     end
 
+    test "divers corrections" do
+      test_with_html([
+        {"\\n", "<br />"},
+        {" \\n ", "<br />"},
+        {"un texte   \\n   et un autre texte", "un texte<br />et un autre texte"},
+        {"un texte\\n   et un autre texte", "un texte<br />   et un autre texte"},
+        {"---", "<hr />"},
+        {"------", "<del>-</del>-"},
+        {"un texte --- autre texte", "_"}
+      ])
+    end
+
     test "les gras" do
       test_with_html([
         {" un truc sans rien", "_"},
