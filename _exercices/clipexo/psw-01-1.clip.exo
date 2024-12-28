@@ -1,7 +1,7 @@
 ---
 name: psw-01-1
 reference: PSW-01
-titre: Les Termes importants\ndu Web – QCM
+titre: Les termes importants\ndu web – qcm
 logiciels: Navigateur internet
 auteur: Philippe PERRET
 competences: [Connaitre le sens et l'utilisation des termes les plus importants du web]
@@ -12,7 +12,9 @@ revisions: []
 ---
 
 rub: Mission
-Réussissez à remplir le QCM ci-dessous en vous aidant du texte d'explication PSW-01-2.
+Remplir le QCM ci-dessous en s’aidant du texte d’explication PSW-01-2.
+
+rub: Q.C.M.
 
 :qcm
 ::enable_dont_know
@@ -26,7 +28,7 @@ Réussissez à remplir le QCM ci-dessous en vous aidant du texte d'explication P
 :r5 Parce que tous les ordinateurs sont reliés entre eux, comme les nœuds d'une *toile* d'araignée.
 :r0 Parce que « Internet », en anglais, signifie « Toile ».
 :
-:qr Qu'est-ce que le protocole HTTP ?
+:qr Le « Protocole HTTP », c’est quoi ?
 :r5 C'est un protocole qui permet de transmettre des pages web.
 :r0 C'est un protocole qui permet de fabriquer des pages web.
 :r0 C'est un organisme qui veille au bon formatage des pages web.

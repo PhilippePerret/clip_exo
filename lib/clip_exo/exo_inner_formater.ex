@@ -153,16 +153,17 @@ defmodule ExoLine.Builder do
   #   r<nombre point>     Pour la réponse
   # C'est donc la première lettre qui désigne le type
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :qcm} = conteneur) do
-    if is_nil(exoline.tline) do
-      raise "Il faut impérativement définir le tline de #{exoline.content} (#{inspect(exoline)})"
+    cond do
+    is_nil(exoline.tline) ->
+      "<div class=\"warning\">Ligne sans tline : '#{exoline.content}' (#{inspect(exoline)})</div>"
+    String.at(exoline.tline, 0) == "q" -> 
+      # Une question
+      "<div class=\"question #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
+    true ->
+      # Une réponse
+      IO.inspect(exoline, label: "\nRÉPONSE dans construction")
+      "<div data-points=\"#{exoline.data.points}\" class=\"reponse #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
     end
-    is_question = String.at(exoline.tline, 0) == "q"
-    main_class = is_question && "question" || "reponse"
-    type_question = is_question && String.at(exoline.tline, 1) == "r"
-
-    
-
-    "<div class=\"#{main_class} #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
   end
   # Erreur : mauvais conteneur
   def to_html(%ExoLine{} = exoline, %ExoConteneur{} = conteneur) do
@@ -290,6 +291,9 @@ defmodule ExoConteneur.Builder do
     get_structure_section(conteneur, "table")
   end
 
+  #
+  # === TRAITEMENT D'UN CONTENEUR QCM ===
+  #
   def to_html(%ExoConteneur{type: :qcm} = conteneur) do
     # Il faut définir le type (radio ou checkbox) de chaque question
     # Ce type dépend de la second lettre de la question qui précède.
@@ -302,28 +306,29 @@ defmodule ExoConteneur.Builder do
       conteneur.lines
       |> Enum.reject(fn line -> String.trim(line.content) == "" end)
       |> Enum.reduce(%{type_courant: nil, lines: []}, fn line, collector -> 
-          IO.inspect(line, label: "\nLINE étudiée")
-          line =
-            if String.at(line.tline, 0) == "q" do
-              # Pour une question
-              qtype = (String.at(line.tline, 1) == "r") && "radio" || "checkbox"
-              %{collector | type_courant: qtype}
-              line
-            else
-              # Pour une réponse
-              # (on récupère son nombre de points — note : ce nombre
-              #  de points jouera aussi sur l'apparence de la réponse
-              #  lorsqu'il faudra la montrer :
-              #   à 0, la réponse est laissée telle quelle
-              #   de 1 à 5, elle est marquée de plus en plus juste
-              #   de 6 à 9, elle reste sur très juste — vert foncé
-              points = line.tline |> String.at(1) |> StringTo.value()
-              Map.merge(line, %{
-                classes: [collector.type_courant],
-                data:     %{points: points || 0}
-              })
-            end
-          %{ collector | lines: collector.lines ++ [line]}
+          if String.at(line.tline, 0) == "q" do
+            # Pour une question
+            qtype = (String.at(line.tline, 1) == "r") && "radio" || "checkbox"
+            line = %{ line | classes: [qtype] }
+            Map.merge(collector, %{
+              type_courant: qtype,
+              lines: collector.lines ++ [line]
+            })
+          else
+            # Pour une réponse
+            # (on récupère son nombre de points — note : ce nombre
+            #  de points jouera aussi sur l'apparence de la réponse
+            #  lorsqu'il faudra la montrer :
+            #   à 0, la réponse est laissée telle quelle
+            #   de 1 à 5, elle est marquée de plus en plus juste
+            #   de 6 à 9, elle reste sur très juste — vert foncé
+            points = line.tline |> String.at(1) |> StringTo.value()
+            new_line = Map.merge(line, %{
+              classes: [collector.type_courant],
+              data:     %{points: points || 0}
+            })
+            %{ collector | lines: collector.lines ++ [new_line]}
+          end
         end)
     new_lines = collector.lines
 
