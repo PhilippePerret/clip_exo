@@ -291,26 +291,28 @@ defmodule ExoConteneur.Builder do
   end
 
   def to_html(%ExoConteneur{type: :qcm} = conteneur) do
-    IO.puts "Je passe pour un QCM"
-
     # Il faut définir le type (radio ou checkbox) de chaque question
     # Ce type dépend de la second lettre de la question qui précède.
     # Il suffit donc de parcourir les lines, de prendre le type quand
     # on rencontre une question, et de l'affecter aux questions qui
-    # suivent
+    # suivent.
+    # On profite de ce premier "tour" sur les lignes pour supprimer les
+    # lignes vides
     collector = 
       conteneur.lines
+      |> Enum.reject(fn line -> String.trim(line.content) == "" end)
       |> Enum.reduce(%{type_courant: nil, lines: []}, fn line, collector -> 
-          collector =
-          if String.at(line.tline, 0) == "q" do
-            # Pour une question
-            qtype = (String.at(line.tline, 1) == "r") && "radio" || "checkbox"
-            %{collector | type_courant: qtype}
-            line
-          else
-            # Pour une réponse
-            %{ line | classes: [collector.type_courant] }
-          end
+          IO.inspect(line, label: "\nLINE étudiée")
+          line =
+            if String.at(line.tline, 0) == "q" do
+              # Pour une question
+              qtype = (String.at(line.tline, 1) == "r") && "radio" || "checkbox"
+              %{collector | type_courant: qtype}
+              line
+            else
+              # Pour une réponse
+              %{ line | classes: [collector.type_courant] }
+            end
           %{ collector | lines: collector.lines ++ [line]}
         end)
     new_lines = collector.lines
