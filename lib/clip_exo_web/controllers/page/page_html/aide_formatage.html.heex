@@ -2,7 +2,7 @@
 <h1>Aide au formatage</h1>
 <blockquote>Cette page rassemble tous les formatages utilisable dans les exercices CLIP.</blockquote>
 
-<h2>STYLISATION DES PARAGRAPHES</h2>
+<h2>Stylisation des paragraphes</h2>
 
 <p>Pour styliser un paragraphe avec des styles connus, il suffit d'utiliser l'empreinte :</p>
 <pre><code>&lt;class_css>.&lt;class_css>: Le paragraphe avec les classes css.</code></pre>
@@ -46,13 +46,39 @@ note^*                  => note<sup>*</sup>
 note^12                 => note<sup>12</sup>
 </code></pre>
 
-<h2>LE DOCUMENT FORMATEUR</h2>
+<h2>Corrections automatiques</h2>
 
-Dans un texte, on peut ajouter avec le style particulier « admin » des textes qui ne seront visibles que par le formateur.
+<p>Certaines corrections sont faites automatiquements. Pour les empêcher, il suffit d'échapper le caractère à conserver, c'est-à-dire de placer une balance inverse devant : « \ ».</p>
 
-Dès que le programme rencontre ce style, il note qu'il lui faudra aussi produire le document pour le formateur (`&lt;nom exercice>-formateur.html`).
+<table>
+  <thead>
+    <tr>
+      <th width="160">Texte initial</th>
+      <th width="160">Texte corrigé</th>
+      <th width="160">Pour le conserver</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>un "mot"</td>
+    <td>un « mot »</td>
+    <td>un \"mot\"</td>
+  </tr>
+  <tr>
+    <td>J'ai dit</td>
+    <td>J’ai dit</td>
+    <td>J\'ai dit</td>
+  </tr>
+</table>
 
-Noter que ce document est aussi produit quand le document contient un QCM.
+
+
+<h2>Le document « formateur »</h2>
+
+<p>Dans un texte, on peut ajouter avec le style particulier « admin » des textes qui ne seront visibles que par le formateur.</p>
+
+<p>Dès que le programme rencontre ce style, il note qu'il lui faudra aussi produire le document pour le formateur (`&lt;nom exercice>-formateur.html`).</p>
+
+<p>Noter que ce document est aussi produit quand le document contient un QCM.</p>
 
 <h2>LES TYPES DE CONTENEUR</h2>
 
