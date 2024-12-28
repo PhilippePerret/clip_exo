@@ -46,7 +46,17 @@ note^*                  => note<sup>*</sup>
 note^12                 => note<sup>12</sup>
 </code></pre>
 
-<h2>LISTE D'ÉTAPES</h2>
+<h2>LE DOCUMENT FORMATEUR</h2>
+
+Dans un texte, on peut ajouter avec le style particulier « admin » des textes qui ne seront visibles que par le formateur.
+
+Dès que le programme rencontre ce style, il note qu'il lui faudra aussi produire le document pour le formateur (`&lt;nom exercice>-formateur.html`).
+
+Noter que ce document est aussi produit quand le document contient un QCM.
+
+<h2>LES TYPES DE CONTENEUR</h2>
+
+<h3>LISTE D'ÉTAPES</h3>
 
 <i>Les « liste d'étapes » est une liste numérotée.</i>
 
@@ -71,7 +81,7 @@ etc.
 </code></pre>
 
 
-<h2>BLOC DE CODE</h2>
+<h3>BLOC DE CODE</h3>
 
 <pre><code>:blockcode
 : Première ligne de code
@@ -80,7 +90,7 @@ etc.
 :+ Ligne de code à marquer "ajouté" (signe "+")
 </code></pre>
 
-<h2>TABLE</h2>
+<h3>TABLE</h3>
 
 <pre><code>:table
 ::cols_width(c1, c2..., cN)
@@ -97,7 +107,7 @@ etc.
     Laisser toujours une ligne vide après les blocs
 </code></pre>
 
-<h2>Q.C.M</h2>
+<h3>Q.C.M</h3>
 
 <em>Un bloc pour les QCM, les Questionnaires à choix multiples.</em>
 
