@@ -137,6 +137,10 @@ defmodule ExoLine.Builder do
       |> Enum.join("")
     "<tr>" <> row <> "</tr>"
   end
+  # - Ligne de LISTE -
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :liste} = conteneur) do
+    "<ul class=\"#{ExoLine.classes_css(exoline, conteneur)}\"><li>#{exoline.fcontent}</li></ul>"
+  end
   # - Ligne d'ÉTAPES -
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :etapes} = conteneur) do
     "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
@@ -335,6 +339,9 @@ defmodule ExoConteneur.Builder do
     get_structure_section(conteneur, "section")
   end
 
+  #
+  # TRAITEMENT DES AUTRES TYPES DE CONTENEUR
+  #
   def to_html(conteneur) do
     get_structure_section(conteneur, "section")
   end

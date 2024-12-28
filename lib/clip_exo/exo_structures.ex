@@ -34,6 +34,7 @@ defmodule ExoConteneur do
   # dans exo_inner_formater.ex (ExoLine.Builder.to_htm/2)
   @types_conteneur %{
     raw:        "Bloc raw",
+    liste:      "Liste simple",
     etapes:      "Liste d'étapes numérotées",
     blockcode:  "Bloc de codes",
     table:      "Table",
@@ -49,7 +50,10 @@ defmodule ExoConteneur do
     |> Enum.join(" ")
   end
   def classes_css(conteneur) do
-    default_css(conteneur)
+    default_css(conteneur) 
+    ++  for option <- [:no_num] do
+          if Map.get(conteneur.options, option) == true, do: Atom.to_string(option), else: nil
+        end |> Enum.reject(fn x -> is_nil(x) end)
     |> Enum.join(" ")
   end
 

@@ -31,6 +31,8 @@ body {
   }
 }
 
+.center {text-align: center}
+
 div.separator {
   height: 0;
 }

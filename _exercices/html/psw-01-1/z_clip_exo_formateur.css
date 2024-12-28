@@ -1,14 +1,14 @@
 
 .admin {
   display: block!important;
-  background-color: #EEFFEE;
+  background-color: ##ebfdff;
+  padding:0.8em 1.5em;
   color: green;
   margin-left: 14em;
   font-family:AvenirNC;
 }
 .admin:before {
   content: "[Formateur] ";
-  font-style: italic;
 }
 
 
