@@ -54,7 +54,7 @@ defmodule ClipExo.Exo do
   Si cette donnée n'est pas donnée (champ laissé vide), on essaie de 
   prendre le dernier traitement effectué.
   """
-  def build(params_exo) do
+  def build(params_exo, options \\ %{}) do
     IO.inspect(params_exo, label: "\nPARAMS_EXO")
     params_exo =
       if params_exo["file_path"] |> PPString.nil_if_empty() |> is_nil() do
@@ -67,7 +67,7 @@ defmodule ClipExo.Exo do
           {:ok, exo}  <- parse_whole_file(path),
           {:ok, exo}  <- build_all_files(exo),
           {:ok, exo}  <- copy_required_files(exo),
-          {:ok, exo}  <- open_exo_html_folder(exo) do
+          {:ok, exo}  <- open_exo_html_folder(exo, options) do
             {:ok, exo}
     else
       {:error, message_erreur} ->
@@ -250,9 +250,13 @@ defmodule ClipExo.Exo do
   @doc """
   Ouvre le dossier html de l'exercice dans le finder
   """
-  def open_exo_html_folder(exo) do
-    System.shell("open \"#{Path.expand(Builder.exo_html_folder(exo))}\"")
-    {:ok, exo}
+  def open_exo_html_folder(exo, options) do
+    if options[:open_folder] do
+      System.shell("open \"#{Path.expand(Builder.exo_html_folder(exo))}\"")
+      {:ok, exo}
+    else
+      {:ok, exo}
+    end
   end
 
   defp build_path_from(nil), do: nil

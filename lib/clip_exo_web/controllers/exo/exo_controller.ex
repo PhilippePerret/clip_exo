@@ -10,7 +10,10 @@ defmodule ClipExoWeb.ExoController do
   end
 
   def build(conn, params) do
-    case Exo.build(params["exo"]) do
+    options = %{
+      open_folder: params["open_folder"]
+    }
+    case Exo.build(params["exo"], options) do
     {:ok, exo} ->
       render(conn, :builder, exo: exo)
     {:error, err_msg} ->
