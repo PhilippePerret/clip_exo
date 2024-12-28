@@ -108,7 +108,9 @@ defmodule ClipExo.ExoBuilder do
   @liste_required_files [
     "./_exercices/css/clip_exo.css",
     "./_exercices/images/Icones-actions-sprite.png",
-    "./_exercices/images/logo-clip-alpha.png"
+    "./_exercices/images/logo-clip-alpha.png",
+    "./_exercices/fontes/AvenirNextCondensed-Regular.ttf",
+    "./_exercices/fontes/AvenirNextCondensed-Italic.ttf"
   ]
 
   @doc """

@@ -3,10 +3,13 @@
   display: block!important;
   background-color: #EEFFEE;
   color: green;
-  margin-left: 4em;
-  margin-right: 4em;
+  margin-left: 14em;
+  font-family:AvenirNC;
 }
-.admin:before {content: "Formateur : "}
+.admin:before {
+  content: "[Formateur] ";
+  font-style: italic;
+}
 
 
 section.qcm div.reponse:not([data-points="0"]):after {

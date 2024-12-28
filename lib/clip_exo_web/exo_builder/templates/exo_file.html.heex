@@ -17,6 +17,10 @@
       <div class="reference"><%= @exo.infos.reference %></div>
 		</header>
 
+    <%= if @document_formateur do %>
+    <div style="text-align:center;border:1px solid;padding:2em;">- VERSION FORMATEUR -</div>
+    <% end %>
+
     <section id="exercice">
       <%= raw @inner_formated %>
     </section>

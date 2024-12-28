@@ -1,0 +1,56 @@
+@font-face {
+  font-family: "PAvenir";
+  src: url("/fonts/AvenirNextCondensed-Regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "PAvenir";
+  src: url("/fonts/AvenirNextCondensed-Italic.ttf");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: "PAvenir";
+  src: url("/fonts/AvenirNextCondensed-Italic.ttf");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: "PAvenir";
+  src: url("/fonts/AvenirNextCondensed-UltraLight.ttf");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "MaFonte";
+  src: url("/fonts/Optima-Regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "MaFonte";
+  src: url("/fonts/Optima-Bold.ttf");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "MaFonte";
+  src: url("/fonts/Optima-Italic.ttf");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "MaFonte";
+  src: url("/fonts/Optima-BoldItalic.ttf");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: "MaFonte";
+  src: url("/fonts/Optima-ExtraBlack.ttf");
+  font-weight: bolder;
+  font-style: normal;
+}

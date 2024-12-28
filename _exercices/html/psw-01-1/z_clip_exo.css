@@ -9,6 +9,19 @@ body {
   counter-reset: pageNumber;
 }
 
+@font-face {
+  font-family: "AvenirNC";
+  src: url("z_AvenirNextCondensed-Regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "AvenirNC";
+  src: url("z_AvenirNextCondensed-Italic.ttf");
+  font-weight: normal;
+  font-style: italic;
+}
+
 @page {
   size:	a4 portrait;
   counter-incremente: pageNumber;
