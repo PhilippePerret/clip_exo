@@ -7,40 +7,41 @@
 
   file_name = @exo.infos.name
   exo_relative_path = ClipExo.ExoBuilder.exo_html_file( @exo, :relative )
-  IO.inspect(exo_relative_path, label: "\nexo_relative_path")
 %>
-<div>
-  Exercice à construire : <%= file_name %>.
-
-</div>
 
 <div>
   <form action={~p"/exo/build"} method="POST">
     <div>
       <input type="hidden" name="exo[file_path]" value={file_name} />
-      <button type="submit">Reconstuire l’exercice</button>
+      <button type="submit">Reconstuire l’exercice '<%= file_name %>'</button>
     </div>
   </form>
 </div>
 
+<%
+
+width = Float.to_string( 120 / 100 * 21)
+height = Float.to_string( 120 / 100 * 29)
+
+style = "width:#{width}cm;height:#{height}cm;"
+
+%>
+
 <iframe 
   src={~p"/exercice/" <> "#{file_name}/#{file_name}.html"}
-  width="1200"
-  height="1000"
+  style={"#{style}"}
   frameborder="1"></iframe>
 
 <%= if @exo.document_formateur_required do %>
 
   <iframe 
     src={~p"/exercice/" <> "#{file_name}/#{file_name}-formateur.html"}
-    width="1200"
-    height="1000"
+    style={"#{style}"}
     frameborder="1"></iframe>
 
 <% end %>
 
 <iframe 
   src={~p"/exercice/" <> "#{file_name}/#{file_name}-specs.html"}
-  width="1200"
-  height="1000"
+  style={"#{style}"}
   frameborder="1"></iframe>
