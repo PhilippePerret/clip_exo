@@ -3,14 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="z_clip_exo.css" />
+    <%= if @document_formateur do %>
+      <link rel="stylesheet" href="z_clip_exo_formateur.css" />
+    <% end %>
     <%= for path <- @exo.infos.css_files || [] do %>
       <link rel="stylesheet" href={"z_" <> Path.basename(path)} />
     <% end %>
-    <style type="text/css">
-      .admin {
-        display: <%= @document_formateur && "block" || "none" %>
-      }
-    </style>
   </head>
   <body>
     <header>

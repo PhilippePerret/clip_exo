@@ -29,6 +29,16 @@
   height="1000"
   frameborder="1"></iframe>
 
+<%= if @exo.document_formateur_required do %>
+
+  <iframe 
+    src={~p"/exercice/" <> "#{file_name}/#{file_name}-formateur.html"}
+    width="1200"
+    height="1000"
+    frameborder="1"></iframe>
+
+<% end %>
+
 <iframe 
   src={~p"/exercice/" <> "#{file_name}/#{file_name}-specs.html"}
   width="1200"

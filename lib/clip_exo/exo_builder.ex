@@ -123,7 +123,12 @@ defmodule ClipExo.ExoBuilder do
     IO.puts "--> copy_required_files"
     # Peut-être des fichiers propres à l'exercice
     customs_files = if exo.infos.css_files, do: exo.infos.css_files, else: []
-    # Boucle sur tous les fichiers à donner
+    customs_files =
+      if exo.document_formateur_required do
+        customs_files ++ ["./_exercices/css/clip_exo_formateur.css"]
+      else customs_files end
+    
+      # Boucle sur tous les fichiers à donner
     @liste_required_files ++ customs_files
     |> Enum.map(fn original -> 
         file_in_exo = Path.join([exo.infos.htm_folder, "z_" <> Path.basename(original)])
