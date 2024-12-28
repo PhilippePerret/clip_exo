@@ -17,6 +17,8 @@ defmodule ClipExoWeb.Router do
   scope "/", ClipExoWeb do
     pipe_through :browser
 
+    get "/manuel", PageController, :manuel
+    get "/fabrication", PageController, :fabrication
     get "/formatage", PageController, :aide_formatage
     get "/exercice/:folder/:file", PageController, :serve_file
     get "/", PageController, :home

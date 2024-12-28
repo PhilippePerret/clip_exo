@@ -6,7 +6,16 @@ defmodule ClipExoWeb.PageController do
   def home(conn, _params) do
     render(conn, :home)
   end
+
+  def fabrication(conn, _params) do
+    render(conn, :fabrication, ui: ClipExo.ui_terms)
+  end
+
+  def manuel(conn, _params) do
+    render(conn, :manuel, ui: ClipExo.ui_terms)
+  end
   
+  # Pour afficher les fichiers dans des iframes
   def serve_file(conn, %{"folder" => folder, "file" => file}) do
     path = Path.join(["_exercices/html", folder, file])
     case File.read(path) do
@@ -17,11 +26,7 @@ defmodule ClipExoWeb.PageController do
     end
   end
 
-  
   def aide_formatage(conn, _params) do
-    # Pour être toujours à la page, on fait une copie du fichier 
-    # clip_exo.css dans le dossier /priv/static/css
-    File.cp!("./_exercices/css/clip_exo.css", "./priv/static/css/clip_exo.css")
     render(conn, :aide_formatage, %{
       liste_classes_paragraphe: ExoInnerFormater.get_paragraph_styles()
     })

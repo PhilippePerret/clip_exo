@@ -1,3 +1,6 @@
+
+.admin { display: none; }
+
 body {
   margin: 1.8cm 2.5cm 5cm;
   width: 17cm;
@@ -253,15 +256,61 @@ table.conteneur.borders-v tr {
   border: none;
 }
 
-pre.warning {
-  padding: 1em;
-  color: red;
-  background-color: #FFEEEE;
-  font-size: 10pt;
-  white-space: pre-wrap;
+/* 
+
+--- CONTENEUR Q.C.M. ---
+
+*/
+section.qcm {
+  display:block;
+}
+section.qcm div.question {
+  margin-top:2.2em;
+  margin-bottom:1.3em;
+  font-size: 1em;
+  background-color: slategrey;
+  color: white;
+  padding: 8px 12px;
+}
+section.qcm div.question:after {
+  font-weight: normal;
+  margin-left: 3em;
+  font-size: 0.75em;
+  font-style: italic;
+  display:block;
+  margin-top:7px;
+}
+section.qcm div.question.radio:after {
+  content: "(Une seule bonne réponse)";
+}
+section.qcm div.question.checkbox:after {
+  content: "(Cocher toutes les bonnes réponses)";
 }
 
-.bold {font-weight:bold}
+section.qcm div.reponse {
+  position: relative;
+  font-size: 0.9em;
+  margin-left: 5em;
+  margin-top: 6px;
+  width: 460px;
+}
+section.qcm div.reponse:before {
+  position:absolute;
+  left: -1.7em;
+}
+section.qcm div.reponse.checkbox:before {
+  content: "❑";
+  top: 1px;
+}
+section.qcm div.reponse.radio:before {
+  content: "◎";
+  top: -3px;
+}
+
+
+/* 
+---- PICTOS ----
+*/
 
 div.picto {
   vertical-align: bottom;
@@ -345,3 +394,12 @@ div.picto.repete {
 .bg_lightgrey, td.bg_lightgrey {
   background-color: lightgrey;
 }
+pre.warning {
+  padding: 1em;
+  color: red;
+  background-color: #FFEEEE;
+  font-size: 10pt;
+  white-space: pre-wrap;
+}
+
+.bold {font-weight:bold}

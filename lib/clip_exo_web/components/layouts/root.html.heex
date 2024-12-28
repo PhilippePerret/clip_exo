@@ -1,3 +1,6 @@
+<%
+  ui = ClipExo.ui_terms
+%>
 <!DOCTYPE html>
 <html lang="fr" class="[scrollbar-gutter:stable]">
   <head>
@@ -15,8 +18,10 @@
     <header>
       <a href={~p"/"}>CLIP-EXO - Éditeur d'exercices pour le CLIP</a>
     </header>
-    <nav class="right">
-      <a href={~p"/formatage"}>Aide au formatage</a>
+    <nav id="main">
+      <a href={~p"/manuel"}><%= ui.menus["manuel"] %></a>
+      <a href={~p"/fabrication"}><%= ui.menus["fabrication"] %></a>
+      <a href={~p"/formatage"}><%= ui.menus["formatage"] %></a>
     </nav>
     <.flash_group flash={@flash} />
     <section id="content">

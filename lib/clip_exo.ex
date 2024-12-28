@@ -6,4 +6,22 @@ defmodule ClipExo do
   Contexts are also responsible for managing your data, regardless
   if it comes from the database, an external API or others.
   """
+
+  @ui_terms %{
+    menus: %{
+      "manuel"      => "Manuel",      # menu principal
+      "fabrication" => "Fabrication", # menu principal
+      "formatage"   => "Formatage",   # menu principal
+    },
+    boutons: %{
+      "editer"        => "Éditer l’exercice",
+      "preformatage"  => "Préformatage de l’exercice",
+      "produire"      => "Produire le fichier de l'exercice"
+    }
+  }
+
+  def ui_terms() do
+    @ui_terms
+  end
+
 end
