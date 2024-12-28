@@ -84,7 +84,9 @@ note^12       => note<sup>12</sup>
 
 <p>Noter que ce document est aussi produit quand le document contient un QCM.</p>
 
-<h2>LES TYPES DE CONTENEUR</h2>
+
+
+<h2>Les types de conteneur</h2>
 
 <h3>LISTE D'ÉTAPES</h3>
 
@@ -142,7 +144,7 @@ etc.
 <em>Un bloc pour les QCM, les Questionnaires à choix multiples.</em>
 
 <pre><code>:qcm
-::enable_dont_know     # ajoute le choix "Je ne sais pas" (1 point)
+::permettre_ne_sait_pas  # ajoute le choix "Je ne sais pas" (1 point)
 :qc Une première question, avec des choix multiple (cases à cocher)
 :r Une réponse comme case à cocher
 :r Une autre réponse comme case à cocher
@@ -178,6 +180,6 @@ etc.
     <li>à partir de 5, la réponse est tout à fait juste</li>
   </ul>
   </li>
-  <li></li>
+  <li>l'option <code>permettre_ne_sait_pas</code> permet d'ajouter automatiquement une case ou un bouton radio « Je ne sais pas » à toutes les questions.</li>
   <li>les "q" et "r" désignant les questions et réponses sont obligatoirement en minuscules</li>
 </ul>

@@ -32,6 +32,7 @@ body {
 }
 
 .center {text-align: center}
+.nowrap {white-space: nowrap!important;}
 
 div.separator {
   height: 0;
@@ -74,21 +75,26 @@ section.conteneur,  table.conteneur {
 
 section.blockcode {
   display: block;
-  counter-reset: monCompteur;
   font-family: 'Courier New', Courier, monospace;
   font-size: 11pt;
   background-color: #EEEEEE;
-  padding: 0.5em;
+  padding: 18px;
+}
+section.blockcode:not(.no_num) {
+  counter-reset: monCompteur;
 }
 
 /* linem pour "line modified" */
 section.blockcode > div.line, section.blockcode > div.linem {
   display: block;
-  counter-increment: monCompteur;
   margin-left: 1cm;
   position: relative;
 }
-section.blockcode > div.line:before, section.blockcode > div.linem:before {
+section.blockcode:not(.no_num) > div.line, section.blockcode:not(.no_num) > div.linem {
+  counter-increment: monCompteur;
+}
+
+section.blockcode:not(.no_num) > div.line:before, section.blockcode:not(.no_num) > div.linem:before {
   content:counter(monCompteur); 
   position: absolute;
   left: -1cm;
@@ -96,12 +102,23 @@ section.blockcode > div.line:before, section.blockcode > div.linem:before {
   top: 2px;
 }
 
-section.blockcode > div.linem:before {
+section.blockcode:not(.no_num) > div.linem:before {
   content: counter(monCompteur) " +";
   color: red;
   font-weight: bold;
 }
 
+/* 
+
+  --- Les DIVs ---
+
+*/
+
+div.line {
+  margin-top: 1em;
+  line-height: 1.4em;
+  text-align: justify;
+}
 
 div.rub, div.rubi {
   font-family: Arial, Helvetica, sans-serif;
@@ -201,6 +218,10 @@ section.etapes div.resultat:before {
 }
 section.etapes div.pas.rouge {
   color:red;
+}
+
+section.liste {
+
 }
 
 /* Les lignes de code */
@@ -393,6 +414,8 @@ div.picto.repete {
 /* 
   ---------- Styles généraux ------------
 */
+
+.air {margin-top: 40px!important; margin-bottom: 40px!important;}
 .left {text-align: left}
 .center {text-align: center}
 .right {text-align: right}

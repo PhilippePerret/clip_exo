@@ -44,7 +44,7 @@ cadre.air: Nous avons employé trois termes inexpliqués, ci-dessus : *interacti
 
 On parle de **SITE WEB** parce qu’un ordinateur — une *machine* — en réseau (internet, ou en réseau local) est relié à un grand nombre d'autres ordinateurs pour former ce qui ressemble à une *toile d’araignée* (ce qui se dit « spider web » en anglais). WEB signifie donc « TOILE ».
 
-Un site web (ainsi que chacune de ses pages) possède une adresse précise, une **URL** (qui signifie « Uniform Resource Locator » pour « Adresse uniforme de ressource »). Cette URL est en quelque sorte **l'adresse postale** de la page ou du site. Cette adresse peut ressembler <span style="white-space:nowrap">à :</span>
+Un site web (ainsi que chacune de ses pages) possède une adresse précise, une **URL** (qui signifie « Uniform Resource Locator » pour « Adresse uniforme de ressource »). Cette URL est en quelque sorte **l'adresse postale** de la page ou du site. Cette adresse peut ressembler à :
 
 :blockcode
 ::no_num
@@ -57,6 +57,6 @@ Pour atteindre l'adresse ci-dessus, on utilise sur le réseau le protocole HTTP 
 
 :blockcode
 ::no_num
-:	https://www.mon_site.net
+:	https&#58;//www.mon_site.net
 
-Le protocole **HTTP** signifie « Hyper Text Transfert Protocole », c’est-à-dire « Protocole de transfert du texte élaboré », correspond à la méthode employée pour transférer des « pages internet » sur la toile. On ajoute maintenant le « S » pour « sécurisé » : **HTTPS**. Les données transmises par le protocole HTTPS sont cryptées, donc sécurisées.
+Le protocole **HTTP** signifie « Hyper Text Transfert Protocole », c’est-à-dire « Protocole de transfert de texte élaboré », correspond à la méthode employée pour transférer des « pages internet » sur la toile. On ajoute maintenant le « S » pour « sécurisé » : **HTTPS**. Les données transmises par le protocole HTTPS sont cryptées, donc sécurisées.

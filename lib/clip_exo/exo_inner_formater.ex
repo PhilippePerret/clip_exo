@@ -149,6 +149,7 @@ defmodule ExoLine.Builder do
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :raw} = conteneur) do
     "<div class=\"#{ExoLine.classes_css(exoline, conteneur)}\">#{traite_line_type_code(exoline)}</div>"
   end
+
   # - Ligne de QCM -
   #
   # Les lignes d'un QCM ont un type (tline) qui peut commencer par :
@@ -164,7 +165,7 @@ defmodule ExoLine.Builder do
       "<div class=\"question #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
     true ->
       # Une réponse
-      IO.inspect(exoline, label: "\nRÉPONSE dans construction")
+      # IO.inspect(exoline, label: "\nRÉPONSE dans construction")
       "<div data-points=\"#{exoline.data.points}\" class=\"reponse #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
     end
   end
@@ -297,9 +298,16 @@ defmodule ExoConteneur.Builder do
   #
   # === TRAITEMENT D'UN CONTENEUR QCM ===
   #
+
   def to_html(%ExoConteneur{type: :qcm} = conteneur) do
+
+    conteneur =
+      if Enum.member?(conteneur.options.extra_options, :permettre_ne_sait_pas) do
+        %{conteneur | lines: add_case_ne_sait_pas(conteneur.lines)}
+      else conteneur end
+
     # Il faut définir le type (radio ou checkbox) de chaque question
-    # Ce type dépend de la second lettre de la question qui précède.
+    # Ce type dépend de la seconde lettre de la question qui précède.
     # Il suffit donc de parcourir les lines, de prendre le type quand
     # on rencontre une question, et de gjl'affecter aux questions qui
     # suivent.
@@ -334,9 +342,65 @@ defmodule ExoConteneur.Builder do
           end
         end)
     new_lines = collector.lines
+    
+    IO.inspect(new_lines, label: "\nNew_lines à la fin")
 
     conteneur = %{conteneur | lines: new_lines}
     get_structure_section(conteneur, "section")
+  end
+
+  # Pour un QCM avec l'option "permet_ne_sait_pas", on doit ajouter
+  # automatiquement la case "Je ne sais pas"
+  defp add_case_ne_sait_pas(lines) do
+    # Il faut ajouter la case "Je ne sais pas" à toutes les 
+    # questions.
+    case_dont_know = %ExoLine{
+      content: "Je ne sais pas",
+      tline: "r1"
+    }
+
+    collector = 
+    Enum.reduce(lines, %{lines: [], last_is_question: nil}, fn line, coll -> 
+      
+      safe_car1_tline = String.at((line.tline || "X"), 0)
+
+      is_question = safe_car1_tline == "q"
+      question_en_cours = coll.last_is_question == true
+      line_is_quest_or_rep = Enum.member?(["q","r"], safe_car1_tline)
+
+      out_of_qcm = question_en_cours && (is_nil(line.tline) || not(line_is_quest_or_rep || is_question))
+      
+      # On doit ajouter la case "Je ne sais pas" si
+      #   - la ligne courante est une question et qu'il y avait une
+      #     question en cours
+      #   - la ligne courante fait sortir du questionnaire
+      new_lines =  
+      cond do
+        (is_question && question_en_cours) or out_of_qcm  ->
+          coll.lines ++ [case_dont_know]
+        true -> coll.lines 
+      end
+      
+      coll =
+        cond do
+          is_question -> %{coll | last_is_question: true}
+          out_of_qcm  -> %{coll | last_is_question: false}
+          true        -> coll 
+        end
+      
+      # On ajoute toujours la ligne courante
+      %{coll | lines: new_lines ++ [line]}
+      end)
+
+    # On en ajoute une toute dernière à la toute fin (mais seulement si on
+    # est encore dans un questionnaire)
+    lines_at_the_end = 
+      if (collector.last_is_question == true) do
+        collector.lines ++ [case_dont_know]
+      else collector.lines end
+
+    lines_at_the_end
+    # |> IO.inspect(label: "\nLignes remontées")
   end
 
   #

@@ -19,7 +19,7 @@ rub: Q.C.M.
 admin: Bien faire remarquer que certaines questions n'ont qu'un seul choix, d'autres en ont plusieurs.
 
 :qcm
-::enable_dont_know
+::permettre_ne_sait_pas
 :qr Que signifie le terme WEB ?
 :r0 Ce sont les initiales de« World Enable Booster », c'est-à-dire « Amplification d'activité mondiale »
 :r0 C'est un petit nom qui veut dire « Chien de compagnie », parce que le web permet de parler de ses animaux préférés
@@ -81,3 +81,5 @@ admin: Bien faire remarquer que certaines questions n'ont qu'un seul choix, d'au
 :r0	… le langage utilisé pour construire la page
 :r5	… l'adresse précise d'une page en particulier
 :r0	… l'adresse de toutes les pages d'un site web
+
+Pour voir ce qui se passera.
