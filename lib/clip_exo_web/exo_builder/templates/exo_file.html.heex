@@ -6,6 +6,11 @@
     <%= for path <- @exo.infos.css_files || [] do %>
       <link rel="stylesheet" href={"z_" <> Path.basename(path)} />
     <% end %>
+    <style type="text/css">
+      .admin {
+        display: <%= @document_formateur && "block" || "none" %>
+      }
+    </style>
   </head>
   <body>
     <header>

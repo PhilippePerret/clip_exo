@@ -16,6 +16,8 @@ Remplir le QCM ci-dessous en s’aidant du texte d’explication PSW-01-2.
 
 rub: Q.C.M.
 
+admin: Bien faire remarquer que certaines questions n'ont qu'un seul choix, d'autres en ont plusieurs.
+
 :qcm
 ::enable_dont_know
 :qr Que signifie le terme WEB ?

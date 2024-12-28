@@ -20,6 +20,11 @@ defmodule ClipExo.Exo do
     body:       "contenu brut de l'exercice",
     body_html:  nil,  # le contenu formaté
     rubriques:  [],   # pour les rubriques des infos
+    document_formateur_required: false,
+    formateur:  false,  # pour indiquer, en cours de fabrication, s'il 
+                        # s'agit de la fabrication du document pour le 
+                        # formateur ou pour le participant (en fait, un
+                        # seul style (admin) diffère l'un de l'autre)
     suivi: nil        # Pour le suivi de la construction
   ]
 
@@ -60,7 +65,7 @@ defmodule ClipExo.Exo do
 
     with  {:ok, path} <- get_path_exo(params_exo),
           {:ok, exo}  <- parse_whole_file(path),
-          {:ok, exo}  <- build_two_files(exo),
+          {:ok, exo}  <- build_all_files(exo),
           {:ok, exo}  <- copy_required_files(exo),
           {:ok, exo}  <- open_exo_html_folder(exo) do
             {:ok, exo}
@@ -120,9 +125,10 @@ defmodule ClipExo.Exo do
 
   @doc """
   Demande de construction des deux fichiers de l'exercice .clip.exo
+  + Le document du formateur si nécessaire.
   """
-  def build_two_files(%ClipExo.Exo{} = exo) do
-    IO.puts "--> build_two_files"
+  def build_all_files(%ClipExo.Exo{} = exo) do
+    IO.puts "--> build_all_files"
     suivi = exo.suivi || ["Début de la construction"]
 
     suivi = suivi ++ [case Builder.build_file_specs(exo) do
@@ -135,9 +141,17 @@ defmodule ClipExo.Exo do
       {:error, msg} -> "💣 Échec de la construction du fichier de l'exercice : " <> msg
     end]
 
+    suivi = if exo.document_formateur_required do
+      exo = %{ exo | formateur: true }
+      suivi ++ [case Builder.build_file_exo(exo) do
+        {:ok, _exo} -> "👍 Construction du fichier formateur"
+        {:error, msg} -> "💣 Échec de la construction du fichier formateur : " <> msg
+      end]
+    else suivi end
+
     exo = %{exo | suivi: suivi}
 
-    IO.puts "<-- build_two_files"
+    IO.puts "<-- build_all_files"
     {:ok, exo}
   end
 
@@ -147,6 +161,8 @@ defmodule ClipExo.Exo do
   Méthode qui prend le code +code+, en supposant qu'il est
   au format clip.exo et le transforme en table (liste) façon
   AST pour produire le document HTML.
+
+  return {:ok, %ClipExo.Exo} ou {:error, "message d'erreur"}
   """
   def parse_whole_file_code(code) do
     code
@@ -154,6 +170,7 @@ defmodule ClipExo.Exo do
   end
 
   @reg_front_matter ~r/(^|\n)---\n(?<front_matter>(?:.|\n)*)\n---\n(?<body>(.|\n)*)\z/Um
+  @reg_for_formateur ~r/(admin\:|\.admin|\:qcm)/
   defp decompose_header_and_body(code) do
     if Regex.match?(@reg_front_matter, code) do
 
@@ -174,6 +191,12 @@ defmodule ClipExo.Exo do
       
       # --- Instanciation de Exo ---
       exo = %ClipExo.Exo{infos: infos, body: body}
+
+      # On regarde tout de suite s'il faudra un document formateur
+      # (on le fait si a) le document contient des tyles 'admin' ou
+      #  b) si le document contient un QCM
+      exo = %{ exo | document_formateur_required: Regex.match?(@reg_for_formateur, body)}
+
       {ok, exo}
     else
       {:error, "Le fichier est mal formaté {TODO: Lien d'aide}"}

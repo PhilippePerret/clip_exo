@@ -74,8 +74,13 @@ defmodule ClipExo.ExoBuilder do
     # Construction du dossier de l'exercice
     _exo_folder = build_exo_folder_if_required(exo)
 
-    # Chemin d'accès au fichier des caractéristiques
-    exo_file_path = exo_html_file(exo)
+    # Chemin d'accès au fichier de l'exercice, pour le
+    # participant ou pour le formateur
+    exo_file_path = if exo.formateur do
+      exo_html_formateur_file(exo)
+    else
+      exo_html_file(exo)
+    end
 
     # Construire le fichier
     File.write(exo_file_path, code)
@@ -155,8 +160,16 @@ defmodule ClipExo.ExoBuilder do
     Path.join([@folder_html_relative, exo.infos.name, exo_html_file_name(exo)])
   end
 
+  def exo_html_formateur_file(exo) do
+    Path.join([exo_html_folder(exo), exo_html_formateur_file_name(exo)])
+  end
+
   def exo_html_file_name(exo) do
     "#{exo.infos.name}.html"
+  end
+  
+  def exo_html_formateur_file_name(exo) do
+    "#{exo.infos.name}-formateur.html"
   end
   
   defp build_exo_folder_if_required(exo) do

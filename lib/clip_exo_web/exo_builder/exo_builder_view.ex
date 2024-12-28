@@ -9,16 +9,18 @@ defmodule ClipExoWeb.ExoBuilderView do
 
   #########################################
   # Construction du fichier de l'exercice #
+  #                                       #
+  # (pour le participant ou le formateur) #
   #########################################
   def build_file_exo(exo) do
     assigns = [
       exo: exo,
+      document_formateur: exo.formateur,
       exo_titre: exo.infos.titre |> String.replace(~r/\\n/, "<br />"),
       inner_formated: exo.body_html
     ]
     render_to_string(__MODULE__, "exo_file.html", assigns)
     # |> IO.inspect(label: "Code retourné par la vue exo_file.html")
-
   end
 
 
