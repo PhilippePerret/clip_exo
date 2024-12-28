@@ -42,7 +42,7 @@ defmodule ClipExo.ExoSchema do
       |> Enum.reject(fn x -> x == nil end)
       |> IO.inspect(label: "\nRubriques à la fin")
 
-    attrs = Map.merge(attrs, %{rubriques: rubriques})
+    attrs = Map.merge(attrs, %{"rubriques" => rubriques})
 
     schema
     |> cast(attrs, [:name, :path, :reference, :titre, :auteur, :created_at, :body, :rubriques, :competences, :duree_min, :duree_max])

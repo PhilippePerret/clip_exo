@@ -65,18 +65,33 @@ defmodule ClipExoWeb.ExoController do
   @doc """
   Méthode qui produit véritablement l'exercice
   """
-  def produce_preformated_exo(conn, params) do
-    IO.inspect(params["exo"], label: "\nEXO (dans produce)")
+  def produce_exo_preformate(conn, params) do
+    IO.inspect(params["exo"], label: "\nEXO (dans produce_exo_preformate)")
     exo_params = params["exo"]
-    case Exo.build_preformated_exo(params["exo"]) do
-    {:ok, path} -> 
+
+    form = 
+    %ClipExo.ExoSchema{}
+    |> ExoSchema.changeset(params["exo"] || %{})
+    |> to_form(as: "exo")
+
+    if exo_params["path"] == "" do
       conn
-      |> put_flash(:info, "Exercice préformé créé avec succès dans #{path}")
-      |> render(:on_built, exo: exo_params)
-    {:error, error_msg} ->
+      |> put_flash(:error, "Il faut au moins définir le chemin d'accès au fichier (son nom)")
+      |> render(:preformated, form: form)
+    else
       conn
-      |> put_flash(:error, error_msg)
-      |> preformated_exo(params)
+      |> put_flash(:info, "Pour le moment, je ne le fais pas")
+      |> render(:preformated, form: form)
+      # case Exo.build_preformated_exo(params["exo"]) do
+      # {:ok, path} -> 
+      #   conn
+      #   |> put_flash(:info, "Exercice préformé créé avec succès dans #{path}")
+      #   |> render(:on_built, exo: exo_params)
+      # {:error, error_msg} ->
+      #   conn
+      #   |> put_flash(:error, error_msg)
+      #   |> preformated_exo(params)
+      # end
     end
   end
 end
