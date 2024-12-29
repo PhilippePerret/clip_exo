@@ -46,9 +46,12 @@ fieldset {
 input[type="text"], input[type="password"], textarea {
   font-size: inherit;
   padding: 4px;
-  width: 100%;
   margin: 4px;
 }
+input[type="text"]:not(.medium):not(.short) {
+  width: 100%;
+}
+
 
 div.description, div.explication {
   font-size: 0.8em;

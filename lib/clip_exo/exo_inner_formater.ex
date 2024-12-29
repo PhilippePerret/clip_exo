@@ -349,6 +349,15 @@ defmodule ExoConteneur.Builder do
     get_structure_section(conteneur, "section")
   end
 
+  #
+  # TRAITEMENT DES AUTRES TYPES DE CONTENEUR
+  #
+  def to_html(conteneur) do
+    get_structure_section(conteneur, "section")
+  end
+
+
+
   # Pour un QCM avec l'option "permet_ne_sait_pas", on doit ajouter
   # automatiquement la case "Je ne sais pas"
   defp add_case_ne_sait_pas(lines) do
@@ -401,13 +410,6 @@ defmodule ExoConteneur.Builder do
 
     lines_at_the_end
     # |> IO.inspect(label: "\nLignes remontées")
-  end
-
-  #
-  # TRAITEMENT DES AUTRES TYPES DE CONTENEUR
-  #
-  def to_html(conteneur) do
-    get_structure_section(conteneur, "section")
   end
 
   # Construction des header/footer pour un conteneur TABLE

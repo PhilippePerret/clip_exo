@@ -16,21 +16,21 @@ defmodule ClipExoWeb.AppComponents do
   def exoform(assigns) do
     assigns = Map.merge(assigns, %{
       ui: ClipExo.ui_terms,
-      last_exo_file_path: ClipExo.Exo.last_file_path()
+      last_exo_path: ClipExo.Exo.last_path()
     })
     ~H"""
     <form action={@route} method="POST">
       <div>
-        <label for="exo_file_path" class="block">
+        <label for="exo_path" class="block">
           Chemin d'accès au fichier
-          <%= if @last_exo_file_path do %>
+          <%= if @last_exo_path do %>
             <span class="smaller italic">
               (par défaut, on reprend le dernier :)
             </span>
           <% end %>
         </label>
     
-        <input id="exo_file_path" name="exo[file_path]" type="text" style="width:200px;" value={@last_exo_file_path} />
+        <input id="exo_path" name="exo[path]" type="text" style="width:200px;" value={@last_exo_path} />
         <button type="submit"><%= @ui.boutons["produire"] %></button>
 
         <div>

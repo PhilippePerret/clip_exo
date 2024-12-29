@@ -1,0 +1,57 @@
+<style type="text/css">
+  form input {
+    font-family: 'Arial Narrow';
+    font-size: 15pt!important;
+  }
+
+  div.flex-container {
+    display:flex;
+    gap: 1rem;
+    align-items:center;
+  }
+  /* .flexi {flex: 1;} */
+  input[data-css="flex-w-40"] {flex: 0 0 60px; width:60px!important;}
+  input[data-css="flex-medium"] {flex: 0 0 200px; width: 200px!important;}
+  .w-50pc {width: 40%;}
+  </style>
+
+<h1>Données de l’exercice</h1>
+<.form 
+  for={@form}
+  action={~p"/exo/produce_data_file"}
+  phx-submit="save">
+
+  <fieldset id="infos">
+    <legend>Infos générales</legend>
+    <.input type="text" field={@form[:titre]} placeholder="Titre (visible) de l'exercice" />
+    <div class="flex-container">
+      <.input type="text" field={@form[:path]} placeholder="Chemin (in _exercices/clipexo/)" data-css="flex-medium" />
+      <.input type="text" field={@form[:name]} placeholder="Nom (path sans extension)" data-css="flex-medium" />
+      <.input type="text" field={@form[:reference]} placeholder="Référence (PSW-XX)" data-css="flex-medium" />
+    </div>
+    <div class="flex-container">
+      <label>Durées (en minutes)</label>
+      <.input type="number" field={@form[:duree_min]} placeholder="min" data-css="flex-w-40" />
+      <.input type="number" field={@form[:duree_max]} placeholder="max" data-css="flex-w-40" />
+    </div>
+    <.input type="text" field={@form[:auteur]} placeholder="Auteur(s) (Prénom NOM, Prénom NOM)" />
+    <.input type="text" field={@form[:logiciels]} placeholder="Logiciels (séparés par des virgules)" />
+    <.input type="text" field={@form[:competences]} placeholder="Compétences (séparées par des virgules)" />
+  </fieldset>
+  <fieldset class="rubriques mt-10">
+    <legend>Rubriques utiles</legend>
+    <div class="explication">(Au choix et pas forcément toutes — ces rubriques vont structurer le fichier de données ; tu pourras en ajouter facilement à l'aide de «««<code>rub: Nouvelle rubrique</code>»»»)</div>
+    <%= for {value, label} <- @data_rubriques do %>
+      <.input type="checkbox"
+        field={@form[:rubriques]}
+        name="rubriques[]"
+        value={value}
+        label={label} />
+    <% end %>
+  </fieldset>
+  <.input type="checkbox" field={@form[:accept_partial_data]} label="Accepter des données partielles" />
+  <div class="buttons">
+    <div class="while-submitting hidden">Merci de patienter pendant l’opération…</div>
+    <.button type="submit">Créer le fichier de données</.button>
+  </div>
+</.form>

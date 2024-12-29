@@ -76,14 +76,14 @@ defmodule ClipExo.ExoBuilder do
 
     # Chemin d'accès au fichier de l'exercice, pour le
     # participant ou pour le formateur
-    exo_file_path = if exo.formateur do
+    exo_path = if exo.formateur do
       exo_html_formateur_file(exo)
     else
       exo_html_file(exo)
     end
 
     # Construire le fichier
-    File.write(exo_file_path, code)
+    File.write(exo_path, code)
 
     IO.puts "<-- build_file_exo"
 

@@ -33,6 +33,52 @@ defmodule ClipExo.Exo do
 
   @folder "./_exercices/clipexo/"
   @html_folder "./_exercices/html"
+  
+  @reg_path ~r/^[^\W]+$/
+
+  @doc """
+  Fonction qui vérifie la validité des données pour la création du
+  fichier de données de l'exercice.
+  Note : c'est toujours pour la création. Car ensuite, une fois que
+  le fichier est créé, on l'édite pour le modifier.
+  +data+ Données provenant du formulaire de data_exo_form.html.heex
+
+  """
+  def data_valid?(data) do
+    IO.inspect(data, label: "\nDATA in data_valid?")
+    cond do
+    is_nil(data) ->
+      {:error, "Aucune donnée envoyée pour validation…"}
+    data["path"] == "" ->
+      {:error, "Il faut impérativement fournir le chemin dans ./_exercices/clipexo/"}
+    not (data["path"] =~ @reg_path) -> 
+      {:error, "Le chemin doit être d'un format valide (pas d'espaces, etc.)"}
+    File.exists?(get_path_exo!(data)) ->
+      {:error, "Le fichier '#{data["path"]}' existe déjà."}
+    duree_min_invalid?(data["duree_min"]) ->
+      {:error, "Un exercice ne peut pas faire moins d'un quart d'heure…"}
+    duree_max_invalid?(data["duree_max"]) ->
+      {:error, "Un exercice ne peut pas durer plus de 4 heures…"}
+    true ->
+      {:ok, data}
+    end
+  end
+
+  defp duree_min_invalid?(duree_min) when duree_min == "" do
+    false
+  end
+  defp duree_min_invalid?(duree_min) do
+    String.to_integer(duree_min) < 15
+  end
+
+  defp duree_max_invalid?(duree_max) when duree_max == "" do
+    false
+  end
+  defp duree_max_invalid?(duree_min) do
+    String.to_integer(duree_min) > 3600 * 4
+  end
+
+
 
   @doc """
   Retourne le contenu de l'exercice clip.exo +path+
@@ -49,7 +95,7 @@ defmodule ClipExo.Exo do
   Construction de l'exercice définit dans +exo+ (%ClipExo.Exo)
   Function principale appelée par le bouton pour construire l'exercice
 
-  Pour le moment, +params_exo+ ne contient que "file_path", le chemin
+  Pour le moment, +params_exo+ ne contient que "path", le chemin
   d'accès relatif au fichier. Par défaut, on le cherche dans @folfder.
   Si cette donnée n'est pas donnée (champ laissé vide), on essaie de 
   prendre le dernier traitement effectué.
@@ -57,7 +103,7 @@ defmodule ClipExo.Exo do
   def build(params_exo, options \\ %{}) do
     IO.inspect(params_exo, label: "\nPARAMS_EXO")
     params_exo =
-      if params_exo["file_path"] |> PPString.nil_if_empty() |> is_nil() do
+      if params_exo["path"] |> PPString.nil_if_empty() |> is_nil() do
         rappel_last_traitement() || raise("Il faut donner le path du fichier exercice.")
       else
         memo_last_traitement(params_exo)
@@ -86,10 +132,10 @@ defmodule ClipExo.Exo do
     params # pour simplifier le code appelant
   end
 
-  # Retourne le dernier file_path utilisé, if any
-  def last_file_path() do
+  # Retourne le dernier path utilisé, if any
+  def last_path() do
     if memo = rappel_last_traitement() do
-      memo["file_path"]
+      memo["path"]
     else
       nil
     end
@@ -272,12 +318,23 @@ defmodule ClipExo.Exo do
   end
 
   # Pour définir précisément le chemin d'accès au fichier de l'exercice, qui n'existe
-  # pas forcément encore
-  defp get_path_exo(params_exo) do
-    if params_exo["file_path"] do
-      { :ok, Path.join([@folder, add_extensions_if_needed(params_exo["file_path"])]) }
+  # pas forcément encore.
+  # On peut fournir soit le +path+ (string) soit la map des données
+  defp get_path_exo(exo_filename) when is_binary(exo_filename) do
+    if exo_filename do
+      { :ok, Path.join([@folder, add_extensions_if_needed(exo_filename)]) }
     else
       { :error, "Il faut définir au moins le nom du fichier."}
+    end
+  end
+  defp get_path_exo(params_exo) do
+    get_path_exo(params_exo["path"] || "indéfini")
+  end
+
+  defp get_path_exo!(exo_filename) do
+    case get_path_exo(exo_filename) do
+    {:ok, path} -> path
+    {:error, msg_err} -> raise msg_err
     end
   end
 

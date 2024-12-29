@@ -3,7 +3,15 @@ defmodule ClipExoWeb.ExoController do
 
   use Phoenix.Component # pour to_form, etc.
 
-  alias ClipExo.{Exo, ExoSchema}
+  alias ClipExo.Exo
+
+  @data_rubriques [
+    {"mission", "Mission"},
+    {"objectif", "Objectif"},
+    {"scenario","Scénario"},
+    {"aide", "Aide"},
+    {"recommandations","Recommandations"}
+  ]
 
   def produire(conn, _params) do
     render(conn, :produire, ui: ClipExo.ui_terms() )
@@ -33,55 +41,44 @@ defmodule ClipExoWeb.ExoController do
     render(conn, :editor, exo: exo)
   end
 
+  # On arrive dans cette fonction lorsqu'on veut produire un exercice
+  # préformaté. Cette fonction présente un formulaire à remplir 
+  # autant qu'on veut, pour produire le fichier de l'exercice 
+  # préformaté.
+  #
+  # Dans la nouvelle version, on doit cocher la case "Accepter des
+  # données partielle" pour que le fichier se crée avec un minimum
+  # de données. Dans le cas contraire, on attendra toutes les données
+  # avant de pouvoir construire le fichier.
+  #
   def preformated_exo(conn, params) do
-    IO.inspect(params, label: "\nPARAMS")
-    
-    exo_params = 
-      params["exo"]
-      |> IO.inspect(label: "\nEXO (en entrée)")
-      # |> formate_param_rubriques()
-      # |> IO.inspect(label: "\nEXO (à la fin)")
 
-    exo = %Exo{}
-    exo_schema = %ClipExo.ExoSchema{
-      titre: exo_params["titre"] || exo.infos.titre,
-      reference: exo_params["reference"] || exo.infos.reference,
-      auteur: exo_params["auteur"] || exo.infos.auteur,
-      created_at: exo.infos.created_at,
-      body: exo.body,
-      rubrique_mission: exo_params["rubrique_mission"],
-      rubrique_objectif: exo_params["rubrique_objectif"],
-      rubrique_scenario: exo_params["rubrique_scenario"],
-      rubrique_recommandations: exo_params["rubrique_recommandations"],
-      rubrique_aide: exo_params["rubrique_aide"]
-    }
-    form = 
-      exo_schema
-      |> ExoSchema.changeset(params["exo"] || %{})
-      |> to_form(as: "exo")
-    render(conn, :preformated, form: form)
+    params_exo = params["exo"] || %{}
+    
+    params_exo
+    |> IO.inspect(label: "\nEXO (en entrée)")
+
+    form = params_exo |> to_form(as: "exo")
+    render(conn, :data_exo_form, form: form, exo: params_exo, data_rubriques: @data_rubriques)
   end
 
   @doc """
   Méthode qui produit véritablement l'exercice
   """
-  def produce_exo_preformate(conn, params) do
-    IO.inspect(params["exo"], label: "\nEXO (dans produce_exo_preformate)")
+  def produce_exo_file(conn, params) do
     exo_params = params["exo"]
+    |> IO.inspect(label: "\nEXO (dans produce_exo_preformate)")
 
-    form = 
-    %ClipExo.ExoSchema{}
-    |> ExoSchema.changeset(params["exo"] || %{})
-    |> to_form(as: "exo")
-
-    if exo_params["path"] == "" do
-      conn
-      |> put_flash(:error, "Il faut au moins définir le chemin d'accès au fichier (son nom)")
-      |> render(:preformated, form: form)
-    else
-      conn
+    case Exo.data_valid?(exo_params) do
+    {:ok, params} ->
+      conn = conn
       |> put_flash(:info, "Pour le moment, je ne le fais pas")
-      |> render(:preformated, form: form)
+      preformated_exo(conn, params)
+    {:error, msg_error} ->
+      conn = conn
+      |> put_flash(:error, msg_error)
+      preformated_exo(conn, params)
+    end
       # case Exo.build_preformated_exo(params["exo"]) do
       # {:ok, path} -> 
       #   conn
@@ -92,6 +89,5 @@ defmodule ClipExoWeb.ExoController do
       #   |> put_flash(:error, error_msg)
       #   |> preformated_exo(params)
       # end
-    end
   end
 end

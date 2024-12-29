@@ -12,7 +12,7 @@
 <div>
   <form action={~p"/exo/build"} method="POST">
     <div>
-      <input type="hidden" name="exo[file_path]" value={file_name} />
+      <input type="hidden" name="exo[path]" value={file_name} />
       <button type="submit">Reconstuire l’exercice '<%= file_name %>'</button>
     </div>
   </form>
