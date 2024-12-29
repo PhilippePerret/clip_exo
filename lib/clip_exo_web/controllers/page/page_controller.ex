@@ -2,13 +2,23 @@ defmodule ClipExoWeb.PageController do
   use ClipExoWeb, :controller
 
   alias ExoInnerFormater
+  alias ClipExo.Exo
   
   def home(conn, _params) do
     render(conn, :home)
   end
 
-  def fabrication(conn, _params) do
-    render(conn, :fabrication, ui: ClipExo.ui_terms)
+  def fabrication(conn, params) do
+    exo = Map.put(params, "path", get_path_from_params_or_last_traitement(params))
+    render(conn, :fabrication, ui: ClipExo.ui_terms, exo: exo)
+  end
+
+  def get_path_from_params_or_last_traitement(params) do
+    if params["exo"] && params["exo"]["path"] do
+      params["exo"]["path"]
+    else
+      Exo.last_path()
+    end
   end
 
   def manuel(conn, _params) do

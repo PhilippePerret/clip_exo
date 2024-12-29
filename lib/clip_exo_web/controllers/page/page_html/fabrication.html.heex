@@ -2,11 +2,21 @@
 
 <p>Choisir l’opération à exécuter.</p>
 
-<center>
 <script type="text/javascript">
-  function goto(location){document.location = location;}
+  function goto(location){
+    document.querySelector('#edition_form').action = location;
+  }
 </script>
-<button onclick="goto('/exo/preformater')"><%= @ui.boutons["preformatage"] %></button>
-<button onclick="goto('/exo/editer')"><%= @ui.boutons["editer"] %></button>
-<button onclick="goto('/exo/produire')"><%= @ui.boutons["produire"] %></button>
+<center>
+  <button onclick="goto('/exo/preformater')"><%= @ui.boutons["preformatage"] %></button>
+</center>
+
+<center>
+  <form id="edition_form" action="">
+    <div>
+      <input type="text" value={"#{@exo["path"]}"} name="exo[path]" id="exo_path" style="width:400px;" placeholder="chemin/vers/fichier" />
+    </div>
+    <button onclick="goto('/exo/editer')" type="submit"><%= @ui.boutons["editer"] %></button>
+    <button onclick="goto('/exo/produire')"type="submit"><%= @ui.boutons["produire"] %></button>
+  </form>
 </center>

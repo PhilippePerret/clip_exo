@@ -26,7 +26,20 @@ defmodule ClipExoWeb.ExoController do
   end
 
   def editer(conn, params) do
-    exo = %{ params | "contenu" => Exo.get_content_of(params["exo"]["path"])}
+    exo = params["exo"] || %{}
+    exo = Map.put(exo, "contenu", Exo.get_content_of(params["exo"]["path"]))
+    render(conn, :editor, exo: exo)
+  end
+
+  def save(conn, params) do
+    exo = params["exo"]
+    conn =
+      case Exo.save(exo) do
+      :ok -> 
+        conn |> put_flash(:info, "Fichier enregistré.")
+      {:error, erreur} ->
+        conn |> put_flash(:error, erreur)
+      end
     render(conn, :editor, exo: exo)
   end
 
@@ -74,7 +87,7 @@ defmodule ClipExoWeb.ExoController do
     case Exo.data_valid?(exo_params) do
     {:ok, params} ->
       conn = conn
-      |> put_flash(:info, "Informations correctes, je construis le fichier des données de l'exercice.")
+      |> put_flash(:info, "Informations correctes. Construction du fichier des données de l'exercice.")
       build_preformated_exo(conn, params)
     {:error, msg_error} ->
       conn = conn

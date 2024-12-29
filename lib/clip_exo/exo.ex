@@ -57,6 +57,22 @@ defmodule ClipExo.Exo do
   @reg_path ~r/^[^\W]+$/
 
   @doc """
+  Enregistrement du fichier de données de l'exercice
+
+  +exo+ doit définir "path" et "contenu"
+
+  La fonction retourne :ok ou {:error, msg_erreur }
+  """
+  def save(exo) do
+    case get_path_of_exo(exo["path"]) do
+      {:error, msg} 
+        -> "Impossible de lire le fichier : #{msg}"
+      path -> 
+        File.write(path, exo["contenu"])    
+     end
+  end
+
+  @doc """
   Fonction qui vérifie la validité des données pour la création du
   fichier de données de l'exercice.
   Note : c'est toujours pour la création. Car ensuite, une fois que
@@ -128,10 +144,13 @@ defmodule ClipExo.Exo do
   @doc """
   Retourne le contenu de l'exercice clip.exo +path+
 
-  +path+ est une path vérifiée
+  +path+ est une path vérifiée ou non.
   """
   def get_content_of(path) do
-    File.read!(path)
+    case get_path_of_exo(path) do
+    {:error, msg} -> "Impossible de lire le fichier : #{msg}"
+    path -> File.read!(path)
+    end
   end
 
   @doc """
@@ -350,6 +369,16 @@ defmodule ClipExo.Exo do
     end
   end
 
+  # Retourne le chemin d'accès au fichier désigné par +path+, qui doit
+  # exister
+  def get_path_of_exo(path) do
+    case build_path_from(path) do
+    {:ok, path}       -> path
+    {:error, err_msg} -> {:error, err_msg}
+    nil -> {:error, "Il faut fournir le chemin de référence de l’exercice."}
+    end
+  end
+
   defp build_path_from(nil), do: nil
   defp build_path_from(path) do
     path_init = path
@@ -383,15 +412,6 @@ defmodule ClipExo.Exo do
     end
   end
 
-  # Retourne le chemin d'accès au fichier désigné par +path+, qui doit
-  # exister
-  def get_path_of_exo(path) do
-    case build_path_from(path) do
-    {:ok, path}       -> path
-    {:error, err_msg} -> {:error, err_msg}
-    nil -> {:error, "Il faut fournir le chemin de référence de l’exercice."}
-    end
-  end
 
   # Ajoute si nécessaire ".clip.exo" ou simplement ".exo" au nom du fichier fourni
   # dans +path+ (qui peut être un simple nom de fichier ou un path complet)

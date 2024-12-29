@@ -28,8 +28,9 @@ defmodule ClipExoWeb.Router do
   scope "/exo", ClipExoWeb do
     pipe_through :browser
 
-    post "/edit", ExoController, :editer
-    get "/edit", ExoController, :editer
+    post "/save",   ExoController, :save
+    post "/editer", ExoController, :editer
+    get "/editer", ExoController, :editer
     get "/produire", ExoController, :produire
     get "/preformater", ExoController, :preformated_exo
     post "/produce_data_file", ExoController, :produce_exo_file
