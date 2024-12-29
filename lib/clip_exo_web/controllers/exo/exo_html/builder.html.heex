@@ -6,8 +6,8 @@
   # ou les publier.
 
   file_name = @exo.infos.name
-  exo_relative_path = ClipExo.ExoBuilder.exo_html_file( @exo, :relative )
-%>
+
+  %>
 
 <div>
   <form action={~p"/exo/build"} method="POST">

@@ -34,6 +34,7 @@ defmodule ClipExoWeb.ExoBuilderView do
         %{label: "Référence", value: exo.infos.reference},
         %{label: "Nom", value: exo.infos.name},
         %{label: "Niveau", value: exo.infos.niveau},
+        %{label: "Durée", value: formated_duree(exo.infos.duree)},
         %{label: "Compétences", value: met_en_forme_liste(exo.infos.competences)},
         %{label: "Logiciels", value: met_en_forme_liste(exo.infos.logiciels)},
         %{label: "", value: "", class: "separator"},
@@ -53,6 +54,31 @@ defmodule ClipExoWeb.ExoBuilderView do
     true -> (Enum.map(liste, fn x -> "<li>#{x}</li>" end) |> Enum.join(""))
     end
   end
+
+  defp formated_duree(duree_list) when is_list(duree_list) do
+    "de #{Enum.at(duree_list, 0)} à #{Enum.at(duree_list, 1)}"
+  end
+  defp formated_duree(duree) when is_binary(duree) do
+    formated_duree(StringTo.value(duree))
+  end
+
+  # Pour mettre en forme dans l'exercice final
+  defp human_duree_for(minutes) do
+    case minutes do
+    15 -> "un 1/4 d’heure"
+    30 -> "une 1/2 heure"
+    45 -> "trois 1/4 d’heure"
+    60 -> "une heure"
+    90 -> "une heure 30"
+    "15" -> "un 1/4 d’heure"
+    "30" -> "une 1/2 heure"
+    "45" -> "trois quart d’heure"
+    "60" -> "une heure"
+    "90" -> "une heure 30"
+    _ -> "#{minutes} minutes"
+    end
+  end
+  
 
   slot :col, doc: "Columns with column labels" do
     attr :label, :string, required: true, doc: "Column label"

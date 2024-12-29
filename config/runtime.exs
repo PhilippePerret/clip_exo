@@ -81,4 +81,16 @@ if config_env() == :prod do
   #       force_ssl: [hsts: true]
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.
+
 end
+
+  # Charger un fichier JSON
+  user_config = 
+  case File.read("user.json") do
+  {:ok, config} ->
+    Jason.decode!(config)
+    |> Enum.each(fn {prop, value} ->
+        System.put_env("USER_#{prop}", value)
+      end)
+  _ -> nil
+  end

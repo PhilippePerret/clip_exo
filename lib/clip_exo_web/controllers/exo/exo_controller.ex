@@ -5,13 +5,8 @@ defmodule ClipExoWeb.ExoController do
 
   alias ClipExo.Exo
 
-  @data_rubriques [
-    {"mission", "Mission"},
-    {"objectif", "Objectif"},
-    {"scenario","Scénario"},
-    {"aide", "Aide"},
-    {"recommandations","Recommandations"}
-  ]
+  @data_rubriques Exo.get_data_rubriques
+  @data_niveaux   Exo.get_data_niveaux
 
   def produire(conn, _params) do
     render(conn, :produire, ui: ClipExo.ui_terms() )
@@ -30,14 +25,8 @@ defmodule ClipExoWeb.ExoController do
     end
   end
 
-  def editor(conn, params) do
-    params = Map.merge(%{"exo" => %{
-      "path" => params["p"], # première arrivée
-    }}, params)
-    exo = %{
-      "path" => params["exo"]["path"],
-      "contenu" => Exo.get_content_of(params["exo"]["path"])
-    }
+  def editer(conn, params) do
+    exo = %{ params | "contenu" => Exo.get_content_of(params["exo"]["path"])}
     render(conn, :editor, exo: exo)
   end
 
@@ -54,12 +43,25 @@ defmodule ClipExoWeb.ExoController do
   def preformated_exo(conn, params) do
 
     params_exo = params["exo"] || %{}
+
+    params_exo = 
+    if (not is_nil((System.get_env("USER_prenom")))) and (is_nil(params_exo["auteur"]) or params_exo["auteur"] == "") do
+      Map.put(params_exo, "auteur", "#{System.get_env("USER_prenom")} #{System.get_env("USER_nom")}")
+    else params_exo end
+
+    params_exo = Map.put(params_exo, "rubriques", params_exo["rubriques"] || [])
+
     
     params_exo
     |> IO.inspect(label: "\nEXO (en entrée)")
 
     form = params_exo |> to_form(as: "exo")
-    render(conn, :data_exo_form, form: form, exo: params_exo, data_rubriques: @data_rubriques)
+    render(conn, :data_exo_form, %{
+      form:           form, 
+      exo:            params_exo, 
+      data_rubriques: @data_rubriques,
+      data_niveaux:   @data_niveaux
+    })
   end
 
   @doc """
@@ -72,22 +74,25 @@ defmodule ClipExoWeb.ExoController do
     case Exo.data_valid?(exo_params) do
     {:ok, params} ->
       conn = conn
-      |> put_flash(:info, "Pour le moment, je ne le fais pas")
-      preformated_exo(conn, params)
+      |> put_flash(:info, "Informations correctes, je construis le fichier des données de l'exercice.")
+      build_preformated_exo(conn, params)
     {:error, msg_error} ->
       conn = conn
       |> put_flash(:error, msg_error)
       preformated_exo(conn, params)
     end
-      # case Exo.build_preformated_exo(params["exo"]) do
-      # {:ok, path} -> 
-      #   conn
-      #   |> put_flash(:info, "Exercice préformé créé avec succès dans #{path}")
-      #   |> render(:on_built, exo: exo_params)
-      # {:error, error_msg} ->
-      #   conn
-      #   |> put_flash(:error, error_msg)
-      #   |> preformated_exo(params)
-      # end
   end
+
+  defp build_preformated_exo(conn, params) do
+    case Exo.build_preformated_exo(params) do
+    {:ok, params} ->
+      # Si la construction a réussi, on passe tout de suite à l'édition du fichier
+      editer(conn, %{"exo" => %{"path" => params["path"]}})
+    {:error, msg_error} ->
+      conn = conn
+      |> put_flash(:error, msg_error)
+      preformated_exo(conn, params)
+    end
+  end
+
 end

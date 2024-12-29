@@ -43,13 +43,18 @@ fieldset {
   all: reset;
 }
 
-input[type="text"], input[type="password"], textarea {
+input[type="text"], input[type="password"], textarea, select, select option {
+  font-family: "AvenirNC" !important;
   font-size: inherit;
   padding: 4px;
   margin: 4px;
 }
 input[type="text"]:not(.medium):not(.short) {
   width: 100%;
+}
+
+span.fixed-size {
+  font-size: 20pt !important;
 }
 
 
@@ -79,7 +84,7 @@ button:hover, a.btn:hover {
 div#flash-group {
   position:absolute;
   right:1em; top:0;
-  max-width:400px;
+  max-width:640px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   line-height: 1em;
 }

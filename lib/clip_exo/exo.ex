@@ -1,6 +1,9 @@
 # Méthodes propres à un exercice
 defmodule ClipExo.Exo do
 
+  alias ClipExo.ExoBuilder, as: Builder
+  alias Jason
+
   defstruct [
     infos: %{
       name: nil,
@@ -28,8 +31,25 @@ defmodule ClipExo.Exo do
     suivi: nil        # Pour le suivi de la construction
   ]
 
-  alias ClipExo.ExoBuilder, as: Builder
-  alias Jason
+
+  @data_rubriques [
+    {"mission", "Mission"},
+    {"objectif", "Objectif"},
+    {"scenario","Scénario"},
+    {"aide", "Aide"},
+    {"recommandations","Recommandations"}
+  ]
+  def get_data_rubriques, do: @data_rubriques
+
+  @data_niveaux [
+    {"0", "Grand débutant"}, 
+    {"1", "Débutant"}, 
+    {"2", "Initié"},
+    {"3", "Intermédiaire"},
+    {"4", "Expert"}
+  ]
+  def get_data_niveaux, do: @data_niveaux
+
 
   @folder "./_exercices/clipexo/"
   @html_folder "./_exercices/html"
@@ -45,7 +65,8 @@ defmodule ClipExo.Exo do
 
   """
   def data_valid?(data) do
-    IO.inspect(data, label: "\nDATA in data_valid?")
+    # IO.inspect(data, label: "\nDATA in data_valid?")
+
     cond do
     is_nil(data) ->
       {:error, "Aucune donnée envoyée pour validation…"}
@@ -55,12 +76,36 @@ defmodule ClipExo.Exo do
       {:error, "Le chemin doit être d'un format valide (pas d'espaces, etc.)"}
     File.exists?(get_path_exo!(data)) ->
       {:error, "Le fichier '#{data["path"]}' existe déjà."}
+    missed = not_all_data_required?(data) ->
+      {:error, ["Des données manquent : #{missed}.", "Si vous ne voulez fournir que les données minimales, cocher la case des données partielles."]}
     duree_min_invalid?(data["duree_min"]) ->
       {:error, "Un exercice ne peut pas faire moins d'un quart d'heure…"}
     duree_max_invalid?(data["duree_max"]) ->
       {:error, "Un exercice ne peut pas durer plus de 4 heures…"}
     true ->
       {:ok, data}
+    end
+  end
+
+  # Retourne nil si toutes les données sont fournies ou que la case "accepter les données partielles" est
+  # cochée.
+  # Note : la propriété obligatoire "path" est déjà checkée
+  defp not_all_data_required?(data) do
+    # Si cette propriété est vraie, on accepte de ne pas avoir toutes
+    # les données. Seule "path" est vraiment nécessaire.
+    accept_partial_data = StringTo.value(data["accept_partial_data"])
+    if accept_partial_data do
+      false # donc valide
+    else
+      data
+      |> Enum.filter(fn {_x, v} -> v == "" end)
+      |> Enum.map(fn {x, _v} -> 
+        x 
+        |> String.replace_leading(String.at(x, 0), String.upcase(String.at(x, 0)))
+        |> String.replace("_", " ")
+      end)
+      |> Enum.join(", ")
+      |> PPString.nil_if_empty()
     end
   end
 
@@ -371,62 +416,58 @@ defmodule ClipExo.Exo do
   """
   def build_preformated_exo(params) do
     params
-    |> IO.inspect(label: "\nPARAMS pour la construction")
+    |> IO.inspect(label: "\nPARAMS pour construction du fichier des données")
     exo_name = params["path"]
-    exo_path = Path.join([@folder, add_extensions_if_needed(exo_name)])
+    exo_filename = add_extensions_if_needed(exo_name)
+    params    = %{ params | "path" => exo_filename }
+    exo_path  = Path.join([@folder, exo_filename])
     cond do
-    exo_path == ".clip.exo" ->
+    exo_filename == ".clip.exo" ->
       {:error, "Il faut fournir le nom du fichier"}
     File.exists?(exo_path) ->
       {:error, "Un fichier d’exercice porte déjà le nom #{exo_name}\n(#{exo_path})"}
     true ->
       # On peut créer le fichier exercice
       File.write!(exo_path, modele_preformated(params), [:utf8])
-      {:ok, exo_path}
+      {:ok, params}
     end
   end
 
   def modele_preformated(params) do
     IO.inspect(params, label: "\nParams in modele_preformated")
+
+    rubriques = 
+      @data_rubriques
+      |> Enum.filter(fn {value, _label} -> Enum.member?(params["rubriques"], value) end)
+      |> Enum.map(fn {_value, label} -> "rub: #{label}" end)
+      |> Enum.join("\n\n\n")
+
     """
     ---
-    reference: #{params["reference"]}
     titre: #{params["titre"]}
-    auteur: #{params["auteur"]}
-    competences: #{params["competences"]}
-    niveau: #{params["niveau"]}
+    reference: #{params["reference"]}
+    name: #{params["name"]}
+    path: #{params["path"]}
+    competences: [#{params["competences"]}]
+    niveau: #{formated_niveau(params)}
     duree: #{duree_form_max_and_min(params)}
+    auteur: #{params["auteur"]}
     created_at: #{Date.utc_today()}
-    revisions: []
+    revisions: [#{params["revisions"]}]
     ---
-    #{params["rubriques"]["mission"] && "rub:Mission\n" || ""}
-    #{params["rubriques"]["scenario"] && "rub:Scénario\n" || ""}
-    #{params["rubriques"]["aide"] && "rub:Aide\n" || ""}
-    #{params["rubriques"]["recommandations"] && "rub:Recommandations\n" || ""}
+    #{rubriques}
     """
+  end
+
+  defp formated_niveau(params) do
+    {_index, label} = Enum.at(@data_niveaux, String.to_integer(params["niveau"] || 0))
+    label
   end
 
   defp duree_form_max_and_min(params) do
-    if params["duree"] do
-      params["duree"]
-    else
-      "#{human_duree_for(params["duree_min"])} à #{human_duree_for(params["duree_max"])}"
-    end
+    duree_min = params["duree_min"] || "30"
+    duree_max = params["duree_max"] || "90"
+    "[#{duree_min}, #{duree_max}]"
   end
-  defp human_duree_for(minutes) do
-    case minutes do
-    15 -> "un 1/4 d’heure"
-    30 -> "une 1/2 heure"
-    45 -> "trois 1/4 d’heure"
-    60 -> "une heure"
-    90 -> "une heure 30"
-    "15" -> "un 1/4 d’heure"
-    "30" -> "une 1/2 heure"
-    "45" -> "trois quart d’heure"
-    "60" -> "une heure"
-    "90" -> "une heure 30"
-    _ -> "#{minutes} minutes"
-    end
-  end
-
+  
 end

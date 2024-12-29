@@ -1,0 +1,50 @@
+---
+name: demo_tables
+reference: TRY-01
+titre: Pour présenter les effets des tables
+auteur: Philippe PERRET
+created_at: 27-12-2024
+niveau: Grand débutant
+competences: ["Prise en main de ClipExo", "Manipulation des tables"]
+logiciels: "IDE"
+duree: [15, 45]
+---
+
+Cet « exercice » présente l'utilisation des tables avec `:table`.
+
+rub: Table sans options (naturelle)
+
+:table
+: Ligne 1 - Colonne 1, Ligne 1 - Colonne 2, Ligne 1 - Colonne 3
+: Ligne 2 - Colonne 1, Ligne 2 - Colonne 2, Ligne 2 - Colonne 3
+: Ligne 3 - Colonne 1, Ligne 3 - Colonne 2, Ligne 3 - Colonne 3
+
+rub: Table définissant la largeur de ses colonnes
+
+:table
+::cols_width(100, 600)
+: Libellé, La valeur plus longue (obtenue avec `::cols_width(100\, 600)`)
+: Libé, L'autre valeur plus longue
+
+rub: Calcul automatique de largeur
+
+:table
+::cols_width(_, 20%)
+: Première cellule large obtenue avec `::cols_width(_\, 20%)`, Petite
+: La donnée '_' est calculée, cellule
+
+rub: Des classes CSS pour les background
+
+:table
+::cols_class(bg_lightgrey, bg_purple, bg_blue)
+: Libellé, Cellule sur fond pourpre, Cellule sur fond bleu. Le background étant défini dans cols_class\, certains attributs ne s'appliquent pas\, comme la couleur de police.
+: Libella, Autre celle fond pourpre, Autre cellule fond bleu
+
+rub: Trois alignements
+
+:table
+::cols_width(33%, _, 33%)
+::cols_align(left, center, right)
+: Cellule à gauche, Cellule au centre, Cellule à droite
+: Défini avec : , ::cols_align(left\, center\, right), en options
+: Largeurs définies par :, ::cols_width(33%\, _\, 33%), en options
