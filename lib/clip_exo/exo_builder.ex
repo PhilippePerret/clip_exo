@@ -34,7 +34,7 @@ defmodule ClipExo.ExoBuilder do
     exo_file_specs = Path.join([exo_folder, "#{exo_name}-specs.html"])
 
     # Construire le fichier
-    File.write(exo_file_specs, code)
+    File.write(exo_file_specs, code, [:utf8])
 
     IO.puts "<-- build_file_specs"
     {:ok, exo} # à la fin
@@ -83,7 +83,7 @@ defmodule ClipExo.ExoBuilder do
     end
 
     # Construire le fichier
-    File.write(exo_path, code)
+    File.write(exo_path, code, [:utf8])
 
     IO.puts "<-- build_file_exo"
 

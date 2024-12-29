@@ -173,7 +173,7 @@ defmodule ClipExo.Exo do
     else nil end
   end
   def memo_last_traitement(params) do
-    File.write(@path_memo_file, Jason.encode!(params))
+    File.write(@path_memo_file, Jason.encode!(params), [:utf8])
     params # pour simplifier le code appelant
   end
 
@@ -469,5 +469,5 @@ defmodule ClipExo.Exo do
     duree_max = params["duree_max"] || "90"
     "[#{duree_min}, #{duree_max}]"
   end
-  
+
 end
