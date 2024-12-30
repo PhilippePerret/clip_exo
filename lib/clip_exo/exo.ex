@@ -24,8 +24,8 @@ defmodule ClipExo.Exo do
     body_html:  nil,  # le contenu formaté
     rubriques:  [],   # pour les rubriques des infos
     document_formateur_required: false,
-    formateur:  false,  # pour indiquer, en cours de fabrication, s'il 
-                        # s'agit de la fabrication du document pour le 
+    formateur:  false,  # pour indiquer, en cours de forgerie, s'il 
+                        # s'agit de la forgerie du document pour le 
                         # formateur ou pour le participant (en fait, un
                         # seul style (admin) diffère l'un de l'autre)
     suivi: nil        # Pour le suivi de la construction

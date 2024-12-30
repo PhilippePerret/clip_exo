@@ -10,7 +10,7 @@ defmodule ClipExo do
   @ui_terms %{
     menus: %{
       "manuel"      => "Manuel",      # menu principal
-      "fabrication" => "Fabrication", # menu principal
+      "forgerie"    => "Forgerie",    # menu principal
       "formatage"   => "Formatage",   # menu principal
     },
     boutons: %{

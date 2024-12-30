@@ -34,7 +34,7 @@ defmodule ClipExoWeb.AppComponents do
         <button type="submit"><%= @ui.boutons["produire"] %></button>
 
         <div>
-          <input type="checkbox" id="cb-open-folder" name="open_folder" />  <label for="cb-open-folder">Ouvrir le dossier après fabrication</label>
+          <input type="checkbox" id="cb-open-folder" name="open_folder" />  <label for="cb-open-folder">Ouvrir le dossier après forgerie</label>
         </div>
     </div>
     </form>

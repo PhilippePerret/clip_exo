@@ -135,7 +135,7 @@ defmodule ClipExo.ExoBuilder do
     |> Enum.map(fn original -> 
         file_in_exo = Path.join([exo.infos.htm_folder, "z_" <> Path.basename(original)])
         # Le fichier existe-t-il déjà ?
-        # Si c'est le cas, on compare sa date de fabrication avec
+        # Si c'est le cas, on compare sa date de forgerie avec
         # la date de modification du fichier original poru savoir
         # s'il est nécessaire de l'actualiser
         if File.exists?(file_in_exo) do

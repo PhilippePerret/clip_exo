@@ -18,7 +18,7 @@ defmodule ClipExoWeb.Router do
     pipe_through :browser
 
     get "/manuel", PageController, :manuel
-    get "/fabrication", PageController, :fabrication
+    get "/forgerie", PageController, :forgerie
     get "/formatage", PageController, :aide_formatage
     get "/exercice/:folder/:file", PageController, :serve_file
     get "/", PageController, :home
@@ -27,7 +27,7 @@ defmodule ClipExoWeb.Router do
 
   scope "/exo", ClipExoWeb do
     pipe_through :browser
-
+    
     post "/save",   ExoController, :save
     post "/editer", ExoController, :editer
     get "/editer", ExoController, :editer
@@ -37,6 +37,14 @@ defmodule ClipExoWeb.Router do
     get "/preformate", ExoController, :preformated_exo
     get "/produire", ExoController, :produire
     post "/produire", ExoController, :produire
+  end
+  
+  scope "/:anyway", ClipExoWeb do
+    pipe_through :browser
+
+    get "/", PageController, :cul_de_sac
+    post "/", PageController, :cul_de_sac
+
   end
 
 end

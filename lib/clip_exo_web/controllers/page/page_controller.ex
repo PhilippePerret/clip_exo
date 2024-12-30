@@ -8,9 +8,9 @@ defmodule ClipExoWeb.PageController do
     render(conn, :home)
   end
 
-  def fabrication(conn, params) do
+  def forgerie(conn, params) do
     exo = Map.put(params, "path", get_path_from_params_or_last_traitement(params))
-    render(conn, :fabrication, ui: ClipExo.ui_terms, exo: exo)
+    render(conn, :forgerie, ui: ClipExo.ui_terms, exo: exo)
   end
 
   def get_path_from_params_or_last_traitement(params) do
@@ -42,4 +42,8 @@ defmodule ClipExoWeb.PageController do
     })
   end
 
+
+  def cul_de_sac(conn, %{"anyway" => anyway}) do
+    render(conn, :cul_de_sac, anyway: anyway)
+  end
 end
