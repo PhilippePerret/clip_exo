@@ -9,10 +9,18 @@
     <%= for path <- @exo.infos.css_files || [] do %>
       <link rel="stylesheet" href={"z_" <> Path.basename(path)} />
     <% end %>
+
+    <style type="text/css">
+      /* Pour l'impression du pied de page */
+      @page {
+        @bottom-right {
+          content: "<%= @exo.infos.titre %> - " counter(compteurPage) "/<%= @exo.infos.nombre_pages %>";
+        }
+      }
+    </style>
   </head>
   <body>
     <header>
-			<img id="logo" src="z_logo-clip-alpha.png" />
       <div class="titre"><%= raw @exo_titre %></div>
       <div class="reference"><%= @exo.infos.reference %></div>
 		</header>

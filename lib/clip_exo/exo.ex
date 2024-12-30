@@ -18,6 +18,7 @@ defmodule ClipExo.Exo do
       competences: [],
       niveau: nil,
       duree: nil,
+      nombre_pages: 2, # à mettre à jour
       css_files: nil
     },
     body:       "contenu brut de l'exercice",
