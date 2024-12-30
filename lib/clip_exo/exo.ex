@@ -145,6 +145,7 @@ defmodule ClipExo.Exo do
   Retourne le contenu de l'exercice clip.exo +path+
 
   +path+ est une path vérifiée ou non.
+
   """
   def get_content_of(path) do
     case get_path_of_exo(path) do
@@ -292,6 +293,7 @@ defmodule ClipExo.Exo do
   """
   def parse_whole_file_code(code) do
     code
+    |> String.replace("\r\n", "\n")
     |> decompose_header_and_body()
   end
 

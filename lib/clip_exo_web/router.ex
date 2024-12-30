@@ -21,7 +21,7 @@ defmodule ClipExoWeb.Router do
     get "/forgerie", PageController, :forgerie
     get "/formatage", PageController, :aide_formatage
     get "/exercice/:folder/:file", PageController, :serve_file
-    get "/", PageController, :home
+    get "/", PageController, :forgerie
   end
 
 

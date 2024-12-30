@@ -56,7 +56,7 @@ defmodule ClipExoWeb.ExoBuilderView do
   end
 
   defp formated_duree(duree_list) when is_list(duree_list) do
-    "de #{Enum.at(duree_list, 0)} à #{Enum.at(duree_list, 1)}"
+    "de #{human_duree_for(Enum.at(duree_list, 0))} à #{human_duree_for(Enum.at(duree_list, 1))}"
   end
   defp formated_duree(duree) when is_binary(duree) do
     formated_duree(StringTo.value(duree))
