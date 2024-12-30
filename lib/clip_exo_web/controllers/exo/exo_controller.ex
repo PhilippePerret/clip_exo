@@ -24,7 +24,7 @@ defmodule ClipExoWeb.ExoController do
       render(conn, :builder, exo: exo)
     {:error, err_msg} ->
       conn |> put_flash(:error, err_msg)
-      render(conn, :no_way, error: err_msg)
+      render(conn, :on_error, error: err_msg)
     end
   end
 
