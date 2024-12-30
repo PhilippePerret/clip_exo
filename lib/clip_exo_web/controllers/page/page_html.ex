@@ -8,3 +8,4 @@ defmodule ClipExoWeb.PageHTML do
 
   embed_templates "page_html/*"
 end
+

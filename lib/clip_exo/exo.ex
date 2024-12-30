@@ -150,7 +150,9 @@ defmodule ClipExo.Exo do
   def get_content_of(path) do
     case get_path_of_exo(path) do
     {:error, msg} -> "Impossible de lire le fichier : #{msg}"
-    path -> File.read!(path)
+    path -> 
+      File.read!(path)
+      |> IO.inspect(label: "\nCONTENU DU FICHIER (get_content_of)")
     end
   end
 

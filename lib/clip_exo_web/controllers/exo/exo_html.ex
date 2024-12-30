@@ -5,4 +5,3 @@ defmodule ClipExoWeb.ExoHTML do
   embed_templates "exo_html/*"
 
 end
-

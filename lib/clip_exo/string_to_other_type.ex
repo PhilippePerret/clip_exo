@@ -71,12 +71,15 @@ defmodule StringTo do
     "[\"Un\", \"deux\"]"    => ["Un", "deux"]
 
   """
+  @reg_empty_list ~r/^\[[  \t]*\]$/
+  @reg_inner_list ~r/^\[(.*)\]$/
   def list(str) when is_binary(str) do
-    if String.trim(str) == "" do
+    trimed_str = String.trim(str)
+    if trimed_str == "" || trimed_str =~ @reg_empty_list do
       []
     else
-      String.trim(str)
-      |> String.replace(~r/^\[(.*)\]$/, "\\1")
+      trimed_str
+      |> String.replace(@reg_inner_list, "\\1")
       |> String.replace("\\,", "__VIRGU__")
       |> String.split(",")
       # - Une liste à partir d'ici -

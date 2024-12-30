@@ -23,6 +23,7 @@ defmodule ClipExo.ExoBuilder do
     # |> IO.inspect(label: "Code évalué")
 
     code = ClipExoWeb.ExoBuilderView.build_file_specs(exo)
+    # code = "Code provisoire pour essai."
 
     # Nom de l'exercice
     exo_name = exo.infos.name
@@ -34,7 +35,8 @@ defmodule ClipExo.ExoBuilder do
     exo_file_specs = Path.join([exo_folder, "#{exo_name}-specs.html"])
 
     # Construire le fichier
-    File.write(exo_file_specs, code, [:utf8])
+    # File.write(exo_file_specs, code, [:utf8])
+    File.write(exo_file_specs, code)
 
     IO.puts "<-- build_file_specs"
     {:ok, exo} # à la fin
@@ -83,7 +85,8 @@ defmodule ClipExo.ExoBuilder do
     end
 
     # Construire le fichier
-    File.write(exo_path, code, [:utf8])
+    # File.write(exo_path, code, [:utf8])
+    File.write(exo_path, code)
 
     IO.puts "<-- build_file_exo"
 

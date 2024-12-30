@@ -40,7 +40,7 @@ defmodule ClipExoWeb.ExoBuilderView do
         %{label: "", value: "", class: "separator"},
         %{label: "Auteur", value: exo.infos.auteur, class: "smaller"},
         %{label: "Créé le", value: exo.infos.created_at, class: "smaller"},
-        %{label: "Révisions", value: exo.infos.revisions, class: "smaller"},
+        %{label: "Révisions", value: formated_revisions(exo.infos.revisions), class: "smaller"}
       ],
       exo_titre: exo.infos.titre |> String.replace(~r/\\n/, "<br />")
     ]
@@ -56,10 +56,10 @@ defmodule ClipExoWeb.ExoBuilderView do
   end
 
   defp formated_duree(duree_list) when is_list(duree_list) do
-    "de #{human_duree_for(Enum.at(duree_list, 0))} à #{human_duree_for(Enum.at(duree_list, 1))}"
+    "De #{human_duree_for(Enum.at(duree_list, 0))} à #{human_duree_for(Enum.at(duree_list, 1))}"
   end
   defp formated_duree(duree) when is_binary(duree) do
-    formated_duree(StringTo.value(duree))
+    formated_duree(StringTo.list(duree))
   end
 
   # Pour mettre en forme dans l'exercice final
@@ -77,6 +77,14 @@ defmodule ClipExoWeb.ExoBuilderView do
     "90" -> "une heure 30"
     _ -> "#{minutes} minutes"
     end
+  end
+
+  defp formated_revisions(revisions) when is_list(revisions) do
+    IO.inspect(revisions, label: "\nRÉVISIONS")
+    if Enum.empty?(revisions), do: "---", else: Enum.join(revisions, ", ")
+  end
+  defp formated_revisions(revisions) when is_binary(revisions) do
+    formated_revisions(if revisions == "", do: [], else: StringTo.list(revisions))
   end
   
 

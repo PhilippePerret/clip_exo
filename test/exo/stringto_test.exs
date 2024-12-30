@@ -108,6 +108,14 @@ defmodule ClipExo.StringToTest do
       ])
     end
 
+    test " une liste vide" do
+      test_with_list([
+        {"[]", []},
+        {"[ ]", []},
+        {"   [ ]   ", []},
+      ])
+    end
+
   end #/describe .list transforme en liste
 
 
