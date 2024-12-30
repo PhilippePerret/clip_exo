@@ -28,12 +28,23 @@ defmodule ClipExoWeb.ExoController do
     end
   end
 
+  # Édition de l'exercice
   def editer(conn, params) do
-    exo = params["exo"] || %{}
-    exo = Map.put(exo, "contenu", Exo.get_content_of(params["exo"]["path"]))
-    render(conn, :editor, exo: exo)
+    case params["exo"] do
+    nil -> on_error_miss_exo(conn)
+    ""  -> on_error_miss_exo(conn)
+    exo ->
+      exo = Map.put(exo, "contenu", Exo.get_content_of(params["exo"]["path"]))
+      Exo.memo_last_traitement(exo)
+      render(conn, :editor, exo: exo)
+    end
   end
 
+  defp on_error_miss_exo(conn) do
+    render(conn, :on_error, "Il faut choisir l'exercice.")
+  end
+
+  # Sauvegarde du code de l'exercice (fichier de base)
   def save(conn, params) do
     exo = params["exo"]
     conn =
@@ -52,7 +63,7 @@ defmodule ClipExoWeb.ExoController do
   # préformaté.
   #
   # Dans la nouvelle version, on doit cocher la case "Accepter des
-  # données partielle" pour que le fichier se crée avec un minimum
+  # données partielles" pour que le fichier se crée avec un minimum
   # de données. Dans le cas contraire, on attendra toutes les données
   # avant de pouvoir construire le fichier.
   #
