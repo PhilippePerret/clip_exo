@@ -38,7 +38,7 @@ cadre.air: Nous avons employé trois termes inexpliqués, ci-dessus : *interacti
 :	le **CSS** s’occupe de L’**APPARENCE**,
 :	le **JAVASCRIPT** s’occupe de L’**INTERACTIVITÉ**.
 
-> Pour ne donner qu’une preuve de la simplification, on a souvent recours au javascript pour gérer l’apparence de la page, pour l’affiner, ce qui incombe normalement au CSS.
+Mais attention : aujourd'hui, les frontières se brouillent de plus en plus. Le HTML se met à s'occuper beaucoup d'apparence avec des frameworks css comme *tailwind*, le javascript s'occupe de contenu et d'aspect et le CSS se mêle d'interactivité — pour gérer des menus par exemple — ou de contenu. La question n'est donc plus de savoir "qui fait quoi ?" mais plutôt "qui est le meilleur pour la situation donnée ?". Nonobstant, il est important de connaitre la base exprimée ci-dessus.
 
 ---
 
@@ -60,3 +60,4 @@ Pour atteindre l'adresse ci-dessus, on utilise sur le réseau le protocole HTTP 
 :	https&#58;//www.mon_site.net
 
 Le protocole **HTTP** signifie « Hyper Text Transfert Protocole », c’est-à-dire « Protocole de transfert de texte élaboré », correspond à la méthode employée pour transférer des « pages internet » sur la toile. On ajoute maintenant le « S » pour « sécurisé » : **HTTPS**. Les données transmises par le protocole HTTPS sont cryptées, donc sécurisées.
+  

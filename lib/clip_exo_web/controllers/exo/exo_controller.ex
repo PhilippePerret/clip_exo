@@ -8,11 +8,14 @@ defmodule ClipExoWeb.ExoController do
   @data_rubriques Exo.get_data_rubriques
   @data_niveaux   Exo.get_data_niveaux
 
-  def produire(conn, _params) do
-    render(conn, :produire, ui: ClipExo.ui_terms() )
-  end
+  # def produire(conn, _params) do
+  #   render(conn, :produire, ui: ClipExo.ui_terms() )
+  # end
 
-  def build(conn, params) do
+  # Construction des trois fichiers finaux de l'exercice, le fichier
+  # participant, le fichier formateur et le fichier caractéristiques.
+  # def build(conn, params) do
+  def produire(conn, params) do
     options = %{
       open_folder: params["open_folder"]
     }

@@ -31,17 +31,12 @@ defmodule ClipExoWeb.Router do
     post "/save",   ExoController, :save
     post "/editer", ExoController, :editer
     get "/editer", ExoController, :editer
-    get "/produire", ExoController, :produire
     get "/preformater", ExoController, :preformated_exo
     post "/produce_data_file", ExoController, :produce_exo_file
     get "/produce_data_file", ExoController, :produce_exo_file
     get "/preformate", ExoController, :preformated_exo
-    post "/build", ExoController, :build
-    get  "/build", ExoController, :build
+    get "/produire", ExoController, :produire
+    post "/produire", ExoController, :produire
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", ClipExoWeb do
-  #   pipe_through :api
-  # end
 end

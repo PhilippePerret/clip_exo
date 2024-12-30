@@ -1,16 +1,17 @@
 <%
 
-  # C'est la page qui s'affiche quand on est en train de construire
-  # l'exercice, c'est-à-dire les fichiers HTML qui vont permettre
-  # ensuite d'exporter en PDF les exercices pour pouvoir les imprimer
-  # ou les publier.
+  # Page de la construction de l’exercice, c’est-à-dire la construction
+  # des 3 fichier HTML :
+  # - fichier des caractéristiques
+  # - fichier pour le participant
+  # - fichier pour le formateur
 
   file_name = @exo.infos.name
 
   %>
 
 <div>
-  <form action={~p"/exo/build"} method="POST">
+  <form action={~p"/exo/produire"} method="POST">
     <div>
       <input type="hidden" name="exo[path]" value={file_name} />
       <button type="submit">Reconstuire l’exercice '<%= file_name %>'</button>

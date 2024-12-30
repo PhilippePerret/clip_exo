@@ -5,7 +5,7 @@ defmodule ClipExoWeb.AppComponents do
   attr :name, :string, required: true
   
   def appform(%{name: "produire"} = assigns) do
-    exoform(Map.put(assigns, :route, "/exo/build"))
+    exoform(Map.put(assigns, :route, "/exo/produire"))
   end
   
   def appform(%{name: "editer"} = assigns) do
