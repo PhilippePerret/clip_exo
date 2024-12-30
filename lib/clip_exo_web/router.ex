@@ -29,6 +29,7 @@ defmodule ClipExoWeb.Router do
     pipe_through :browser
     
     post "/save",   ExoController, :save
+    get  "/save",  ExoController, :editer # !
     post "/editer", ExoController, :editer
     get "/editer", ExoController, :editer
     get "/preformater", ExoController, :preformated_exo

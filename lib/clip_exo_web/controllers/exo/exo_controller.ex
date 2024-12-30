@@ -36,12 +36,12 @@ defmodule ClipExoWeb.ExoController do
     exo ->
       exo = Map.put(exo, "contenu", Exo.get_content_of(params["exo"]["path"]))
       Exo.memo_last_traitement(exo)
-      render(conn, :editor, exo: exo)
+      render(conn, :editor, exo: exo, ui: ClipExo.ui_terms)
     end
   end
 
   defp on_error_miss_exo(conn) do
-    render(conn, :on_error, "Il faut choisir l'exercice.")
+    render(conn, :on_error, error: "Il faut choisir l'exercice.")
   end
 
   # Sauvegarde du code de l'exercice (fichier de base)
@@ -54,7 +54,7 @@ defmodule ClipExoWeb.ExoController do
       {:error, erreur} ->
         conn |> put_flash(:error, erreur)
       end
-    render(conn, :editor, exo: exo)
+    render(conn, :editor, exo: exo, ui: ClipExo.ui_terms)
   end
 
   # On arrive dans cette fonction lorsqu'on veut produire un exercice
