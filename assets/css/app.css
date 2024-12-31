@@ -104,6 +104,7 @@ button, a.btn {
   margin:1em;
   cursor:pointer;
 }
+a.btn { display:inline-block;padding-bottom: 12px;}
 button:hover, a.btn:hover {
   background-color: purple;
 }

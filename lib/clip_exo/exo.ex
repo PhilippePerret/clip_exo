@@ -89,13 +89,11 @@ defmodule ClipExo.Exo do
   """
   def liste_exercices() do
     {res, _status} = System.shell("ls \"#{@folder_full_path}\"")
-    liste = 
-      res 
-      |> String.split("\n")
-      |> Enum.reject(fn x -> x == "" || String.slice(x, -9..-1) != ".clip.exo" end)
-      |> Enum.map(fn x -> String.slice(x, 0..-10//-1) end)
-    IO.inspect(liste, label: "\nRETOUR DE liste exercices")
-    liste
+    res 
+    |> String.split("\n")
+    |> Enum.reject(fn x -> x == "" || String.slice(x, -9..-1) != ".clip.exo" end)
+    |> Enum.map(fn x -> x |> String.slice(0..-10) end)
+    # |> IO.inspect(label: "\nRETOUR DE liste exercices")
   end
 
   @doc """
