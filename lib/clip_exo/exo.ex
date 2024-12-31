@@ -518,6 +518,7 @@ defmodule ClipExo.Exo do
     auteur: #{params["auteur"]}
     created_at: #{Date.utc_today()}
     revisions: [#{params["revisions"]}]
+    nombre_pages: 2
     ---
     #{rubriques}
     """

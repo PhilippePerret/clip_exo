@@ -111,8 +111,7 @@ defmodule ClipExoWeb.ExoController do
     else params_exo end
 
     params_exo = Map.put(params_exo, "rubriques", params_exo["rubriques"] || [])
-
-    
+   
     params_exo
     |> IO.inspect(label: "\nEXO (en entrée)")
 
