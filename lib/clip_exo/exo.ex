@@ -57,6 +57,7 @@ defmodule ClipExo.Exo do
 
 
   @folder "./_exercices/clipexo/"
+  @folder_full_path Path.expand(@folder)
   @html_folder "./_exercices/html"
   
   @reg_path ~r/^[^\W]+$/
@@ -81,6 +82,20 @@ defmodule ClipExo.Exo do
       # sert surtout à retrouver le name (qu'on appelle 'path' ici)
       %__MODULE__{infos: %{path: exo_path, name: exo_path}}
     end
+  end
+
+  @doc """
+  Retourne la liste des exercices du dossier ./_exercices/clipexo/
+  """
+  def liste_exercices() do
+    {res, status} = System.shell("ls \"#{@folder_full_path}\"")
+    liste = 
+      res 
+      |> String.split("\n")
+      |> Enum.reject(fn x -> x == "" || String.slice(x, -9..-1) != ".clip.exo" end)
+      |> Enum.map(fn x -> String.slice(x, 0..-10) end)
+    IO.inspect(liste, label: "\nRETOUR DE liste exercices")
+    liste
   end
 
   @doc """

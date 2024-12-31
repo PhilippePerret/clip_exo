@@ -18,3 +18,12 @@
     <button onclick="goto('/exo/produire')"type="submit"><%= @ui.boutons["produire"] %></button>
   </form>
 </center>
+
+<h3>Liste des exercices</h3>
+
+<ul id="exo-liste">
+<%= for exo <- @exo_liste do %>
+  <% path = "/exo/editer/?exo[path]=#{exo}" %>
+  <li><a href={path}><%= exo %></a></li>
+<% end %>
+</ul>
