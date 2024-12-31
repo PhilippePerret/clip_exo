@@ -70,7 +70,7 @@ style = "width:#{width}cm;height:#{height}cm;"
     let height  = section.offsetHeight;
     console.log("section.offsetHeight", section.offsetHeight)
     let span_nb = document.querySelector("#nombre_pages");
-    let nombre_pages = height / HEIGHT_PX_PAGE_A4 ;
+    let nombre_pages = Math.ceil(height / HEIGHT_PX_PAGE_A4) ;
     let current_nombre = current_nombre_pages();
     let s = nombre_pages > 1 ? "s" : "" ;
     if (nombre_pages != current_nombre) {

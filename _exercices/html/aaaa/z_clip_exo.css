@@ -33,7 +33,7 @@ body {
     size: A4 portrait;
      /* s'appliquera seulement avec le réglage Marges par défaut*/
     /* margin: 1.5cm 2cm 2cm; */
-    margin: 0cm 2cm 2cm;
+    margin: 1.5cm 2cm 2cm;
     /* border: 1px solid #CCC; */
     counter-increment: compteurPage;
     /* Seulement sur chrome */
@@ -43,6 +43,10 @@ body {
       color: #777777;
       font-family: Arial,Helvetica, Geneva;
     }
+  }
+
+  @page:first {
+    margin: 0cm 2cm 2cm;
   }
 
 } /* /@media print*/

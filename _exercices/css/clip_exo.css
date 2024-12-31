@@ -32,8 +32,7 @@ body {
   @page {
     size: A4 portrait;
      /* s'appliquera seulement avec le réglage Marges par défaut*/
-    /* margin: 1.5cm 2cm 2cm; */
-    margin: 0cm 2cm 2cm;
+    margin: 2cm 2cm;
     /* border: 1px solid #CCC; */
     counter-increment: compteurPage;
     /* Seulement sur chrome */
@@ -43,6 +42,12 @@ body {
       color: #777777;
       font-family: Arial,Helvetica, Geneva;
     }
+  }
+
+  @page:first {
+    /* Pour pouvoir placer correctement le logo, on doit mettre la marge
+       haut à rien */
+    margin: 0cm 2cm 2cm; 
   }
 
 } /* /@media print*/
