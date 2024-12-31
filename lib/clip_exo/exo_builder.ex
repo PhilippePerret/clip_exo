@@ -1,10 +1,6 @@
 defmodule ClipExo.ExoBuilder do
 
-  # alias ClipExo.Exo
-
-  @folder_html_relative "./_exercices/html"
-  @folder_html Path.absname(@folder_html_relative)
-  # IO.inspect(@folder_html, label: "\nDossier html")
+  alias ClipExo.Exo
 
 
   ################################################################################
@@ -25,14 +21,8 @@ defmodule ClipExo.ExoBuilder do
     code = ClipExoWeb.ExoBuilderView.build_file_specs(exo)
     # code = "Code provisoire pour essai."
 
-    # Nom de l'exercice
-    exo_name = exo.infos.name
-
-    # Construire le dossier de l'exerice si nécessaire
-    exo_folder = build_exo_folder_if_required(exo)
-
     # Chemin d'accès au fichier des caractéristiques
-    exo_file_specs = Path.join([exo_folder, "#{exo_name}-specs.html"])
+    exo_file_specs = Exo.exo_html_specs_file(exo)
 
     # Construire le fichier
     # File.write(exo_file_specs, code, [:utf8])
@@ -79,9 +69,9 @@ defmodule ClipExo.ExoBuilder do
     # Chemin d'accès au fichier de l'exercice, pour le
     # participant ou pour le formateur
     exo_path = if exo.formateur do
-      exo_html_formateur_file(exo)
+      Exo.exo_html_formateur_file(exo)
     else
-      exo_html_file(exo)
+      Exo.exo_html_file(exo)
     end
 
     # Construire le fichier
@@ -161,37 +151,13 @@ defmodule ClipExo.ExoBuilder do
   #
   ################################################################################
 
-  # Retourne le chemin d'accès au fichier html de l'exercice
-  def exo_html_file(exo) do
-    Path.join([exo_html_folder(exo), exo_html_file_name(exo)])
-  end
-
-  def exo_html_file(exo, :relative) do
-    Path.join([@folder_html_relative, exo.infos.name, exo_html_file_name(exo)])
-  end
-
-  def exo_html_formateur_file(exo) do
-    Path.join([exo_html_folder(exo), exo_html_formateur_file_name(exo)])
-  end
-
-  def exo_html_file_name(exo) do
-    "#{exo.infos.name}.html"
-  end
-  
-  def exo_html_formateur_file_name(exo) do
-    "#{exo.infos.name}-formateur.html"
-  end
-  
   defp build_exo_folder_if_required(exo) do
-    exo_folder = exo_html_folder(exo)
+    exo_folder = Exo.exo_html_folder(exo)
     if not File.exists?(exo_folder) do
       File.mkdir(exo_folder)
     end
     exo_folder
   end
 
-  def exo_html_folder(exo) do
-    Path.join([@folder_html, exo.infos.name])
-  end
 
 end

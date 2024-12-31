@@ -188,3 +188,12 @@ blockquote {
 }
 
 code {font-size:0.8em;}
+
+button.neutre {
+  all: unset;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  color: orange;
+  cursor: pointer;
+}

@@ -61,7 +61,6 @@ defmodule ClipExoWeb.ExoController do
   Pour ouvrir le fichier dans le Finder
   """
   def ouvrir(conn, params) do
-    IO.inspect(conn, label: "\nCONN dans ouvrir")
     conn = conn |> put_flash(:info, "L'exercice est ouvert sur le bureau.")
     Exo.open(Exo.get_from_params(params))
     origin  = Enum.at(Plug.Conn.get_req_header(conn, "origin"), 0)
@@ -69,6 +68,28 @@ defmodule ClipExoWeb.ExoController do
     referer = String.replace(referer, origin, "")
     redirect(conn, to: referer, params: params)
   end
+
+  # Depuis la page "imprimer", on peut ouvrir les fichiers dans 
+  # Google Chrome dans la perspective de les imprimer.
+  def imprimer(conn, %{"open" => open} = params) do
+    exo = Exo.get_from_params(params)
+    conn =
+      case Exo.open_in_chrome(exo) do
+      {:ok, msg} -> conn |> put_flash(:info, msg)
+      {:error, erreur} -> conn |> put_flash(:error, "Impossible d'ouvrir le fichier dans chrome : #{erreur}…")
+      end
+    imprimer(conn, Map.delete(params, "open"))
+  end
+
+  # Arrivée "normal" sur la page "Imprimer". Un bouton permettra
+  # d'ouvrir les fichiers de l'exercice.
+  # Cette page donne des indications sur la façon d'imprimer les
+  # exercices ou de produire leur PDF.
+  def imprimer(conn, params) do
+    _exo = Exo.get_from_params(params)
+    render(conn, :imprimer, exo: params["exo"])
+  end
+
 
   # On arrive dans cette fonction lorsqu'on veut produire un exercice
   # préformaté. Cette fonction présente un formulaire à remplir 

@@ -33,6 +33,10 @@ defmodule ClipExo.Exo do
   ]
 
 
+  @folder_html_relative "./_exercices/html"
+  @folder_html Path.absname(@folder_html_relative)
+  # IO.inspect(@folder_html, label: "\nDossier html")
+
   @data_rubriques [
     {"mission", "Mission"},
     {"objectif", "Objectif"},
@@ -72,6 +76,9 @@ defmodule ClipExo.Exo do
     if is_nil(exo_path) do
       raise "Impossible de trouver l'exercice dans #{inspect(params)}"
     else
+      # Plus tard, on pourra imaginer de récupérer vraiment toutes
+      # les informations, si nécessaire. Mais pour le moment, ça
+      # sert surtout à retrouver le name (qu'on appelle 'path' ici)
       %__MODULE__{infos: %{path: exo_path, name: exo_path}}
     end
   end
@@ -401,49 +408,30 @@ defmodule ClipExo.Exo do
   end
 
   def open(exo) do
-    System.shell("open \"#{Path.expand(Builder.exo_html_folder(exo))}\"")
+    System.shell("open \"#{expanded_folder_path(exo)}\"")
   end
 
-  # Retourne le chemin d'accès au fichier désigné par +path+, qui doit
-  # exister
-  def get_path_of_exo(path) do
-    case build_path_from(path) do
-    {:ok, path}       -> path
-    {:error, err_msg} -> {:error, err_msg}
-    nil -> {:error, "Il faut fournir le chemin de référence de l’exercice."}
-    end
-  end
-
-  defp build_path_from(nil), do: nil
-  defp build_path_from(path) do
-    path_init = path
-    path = add_extensions_if_needed(path)
-    path_with_folder = Path.join([@folder, path])
-    cond do
-    File.exists?(path) -> {:ok, path}
-    File.exists?(path_with_folder) -> {:ok, path_with_folder}
-    true -> {:error, "Impossible de trouver le path du fichier à partir de #{path_init}"}
-    end
-  end
-
-  # Pour définir précisément le chemin d'accès au fichier de l'exercice, qui n'existe
-  # pas forcément encore.
-  # On peut fournir soit le +path+ (string) soit la map des données
-  defp get_path_exo(exo_filename) when is_binary(exo_filename) do
-    if exo_filename do
-      { :ok, Path.join([@folder, add_extensions_if_needed(exo_filename)]) }
+  @doc """
+  Ouvre dans chrome (pour impression ou PDF) les 2 ou 3 fichiers de
+  l'exercice.
+  """
+  def open_in_chrome(exo) do
+    if File.exists?(exo_html_file(exo)) do
+      files = 
+        for {name, path} <- [
+          {"Fichier Exercice", exo_html_file(exo)},
+          {"Fichier Formateur", exo_html_formateur_file(exo)},
+          {"Fichier caractéristiques", exo_html_specs_file(exo)}
+          ] do
+            if File.exists?(path) do
+              System.shell("open -a \"Google Chrome\" \"#{path}\"")
+              name
+            end
+        end
+      files = files |> Enum.reject(fn x -> is_nil(x) end) |> Enum.join(", ")
+      {:ok, "Fichiers ouverts : #{files}"}
     else
-      { :error, "Il faut définir au moins le nom du fichier."}
-    end
-  end
-  defp get_path_exo(params_exo) do
-    get_path_exo(params_exo["path"] || "indéfini")
-  end
-
-  defp get_path_exo!(exo_filename) do
-    case get_path_exo(exo_filename) do
-    {:ok, path} -> path
-    {:error, msg_err} -> raise msg_err
+      {:error, "Le fichier de l'exercice est introuvable. Il faut peut-être le produire."}
     end
   end
 
@@ -523,6 +511,96 @@ defmodule ClipExo.Exo do
     duree_min = params["duree_min"] || "30"
     duree_max = params["duree_max"] || "90"
     "[#{duree_min}, #{duree_max}]"
+  end
+
+
+
+  ###################################################################
+  #
+  #             MÉTHODES DE PATHS
+  #
+  ###################################################################
+
+
+  # Retourne le chemin d'accès au fichier html de l'exercice
+  def exo_html_file(exo) do
+    Path.join([exo_html_folder(exo), exo_html_file_name(exo)])
+  end
+
+  def exo_html_file(exo, :relative) do
+    Path.join([@folder_html_relative, exo.infos.name, exo_html_file_name(exo)])
+  end
+
+  def exo_html_formateur_file(exo) do
+    Path.join([exo_html_folder(exo), exo_html_formateur_file_name(exo)])
+  end
+
+  def exo_html_file_name(exo) do
+    "#{exo.infos.name}.html"
+  end
+  
+  def exo_html_formateur_file_name(exo) do
+    "#{exo.infos.name}-formateur.html"
+  end
+
+  def exo_html_specs_file(exo) do
+    Path.join([exo_html_folder(exo), exo_html_specs_file_name(exo)])
+  end
+
+  defp exo_html_specs_file_name(exo) do
+    "#{exo.infos.name}-specs.html"
+  end
+  
+  def exo_html_folder(exo) do
+    Path.join([@folder_html, exo.infos.name])
+  end
+
+
+  defp expanded_folder_path(exo) do
+    Path.expand(exo_html_folder(exo))
+  end
+
+  # Retourne le chemin d'accès au fichier désigné par +path+, qui doit
+  # exister
+  def get_path_of_exo(path) do
+    case build_path_from(path) do
+    {:ok, path}       -> path
+    {:error, err_msg} -> {:error, err_msg}
+    nil -> {:error, "Il faut fournir le chemin de référence de l’exercice."}
+    end
+  end
+
+  defp build_path_from(nil), do: nil
+  defp build_path_from(path) do
+    path_init = path
+    path = add_extensions_if_needed(path)
+    path_with_folder = Path.join([@folder, path])
+    cond do
+    File.exists?(path) -> {:ok, path}
+    File.exists?(path_with_folder) -> {:ok, path_with_folder}
+    true -> {:error, "Impossible de trouver le path du fichier à partir de #{path_init}"}
+    end
+  end
+
+  # Pour définir précisément le chemin d'accès au fichier de l'exercice, qui n'existe
+  # pas forcément encore.
+  # On peut fournir soit le +path+ (string) soit la map des données
+  defp get_path_exo(exo_filename) when is_binary(exo_filename) do
+    if exo_filename do
+      { :ok, Path.join([@folder, add_extensions_if_needed(exo_filename)]) }
+    else
+      { :error, "Il faut définir au moins le nom du fichier."}
+    end
+  end
+  defp get_path_exo(params_exo) do
+    get_path_exo(params_exo["path"] || "indéfini")
+  end
+
+  defp get_path_exo!(exo_filename) do
+    case get_path_exo(exo_filename) do
+    {:ok, path} -> path
+    {:error, msg_err} -> raise msg_err
+    end
   end
 
 end
