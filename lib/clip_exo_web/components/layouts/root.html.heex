@@ -26,7 +26,7 @@
     <.flash_group flash={@flash} />
     <%= if assigns[:exo] do %>
     <section id="exo-boutons">
-      <span>Exercice courant</span>
+      <span>Exercice courant (<%= @exo["path"] %>)</span>
       <.bouton type="ouvrir" path={@exo["path"]} name="Ouvrir son dossier" />
       <.bouton type="editer" path={@exo["path"]} name="Éditer son fichier" />
       <.bouton type="produire" path={@exo["path"]} name="Produire ses fichiers" />
