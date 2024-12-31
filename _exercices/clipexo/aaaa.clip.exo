@@ -1,5 +1,5 @@
 ---
-titre: aaaa
+titre: Le nouveau titre de\nl'exercice AAAA
 reference: aaaa
 name: aaaa
 path: aaaa.clip.exo
@@ -16,7 +16,11 @@ C'est la mission principal de cet exercice. J'allonge la mission pour voir si el
 
 rub: Scénario
 
+:etapes
+: Première étape à faire
+: Deuxième étape à faire
+: troisième étape à faire
   
-  
-  
-  
+rub: Recommandations
+
+Les première recommandations. Qui ont été modifiées.

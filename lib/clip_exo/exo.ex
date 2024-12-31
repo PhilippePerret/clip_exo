@@ -88,12 +88,12 @@ defmodule ClipExo.Exo do
   Retourne la liste des exercices du dossier ./_exercices/clipexo/
   """
   def liste_exercices() do
-    {res, status} = System.shell("ls \"#{@folder_full_path}\"")
+    {res, _status} = System.shell("ls \"#{@folder_full_path}\"")
     liste = 
       res 
       |> String.split("\n")
       |> Enum.reject(fn x -> x == "" || String.slice(x, -9..-1) != ".clip.exo" end)
-      |> Enum.map(fn x -> String.slice(x, 0..-10) end)
+      |> Enum.map(fn x -> String.slice(x, 0..-10//-1) end)
     IO.inspect(liste, label: "\nRETOUR DE liste exercices")
     liste
   end
@@ -107,11 +107,19 @@ defmodule ClipExo.Exo do
   """
   def save(exo) do
     case get_path_of_exo(exo["path"]) do
-      {:error, msg} 
-        -> "Impossible de lire le fichier : #{msg}"
-      path -> 
-        File.write(path, exo["contenu"])    
-     end
+    {:error, msg} -> "Impossible de lire le fichier : #{msg}"
+    {:ok, path} ->
+      case File.write(path, String.trim(exo["contenu"])) do
+      :ok ->
+        if exo["apercu"] do
+          case build(%{"exo" => exo}) do
+          {:ok, _exo} -> :ok
+          {:error, erreur} -> {:error, erreur}
+          end
+        else :ok end
+      {:error, erreur} -> {:error, erreur}
+      end
+    end
   end
 
   @doc """
@@ -192,7 +200,7 @@ defmodule ClipExo.Exo do
   def get_content_of(path) do
     case get_path_of_exo(path) do
     {:error, msg} -> "Impossible de lire le fichier : #{msg}"
-    path -> 
+    {:ok, path} -> 
       File.read!(path)
       |> IO.inspect(label: "\nCONTENU DU FICHIER (get_content_of)")
     end
@@ -210,7 +218,7 @@ defmodule ClipExo.Exo do
   prendre le dernier traitement effectué.
   """
   def build(params_exo, options \\ %{}) do
-    IO.inspect(params_exo, label: "\nPARAMS_EXO")
+    # IO.inspect(params_exo, label: "\nPARAMS_EXO")
     params_exo =
       if params_exo["path"] |> PPString.nil_if_empty() |> is_nil() do
         rappel_last_traitement() || raise("Il faut donner le path du fichier exercice.")
@@ -579,7 +587,7 @@ defmodule ClipExo.Exo do
   # exister
   def get_path_of_exo(path) do
     case build_path_from(path) do
-    {:ok, path}       -> path
+    {:ok, path} -> {:ok, path}
     {:error, err_msg} -> {:error, err_msg}
     nil -> {:error, "Il faut fournir le chemin de référence de l’exercice."}
     end

@@ -71,7 +71,7 @@ defmodule ClipExoWeb.ExoController do
 
   # Depuis la page "imprimer", on peut ouvrir les fichiers dans 
   # Google Chrome dans la perspective de les imprimer.
-  def imprimer(conn, %{"open" => open} = params) do
+  def imprimer(conn, %{"open" => _open} = params) do
     exo = Exo.get_from_params(params)
     conn =
       case Exo.open_in_chrome(exo) do

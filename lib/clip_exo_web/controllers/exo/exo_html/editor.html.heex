@@ -1,14 +1,24 @@
 <!-- Éditeur de l'exercice -->
 <script type="text/javascript">
+  
+  
   function set_action(action){
-    const form = document.querySelector('#editor-form');
+    let field = document.querySelector('#exo_scrolling')
+    let textarea = document.querySelector('#exo_contenu');
+    field.value = textarea.scrollTop;
+    let form = document.querySelector('#editor-form');
     form.action = "/exo/" + action;
   }
 
-  function toggle_overview(){
-    const apercu = document.querySelector('#apercu');
-    new_disp = apercu.style.display == "block" ? "none" : "block";
-    apercu.style.display = new_disp;
+  function toggle_overview(afficher){
+    console.log("afficher = ", afficher);
+    // Il faut mettre 
+    let apercu = document.querySelector('#apercu');
+    if ( afficher ) {
+      let file_name = "<%= @exo["path"] %>";
+      apercu.src = "/exercice/"+file_name+"/"+file_name+".html";
+    }
+    apercu.style.display = afficher ? "block" : "none";
   }
 </script>
 
@@ -19,19 +29,33 @@ file_name = @exo["path"]
 <form id="editor-form" action="" method="POST">
 
   <input type="hidden" name="exo[path]" value={file_name} />
+  <input type="hidden" id="exo_scrolling" name="exo[scrolling]" />
 
   <textarea name="exo[contenu]" id="exo_contenu" style="width:100%;height:800px;padding:1em;">
     <%= @exo["contenu"] %>
   </textarea>
-
+  <script type="text/javascript">
+    let scroll = <%= @exo["scrolling"] || 0 %> ;
+    let textarea = document.querySelector('#exo_contenu');
+    if (scroll > 0) {
+      textarea.scroll(0, scroll)
+    }
+  </script>
+  
   <div class="right">
-    <button onclick="set_action('produire')" type="submit"><%= @ui.boutons["produire"] %></button>
+  <div id="panneau_aide_formatage">
+    <div class="content">
+      <.aide_formatage />
+    </div>
+    <span class="main-titre">AIDE FORMATAGE</span>
+  </div>
+
+    <span id="cb_apercu" class="smaller left">
+      <input checked={@exo["apercu"] == "on"} type="checkbox" name="exo[apercu]" id="exo_apercu" onclick="toggle_overview(this.checked)" />
+      <label for="exo_apercu" class="smaller">Activer l’aperçu</label>
+    </span>
     <button onclick="set_action('save')" type="submit"><%= @ui.boutons["enregistrer"] %></button>
   </div>
-  <span id="cb_apercu" class="smaller">
-    <input type="checkbox" name="exo[apercu]" id="exo_apercu" onclick="toggle_overview()" />
-    <label for="exo_apercu" class="smaller">Activer l’aperçu</label>
-  </span>
 </form>
 
 <%
@@ -53,7 +77,11 @@ height = Float.to_string( 120 / 100 * 29)
   }
 </style>
 
+
 <iframe 
   id="apercu"
-  src={~p"/exercice/" <> "#{file_name}/#{file_name}.html"}
-  frameborder="1"></iframe>
+  src=""
+  frameborder="1">
+</iframe>
+
+<script type="text/javascript">toggle_overview(<%= @exo["apercu"] == "on" %>)</script>

@@ -197,3 +197,47 @@ button.neutre {
   color: orange;
   cursor: pointer;
 }
+
+div#panneau_aide_formatage {
+  display:inline-block;
+  height: 40px;
+  overflow:hidden;
+  position:relative;
+  font-size: 14pt;
+  float: left;
+}
+div#panneau_aide_formatage:hover {
+  overflow:visible;
+}
+div#panneau_aide_formatage span.main-titre {
+  font-family: Helvetica;
+  font-size: 14pt;
+}
+div#panneau_aide_formatage div.content {
+  position: absolute;
+  width: calc(3 * 320px);
+  text-align: left;
+  bottom: 40px;
+  left: 0;
+  display: none;
+  background-color: #FAFAFA;
+  border: 1px solid;
+  padding: 1.5em 1em; 
+  columns: 300px auto;
+}
+div#panneau_aide_formatage:hover div.content {
+  display: block;
+  height: auto;
+}
+div#panneau_aide_formatage:hover div.content h3,
+div#panneau_aide_formatage:hover div.content h4 {
+  margin: 0;
+  margin-top:0.5em;
+  padding: 0;
+}
+div#panneau_aide_formatage:hover div.content p {
+  margin:0; padding:0;
+}
+div#panneau_aide_formatage:hover div.content code {
+  font-weight:bold;
+}

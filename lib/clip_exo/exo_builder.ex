@@ -64,7 +64,7 @@ defmodule ClipExo.ExoBuilder do
     code = ClipExoWeb.ExoBuilderView.build_file_exo(exo)
 
     # Construction du dossier de l'exercice
-    _exo_folder = build_exo_folder_if_required(exo)
+    build_exo_folder_if_required(exo)
 
     # Chemin d'accès au fichier de l'exercice, pour le
     # participant ou pour le formateur
