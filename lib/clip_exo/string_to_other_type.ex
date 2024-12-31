@@ -1,5 +1,8 @@
 defmodule StringTo do
 
+  @reg_empty_list ~r/^\[[  \t]*\]$/
+  @reg_inner_list ~r/^\[(.*)\]$/
+
   @reg_atom ~r/^\:[a-z_]+$/
   @reg_instring ~r/^"(.*)"$/
   @reg_integer ~r/^[0-9]+$/
@@ -32,6 +35,7 @@ defmodule StringTo do
   """
   def value(x) when is_binary(x) do
     cond do
+    x =~ @reg_inner_list -> list(x) # une liste reconnaissable
     x =~ @reg_atom      -> elem(Code.eval_string(x),0)  # :atom
     x =~ @reg_instring  -> elem(Code.eval_string(x),0)  # String
     x =~ @reg_range     -> elem(Code.eval_string(x),0)  # Range
@@ -71,8 +75,6 @@ defmodule StringTo do
     "[\"Un\", \"deux\"]"    => ["Un", "deux"]
 
   """
-  @reg_empty_list ~r/^\[[  \t]*\]$/
-  @reg_inner_list ~r/^\[(.*)\]$/
   def list(str) when is_binary(str) do
     trimed_str = String.trim(str)
     if trimed_str == "" || trimed_str =~ @reg_empty_list do

@@ -255,5 +255,13 @@ defmodule ClipExo.StringToTest do
         {nil, nil}
       ])
     end
+
+    test "avec des listes reconnaissables" do
+      test_with_value([
+        {"[1, 2, 3]", [1, 2, 3]},
+        {"[oui, et, non]", ["oui", "et", "non"]},
+        {"[true, :atom, \"et\", oui, 12]", [true, :atom, "et", "oui", 12]}
+      ])
+    end
   end #/describe "StringTo.value"
 end
