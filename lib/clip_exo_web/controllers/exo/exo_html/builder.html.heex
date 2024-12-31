@@ -17,6 +17,7 @@
       <button type="submit">Reconstuire l’exercice '<%= file_name %>'</button>
     </div>
   </form>
+  <div id="span-nombre-pages" data-nombre={@exo.infos.nombre_pages} style="width:100%;font-size:15pt;">Nombre de pages calculées : <span id="nombre_pages">---</span></div>
 </div>
 
 <%
@@ -29,6 +30,7 @@ style = "width:#{width}cm;height:#{height}cm;"
 %>
 
 <iframe 
+  id="iframe-exercice"
   src={~p"/exercice/" <> "#{file_name}/#{file_name}.html"}
   style={"#{style}"}
   frameborder="1"></iframe>
@@ -46,3 +48,44 @@ style = "width:#{width}cm;height:#{height}cm;"
   src={~p"/exercice/" <> "#{file_name}/#{file_name}-specs.html"}
   style={"#{style}"}
   frameborder="1"></iframe>
+
+
+<script type="text/javascript">
+
+  function span_nombre_pages() {
+    return document.querySelector('#span-nombre-pages');
+  }
+  function current_nombre_pages(){
+    return span_nombre_pages().dataset.nombre ;
+  }
+
+  function calcule_nombre_pages() {
+    let iframe  = document.querySelector("#iframe-exercice");
+    let section = iframe.contentWindow.document.querySelector("section#exercice")
+    let height  = section.offsetHeight;
+    console.log("section.offsetHeight", section.offsetHeight)
+    let span_nb = document.querySelector("#nombre_pages");
+    let nombre_pages = height / 990 ;
+    let current_nombre = current_nombre_pages();
+    let s = nombre_pages > 1 ? "s" : "" ;
+    if (nombre_pages != current_nombre) {
+      texte_nb_pages = nombre_pages + " page"+s+" (actualiser en éditant le fichier — actuellement : "+current_nombre+" p.)"
+      // "(" + height + " px / " + px2cm(height) + " cm)"
+      span_nombre_pages().style.color = "red";
+    } else {
+      texte_nb_pages = nombre_pages + " page"+s+" (déjà fixée)"
+    }
+    span_nb.innerHTML = texte_nb_pages;
+  }
+  function px2cm(px) {
+    var n = 0;
+    var cpi = 2.54; // centimeters per inch
+    var dpi = 96; // dots per inch
+    var ppd = window.devicePixelRatio; // pixels per dot
+    return (px * cpi / (dpi * ppd)).toFixed(n);
+  }
+
+  
+
+  setTimeout(calcule_nombre_pages, 2000)
+</script>

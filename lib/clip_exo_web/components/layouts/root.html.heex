@@ -25,13 +25,19 @@
     </nav>
     <.flash_group flash={@flash} />
     <%= if assigns[:exo] do %>
-    <section id="exo-boutons">
-      <span>Exercice courant (<%= @exo["path"] %>)</span>
-      <.bouton type="ouvrir" path={@exo["path"]} name="Ouvrir son dossier" />
-      <.bouton type="editer" path={@exo["path"]} name="Éditer son fichier" />
-      <.bouton type="produire" path={@exo["path"]} name="Produire ses fichiers" />
-      <.bouton type="imprimer" path={@exo["path"]} name="Imprimer ses fichiers" />
-    </section>
+      <%
+      exo_path = case @exo do
+        %ClipExo.Exo{} -> @exo.infos.name
+        _ -> @exo["path"]
+        end
+      %>
+      <section id="exo-boutons">
+        <span>Exercice courant (<%= exo_path %>)</span>
+        <.bouton type="ouvrir" path={exo_path} name="Ouvrir son dossier" />
+        <.bouton type="editer" path={exo_path} name="Éditer son fichier" />
+        <.bouton type="produire" path={exo_path} name="Produire ses fichiers" />
+        <.bouton type="imprimer" path={exo_path} name="Imprimer ses fichiers" />
+      </section>
     <% end %>
     <section id="content">
       <%= @inner_content %>

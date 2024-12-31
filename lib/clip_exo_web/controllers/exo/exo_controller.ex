@@ -155,4 +155,10 @@ defmodule ClipExoWeb.ExoController do
     end
   end
 
+
+  def handle_event("change-nombre-page", params, conn) do
+    IO.inspect(params, label: "\nPARAMS dans handle event")
+    conn = conn |> put_flash(:info, "Le nombre de pages a été enregistré.")
+    {:no_reply, conn}
+  end
 end
