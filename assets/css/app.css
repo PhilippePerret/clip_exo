@@ -37,7 +37,11 @@ nav#main a {
 }
 
 section#exo-boutons {
-  padding:1px;
+  padding:1px 1em;
+  opacity: 0.5;
+}
+section#exo-boutons:hover {
+  opacity: 1;
 }
 section#exo-boutons form {
   display:inline; 

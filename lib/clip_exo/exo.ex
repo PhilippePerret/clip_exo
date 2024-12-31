@@ -58,6 +58,25 @@ defmodule ClipExo.Exo do
   @reg_path ~r/^[^\W]+$/
 
   @doc """
+  Reçoit les paramètres d'une requête et retourne un
+  %Exo valide, même si partiel
+  """
+  def get_from_params(params) do
+    exo_path =
+      cond do
+      not is_nil(params["exo"]) -> params["exo"]["path"]
+      not (params["exo"] == "") -> params["exo"]["path"]
+      params["exo_path"]        -> params["exo_path"]
+      true -> nil
+      end
+    if is_nil(exo_path) do
+      raise "Impossible de trouver l'exercice dans #{inspect(params)}"
+    else
+      %__MODULE__{infos: %{path: exo_path, name: exo_path}}
+    end
+  end
+
+  @doc """
   Enregistrement du fichier de données de l'exercice
 
   +exo+ doit définir "path" et "contenu"
@@ -372,11 +391,17 @@ defmodule ClipExo.Exo do
   """
   def open_exo_html_folder(exo, options) do
     if options[:open_folder] do
-      System.shell("open \"#{Path.expand(Builder.exo_html_folder(exo))}\"")
-      {:ok, exo}
+      case open(exo) do
+      :ok -> {:ok, exo}
+      {:error, erreur} -> {:error, erreur}
+      end
     else
       {:ok, exo}
     end
+  end
+
+  def open(exo) do
+    System.shell("open \"#{Path.expand(Builder.exo_html_folder(exo))}\"")
   end
 
   # Retourne le chemin d'accès au fichier désigné par +path+, qui doit

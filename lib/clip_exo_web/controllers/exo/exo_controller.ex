@@ -57,6 +57,19 @@ defmodule ClipExoWeb.ExoController do
     render(conn, :editor, exo: exo, ui: ClipExo.ui_terms)
   end
 
+  @doc """
+  Pour ouvrir le fichier dans le Finder
+  """
+  def ouvrir(conn, params) do
+    IO.inspect(conn, label: "\nCONN dans ouvrir")
+    conn = conn |> put_flash(:info, "L'exercice est ouvert sur le bureau.")
+    Exo.open(Exo.get_from_params(params))
+    origin  = Enum.at(Plug.Conn.get_req_header(conn, "origin"), 0)
+    referer = Enum.at(Plug.Conn.get_req_header(conn, "referer"), 0)
+    referer = String.replace(referer, origin, "")
+    redirect(conn, to: referer, params: params)
+  end
+
   # On arrive dans cette fonction lorsqu'on veut produire un exercice
   # préformaté. Cette fonction présente un formulaire à remplir 
   # autant qu'on veut, pour produire le fichier de l'exercice 

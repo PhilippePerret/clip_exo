@@ -38,6 +38,7 @@ defmodule ClipExoWeb.Router do
     get "/preformate", ExoController, :preformated_exo
     get "/produire", ExoController, :produire
     post "/produire", ExoController, :produire
+    post "/ouvrir", ExoController, :ouvrir
   end
   
   scope "/:anyway", ClipExoWeb do
