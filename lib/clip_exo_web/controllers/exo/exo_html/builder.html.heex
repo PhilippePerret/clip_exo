@@ -52,6 +52,10 @@ style = "width:#{width}cm;height:#{height}cm;"
 
 <script type="text/javascript">
 
+  // Pour le calcul du nombre de pages
+  const HEIGHT_PX_PAGE_A4 = 980 ;
+
+
   function span_nombre_pages() {
     return document.querySelector('#span-nombre-pages');
   }
@@ -59,13 +63,14 @@ style = "width:#{width}cm;height:#{height}cm;"
     return span_nombre_pages().dataset.nombre ;
   }
 
+ 
   function calcule_nombre_pages() {
     let iframe  = document.querySelector("#iframe-exercice");
     let section = iframe.contentWindow.document.querySelector("section#exercice")
     let height  = section.offsetHeight;
     console.log("section.offsetHeight", section.offsetHeight)
     let span_nb = document.querySelector("#nombre_pages");
-    let nombre_pages = height / 990 ;
+    let nombre_pages = height / HEIGHT_PX_PAGE_A4 ;
     let current_nombre = current_nombre_pages();
     let s = nombre_pages > 1 ? "s" : "" ;
     if (nombre_pages != current_nombre) {

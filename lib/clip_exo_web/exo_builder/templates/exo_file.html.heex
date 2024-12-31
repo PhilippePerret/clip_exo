@@ -14,7 +14,7 @@
       /* Pour l'impression du pied de page */
       @page {
         @bottom-right {
-          content: "<%= @exo.infos.titre %> - " counter(compteurPage) "/<%= @exo.infos.nombre_pages %>";
+          content: "<%= raw String.replace(@exo.infos.titre, "\\n", " ") %> - " counter(compteurPage) "/<%= @exo.infos.nombre_pages %>";
         }
       }
     </style>
