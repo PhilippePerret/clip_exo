@@ -17,7 +17,9 @@ defmodule ClipExo do
       "editer"        => "Éditer l’exercice",
       "preformatage"  => "Préformatage d’un nouvel exercice",
       "produire"      => "Produire les fichiers de l'exercice",
-      "enregistrer"   => "Enregistrer le fichier"
+      "enregistrer"   => "Enregistrer le fichier",
+      "imprimer"      => "Imprimer les fichiers de l’exercice",
+      "ouvrir"        => "Ouvrir le dossier de l’exercice"
     }
   }
 

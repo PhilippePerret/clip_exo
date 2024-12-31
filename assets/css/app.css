@@ -35,6 +35,30 @@ nav#main a {
   vertical-align:super;
   color: white;
 }
+
+section#exo-boutons {
+  padding:1px;
+}
+section#exo-boutons form {
+  display:inline; 
+  margin: none !important; 
+  padding:none !important;
+  /* background-color:blue; */
+}
+section#exo-boutons span {
+  font-size: 13pt;
+  font-family: Arial Narrow, Helvetica, Geneva;
+  margin: none;
+  /* background-color:red; */
+}
+section#exo-boutons span:after {content: " :"}
+section#exo-boutons button {
+  display: inline-block;
+  font-size: 9.5pt;
+  padding: 4px 8px;
+  margin: 0!important;
+}
+
 section#content {
   margin:2em 4em;
 }

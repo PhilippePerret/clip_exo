@@ -16,7 +16,7 @@
   </head>
   <body class="bg-white">
     <header>
-      <a href={~p"/"}>CLIP-EXO - Éditeur d'exercices pour le CLIP</a>
+      <a href={~p"/"}>CLIP-EXO - Exercices pour le CLIP</a>
     </header>
     <nav id="main">
       <a href={~p"/manuel"}><%= ui.menus["manuel"] %></a>
@@ -24,6 +24,15 @@
       <a href={~p"/formatage"}><%= ui.menus["formatage"] %></a>
     </nav>
     <.flash_group flash={@flash} />
+    <%= if assigns[:exo] do %>
+    <section id="exo-boutons">
+      <span>Exercice courant</span>
+      <.bouton type="ouvrir" path={@exo["path"]} name="Ouvrir son dossier" />
+      <.bouton type="editer" path={@exo["path"]} name="Éditer son fichier" />
+      <.bouton type="produire" path={@exo["path"]} name="Produire ses fichiers" />
+      <.bouton type="imprimer" path={@exo["path"]} name="Imprimer ses fichiers" />
+    </section>
+    <% end %>
     <section id="content">
       <%= @inner_content %>
     </section>
