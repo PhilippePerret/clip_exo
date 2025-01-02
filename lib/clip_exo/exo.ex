@@ -63,7 +63,7 @@ defmodule ClipExo.Exo do
   @folder_full_path Path.expand(@folder)
   @html_folder "./_exercices/html"
   
-  @reg_path ~r/^[^\W]+$/
+  @reg_path ~r/^[a-zA-Z0-9_\-\.]+$/
 
   @doc """
   Reçoit les paramètres d'une requête et retourne un
@@ -80,23 +80,17 @@ defmodule ClipExo.Exo do
       |> IO.inspect(label: "\nINFOS MISE DANS EXO")
     end
   end
-
+  def get_from_params(%{"path" => path}) do
+    %__MODULE__{infos: %{path: path, name: path}}
+  end
+  def get_from_params(%{"eco" => exo}) do
+    %__MODULE__{infos: %{path: exo["path"], name: exo["path"]}}
+  end
+  def get_from_params(%__MODULE__{} = exo) do
+    %__MODULE__{infos: %{path: exo.infos.path, name: exo.infos.name}}
+  end
   def get_from_params(params) do
-    exo_path =
-      cond do
-      not is_nil(params["exo"]) -> params["exo"]["path"]
-      not (params["exo"] == "") -> params["exo"]["path"]
-      params["exo_path"]        -> params["exo_path"]
-      true -> nil
-      end
-    if is_nil(exo_path) do
-      raise "Impossible de trouver l'exercice dans #{inspect(params)}"
-    else
-      # Plus tard, on pourra imaginer de récupérer vraiment toutes
-      # les informations, si nécessaire. Mais pour le moment, ça
-      # sert surtout à retrouver le name (qu'on appelle 'path' ici)
-      %__MODULE__{infos: %{path: exo_path, name: exo_path}}
-    end
+    raise "Impossible de trouver l'exercice dans #{inspect(params)}"
   end
 
 
@@ -627,6 +621,7 @@ defmodule ClipExo.Exo do
     name: #{params["name"]}
     path: #{params["path"]}
     competences: [#{params["competences"]}]
+    logiciels: [#{params["logiciels"]}]
     niveau: #{formated_niveau(params)}
     duree: #{duree_form_max_and_min(params)}
     auteur: #{params["auteur"]}

@@ -1,0 +1,55 @@
+---
+titre: Trop stylé !
+reference: PSW-04
+name: PSW-04-1
+path: PSW-04-1.clip.exo
+competences: [Premières stylisations en CSS, Identification des sélecteurs]
+logiciels: [Navigateur internet, Environnement de développement (Visual Studio Code)]
+niveau: Grand débutant
+duree: [30, 60]
+auteur: Philippe PERRET
+created_at: 2025-01-02
+revisions: []
+---
+rub: Mission
+Réussir ses premières stylisations d'élément HTML grâce aux premières règles CSS.
+
+
+rub: Scénario
+
+## Sélection et application des règles
+
+La première chose à comprendre est que l'opération de stylisation comprend deux parties :
+
+:liste
+: la sélection des éléments à styliser,
+: le choix des *règles de style* à leur appliquer.
+
+### Sélection des éléments HTML
+
+Pour sélectionner des éléments HTML — et les désigner —, on a de nombreux moyens, mais trois sont les plus courants. On peut y faire référence par :
+
+- le **type de nœud**, c'est-à-dire de "boite", de "conteneur" (par exemple `div` ou `body` ou `img`, etc.),
+- l'**identifiant** de la boite, que nous avons déjà utilisé dans les exercices précédents (attribut qui s'appelle `id),
+- la  ou les **classes CSS** contenues dans l'attribut `class`.
+
+Par exemple, si on trouve le nœud/la boite suivante :
+
+:blockcode
+::no_num
+: <div id="maBoite" class="maClasse1 maClasse2 maclasse3">…</div>
+
+… on voit un type de nœud `div`, un identifiant `maBoite` et trois classes CSS (séparées par des espaces, comme c'est l'usage).
+
+L'identifiant doit absolument être unique dans toute la page. Si une boite s'appelle `maBoite`, aucune autre boite ne doit porter le même identifiant.
+
+Les classes CSS, en revanche, peuvent se partager, et c'est même un de leur grand intérêt, comme on le verra.
+
+Pour le moment, se souvenir simplement que l'identifiant (attribut `id`) doit être unique. C'est le seul *attribut* qui doit être unique dans toute la page.
+
+### Application des règles CSS
+
+Les règles CSS permettent de mettre le contenu en forme et même d'intervenir sur l'interactivité (le "dialogue" avec l'utilisateur). On peut faire une infinité de choses, à commencer par choisir les tailles, les couleurs, les polices, les positions, opacités.
+
+
+rub: Recommandations

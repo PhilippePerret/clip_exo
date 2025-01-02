@@ -24,19 +24,20 @@
       <a href={~p"/formatage"}><%= ui.menus["formatage"] %></a>
     </nav>
     <.flash_group flash={@flash} />
-    <%= if assigns[:exo] do %>
-      <%
-      exo_path = case @exo do
-        %ClipExo.Exo{} -> @exo.infos.name
-        _ -> @exo["path"]
-        end
+    
+    <%= if assigns[:exo] && ( ClipExo.Exo.get_from_params(@exo) ) do %>
+      <% 
+        exo = ClipExo.Exo.get_from_params(@exo)
+        exo_path = exo.infos.name
+        has_html_files = ClipExo.Exo.exists_html_files?(exo)
       %>
+    
       <section id="exo-boutons">
         <span>Exercice courant (<%= exo_path %>)</span>
         <.bouton type="ouvrir" path={exo_path} name="Ouvrir son dossier" />
         <.bouton type="editer" path={exo_path} name="Éditer son fichier" />
         <.bouton type="produire" path={exo_path} name="Produire les HTML" />
-        <%= if ClipExo.Exo.exists_html_files?(%ClipExo.Exo{infos: %{name: exo_path}}) do %>
+        <%= if has_html_files do %>
           <.bouton type="produire_pdf" path={exo_path} name="Produire les PDF" />
         <% end %>
       </section>

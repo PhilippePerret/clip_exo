@@ -106,6 +106,7 @@ defmodule ClipExoWeb.ExoController do
     else params_exo end
 
     params_exo = Map.put(params_exo, "rubriques", params_exo["rubriques"] || [])
+    |> IO.inspect(label: "\nPARAMS_EXO")
    
     form = params_exo |> to_form(as: "exo")
     render(conn, :data_exo_form, %{
