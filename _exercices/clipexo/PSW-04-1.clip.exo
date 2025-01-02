@@ -1,8 +1,8 @@
 ---
 titre: Trop stylé !
 reference: PSW-04
-name: PSW-04-1
-path: PSW-04-1.clip.exo
+name: psw-04-1
+path: psw-04-1.clip.exo
 competences: [Premières stylisations en CSS, Identification des sélecteurs]
 logiciels: [Navigateur internet, Environnement de développement (Visual Studio Code)]
 niveau: Grand débutant

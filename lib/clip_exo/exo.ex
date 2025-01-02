@@ -83,7 +83,7 @@ defmodule ClipExo.Exo do
   def get_from_params(%{"path" => path}) do
     %__MODULE__{infos: %{path: path, name: path}}
   end
-  def get_from_params(%{"eco" => exo}) do
+  def get_from_params(%{"exo" => exo}) do
     %__MODULE__{infos: %{path: exo["path"], name: exo["path"]}}
   end
   def get_from_params(%__MODULE__{} = exo) do
@@ -537,7 +537,12 @@ defmodule ClipExo.Exo do
   end
 
   def open(exo) do
-    System.shell("open \"#{expanded_folder_path(exo)}\"")
+    {retour, status } = System.shell("open \"#{expanded_folder_path(exo)}\"")
+    if status == 0 do
+      {:ok, exo}
+    else
+      {:error, "[Status #{status}] #{retour}"}
+    end
   end
 
   # @doc """

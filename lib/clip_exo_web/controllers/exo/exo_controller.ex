@@ -8,10 +8,6 @@ defmodule ClipExoWeb.ExoController do
   @data_rubriques Exo.get_data_rubriques
   @data_niveaux   Exo.get_data_niveaux
 
-  # def produire(conn, _params) do
-  #   render(conn, :produire, ui: ClipExo.ui_terms() )
-  # end
-
   # Construction des trois fichiers finaux de l'exercice, le fichier
   # participant, le fichier formateur et le fichier caractéristiques.
   # def build(conn, params) do
@@ -61,8 +57,15 @@ defmodule ClipExoWeb.ExoController do
   Pour ouvrir le fichier dans le Finder
   """
   def ouvrir(conn, params) do
-    conn = conn |> put_flash(:info, "L'exercice est ouvert sur le bureau.")
-    Exo.open(Exo.get_from_params(params))
+    exo = Exo.get_from_params(params)
+    conn =
+      case Exo.open(exo) do
+      {:ok, exo} -> 
+        conn |> put_flash(:info, "L'exercice est ouvert sur le bureau.")
+      {:error, erreur} ->
+        conn |> put_flash(:error, "Impossible d'ouvrir #{exo.infos.path}")
+      end
+
     origin  = Enum.at(Plug.Conn.get_req_header(conn, "origin"), 0)
     referer = Enum.at(Plug.Conn.get_req_header(conn, "referer"), 0)
     referer = String.replace(referer, origin, "")
