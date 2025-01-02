@@ -1,3 +1,12 @@
 <h1>Production des PDF</h1>
 
-<p>Cette page apparait lorsque l'on a demandé la production des fichiers PDF de l'exercice.</p>
+<%= if @building_ok do %>
+
+<p>Les fichiers PDF ont été produit avec succès. Vous pouvez ouvrir le dossier de l'exercice pour les trouver.</p>
+
+<% else %>
+
+<p>Des erreurs ont été rencontrées au cours de la fabrication des fichiers PDF :</p>
+
+<p class="warning">Erreurs : <%= @building_errors %></p>
+<% end %>

@@ -35,8 +35,10 @@
         <span>Exercice courant (<%= exo_path %>)</span>
         <.bouton type="ouvrir" path={exo_path} name="Ouvrir son dossier" />
         <.bouton type="editer" path={exo_path} name="Éditer son fichier" />
-        <.bouton type="produire" path={exo_path} name="Produire ses fichiers" />
-        <.bouton type="produire_pdf" path={exo_path} name="Produire les PDF" />
+        <.bouton type="produire" path={exo_path} name="Produire les HTML" />
+        <%= if ClipExo.Exo.exists_html_files?(%ClipExo.Exo{infos: %{name: exo_path}}) do %>
+          <.bouton type="produire_pdf" path={exo_path} name="Produire les PDF" />
+        <% end %>
       </section>
     <% end %>
     <section id="content">

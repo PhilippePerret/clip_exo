@@ -19,8 +19,9 @@
       // On met des espaces à la place des "/" dans la date
       vars.date = vars.date.replace(/\//g, '&ThinSpace;');
 
-      // On décode
+      // On décode le titre et la référence encodés
       vars.exo_titre = decodeURIComponent(vars.exo_titre);
+      vars.exo_ref = decodeURIComponent(vars.exo_ref);
 
       // On met les valeurs dans les champs
       for ( var i in PROPS ) {

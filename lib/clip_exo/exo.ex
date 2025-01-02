@@ -141,34 +141,77 @@ defmodule ClipExo.Exo do
 
   Il faut bien sûr que son fichier HTML ait été préalablement construit.
   """
-  def to_pdf(exo) do
+  def to_pdf(exo, file_name) do
 
     titre = 
       exo.infos.titre
       |> String.replace("\\n", " ")
       |> URI.encode()
-      |> IO.inspect(label: "\nTITRE ENVOYÉ")
+    
+    ref = 
+      exo.infos.reference
+      |> URI.encode()
 
     to_pdf_command = """
     wkhtmltopdf 
-    --quiet
     --enable-local-file-access
     --encoding utf-8
     -O portrait -T "15mm" -B "25mm" -L "20mm" -R "20mm"
     --footer-html "../footer.html"
     --footer-line --footer-spacing 10
-    --replace "exo_titre" "#{titre}" --replace "exo_ref" "#{exo.infos.reference}"
-    "#{exo.infos.name}.html" "#{exo.infos.name}.pdf"
+    --replace "exo_titre" "#{titre}" --replace "exo_ref" "#{ref}"
+    "#{file_name}.html" "#{file_name}.pdf"
     """
     |> String.trim()
     |> String.replace("\n", " ")
 
     to_folder_command = "cd \"#{expanded_folder_path(exo)}\""
 
-    res = System.shell("#{to_folder_command} && #{to_pdf_command}")
-    IO.inspect(res, label: "\nretour de commande PDF")
+    {retour, status} = System.shell("#{to_folder_command} && #{to_pdf_command}")
+    if status == 0 do
+      {:ok, exo}
+    else
+      {:error, "[Status #{status}] #{retour}"}
+    end
+  end
 
-    {:ok, exo} # pour le moment
+  # Fonction principale appelée pour construire les fichiers PDF
+  def to_pdf(exo) do
+    erreurs = []
+
+    erreurs = erreurs ++
+    if File.exists?(exo_html_file(exo)) do
+      case to_pdf(exo, exo.infos.name) do
+      {:ok, exo} -> []
+      {:error, erreur} -> [erreur]
+      end
+    else
+      ["Le fichier HTML principal est introuvable."]
+    end
+
+    erreurs = erreurs ++
+    if File.exists?(exo_html_specs_file(exo)) do
+      case to_pdf(exo, "#{exo.infos.name}-specs") do
+      {:ok, exo} -> []
+      {:error, erreur} -> [erreur]
+      end
+    else
+      ["Le fichier des caractéristiques est introuvable."]
+    end
+
+    erreurs = erreurs ++ 
+    if File.exists?(exo_html_formateur_file(exo)) do
+      case to_pdf(exo, "#{exo.infos.name}-formateur") do
+      {:ok, exo}        -> []
+      {:error, erreur}  -> [erreur]
+      end
+    else [] end
+
+    if Enum.any?(erreurs) do
+      {:error, Enum.join(erreurs, ", ")}
+    else
+      {:ok, exo}
+    end
   end
 
 
@@ -618,6 +661,19 @@ defmodule ClipExo.Exo do
     end
   end
 
+  @doc """
+  De façon générale, retourne true si les fichiers HTML
+  de l'exercice existent. On a juste besoin du fichier de
+  l'exercice et du fichier de référence.
+  """
+  def exists_html_files?(exo) do
+    exists_file_exo_html?(exo) && exists_file_specs_html?(exo)
+  end
+
+  def exists_file_exo_html?(exo) do
+    File.exists?(exo_html_file(exo))
+  end
+
   # Retourne le chemin d'accès au fichier html de l'exercice
   def exo_html_file(exo) do
     Path.join([exo_html_folder(exo), exo_html_file_name(exo)])
@@ -627,16 +683,12 @@ defmodule ClipExo.Exo do
     Path.join([@folder_html_relative, exo.infos.name, exo_html_file_name(exo)])
   end
 
-  def exo_html_formateur_file(exo) do
-    Path.join([exo_html_folder(exo), exo_html_formateur_file_name(exo)])
-  end
-
   def exo_html_file_name(exo) do
     "#{exo.infos.name}.html"
   end
-  
-  def exo_html_formateur_file_name(exo) do
-    "#{exo.infos.name}-formateur.html"
+ 
+  def exists_file_specs_html?(exo) do
+    File.exists?(exo_html_specs_file(exo))
   end
 
   def exo_html_specs_file(exo) do
@@ -646,7 +698,15 @@ defmodule ClipExo.Exo do
   defp exo_html_specs_file_name(exo) do
     "#{exo.infos.name}-specs.html"
   end
-  
+
+  def exo_html_formateur_file(exo) do
+    Path.join([exo_html_folder(exo), exo_html_formateur_file_name(exo)])
+  end
+ 
+  def exo_html_formateur_file_name(exo) do
+    "#{exo.infos.name}-formateur.html"
+  end
+
   def exo_html_folder(exo) do
     Path.join([@folder_html, exo.infos.name])
   end

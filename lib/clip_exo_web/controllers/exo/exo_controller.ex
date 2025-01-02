@@ -69,39 +69,20 @@ defmodule ClipExoWeb.ExoController do
     redirect(conn, to: referer, params: params)
   end
 
-  # # Depuis la page "imprimer", on peut ouvrir les fichiers dans 
-  # # Google Chrome dans la perspective de les imprimer.
-  # # @OBSOLÈTE
-  # def imprimer(conn, %{"open" => _open} = params) do
-  #   exo = Exo.get_from_params(params)
-  #   conn =
-  #     case Exo.open_in_chrome(exo) do
-  #     {:ok, msg} -> conn |> put_flash(:info, msg)
-  #     {:error, erreur} -> conn |> put_flash(:error, "Impossible d'ouvrir le fichier dans chrome : #{erreur}…")
-  #     end
-  #   imprimer(conn, Map.delete(params, "open"))
-  # end
-
   def produire_pdf(conn, params) do
     exo = Exo.get_from_params(params, :all)
     conn =
       case Exo.to_pdf(exo) do
-      {:ok, _exo} -> conn |> put_flash(:info, "PDF produit avec succès.")
-      {:error, erreur} -> conn |> put_flash(:error, erreur)
+      {:ok, _exo} -> 
+        conn 
+        |> put_flash(:info, "PDF produit avec succès.")
+        |> Map.put(:assigns, Map.merge(conn.assigns, %{building_ok: true, building_errors: nil}))
+      {:error, erreurs} -> 
+        conn 
+        |> put_flash(:error, erreurs)
+        |> Map.put(:assigns, Map.merge(conn.assigns, %{building_ok: false, building_errors: erreurs}))
       end
-    render(conn, :on_build_pdf, ui: ClipExo.ui_terms, path: exo.infos.name)
-  end
-
-
-  # Arrivée "normal" sur la page "Imprimer". Un bouton permettra
-  # d'ouvrir les fichiers de l'exercice.
-  # Cette page donne des indications sur la façon d'imprimer les
-  # exercices ou de produire leur PDF.
-  # @OBSOLÈTE - on fabrique maintenant le PDF sans passer par
-  # google Chrome
-  def imprimer(conn, params) do
-    _exo = Exo.get_from_params(params)
-    render(conn, :imprimer, exo: params["exo"])
+    render(conn, :on_build_pdf, ui: ClipExo.ui_terms, exo: exo)
   end
 
 
@@ -126,9 +107,6 @@ defmodule ClipExoWeb.ExoController do
 
     params_exo = Map.put(params_exo, "rubriques", params_exo["rubriques"] || [])
    
-    params_exo
-    |> IO.inspect(label: "\nEXO (en entrée)")
-
     form = params_exo |> to_form(as: "exo")
     render(conn, :data_exo_form, %{
       form:           form, 
