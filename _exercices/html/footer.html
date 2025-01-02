@@ -19,6 +19,9 @@
       // On met des espaces à la place des "/" dans la date
       vars.date = vars.date.replace(/\//g, '&ThinSpace;');
 
+      // On décode
+      vars.exo_titre = decodeURIComponent(vars.exo_titre);
+
       // On met les valeurs dans les champs
       for ( var i in PROPS ) {
         var spanId = PROPS[i];

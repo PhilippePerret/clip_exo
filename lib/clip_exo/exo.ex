@@ -146,12 +146,14 @@ defmodule ClipExo.Exo do
     titre = 
       exo.infos.titre
       |> String.replace("\\n", " ")
+      |> URI.encode()
+      |> IO.inspect(label: "\nTITRE ENVOYÉ")
 
     to_pdf_command = """
     wkhtmltopdf 
     --quiet
     --enable-local-file-access
-    --encoding 'utf-8'
+    --encoding utf-8
     -O portrait -T "15mm" -B "25mm" -L "20mm" -R "20mm"
     --footer-html "../footer.html"
     --footer-line --footer-spacing 10
