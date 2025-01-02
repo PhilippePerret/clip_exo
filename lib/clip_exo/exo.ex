@@ -152,6 +152,9 @@ defmodule ClipExo.Exo do
       exo.infos.reference
       |> URI.encode()
 
+    # On crée le dossier PDF dans le cas où il n'existerait pas
+    File.mkdir_p("#{expanded_folder_path(exo)}/pdf")
+
     to_pdf_command = """
     wkhtmltopdf 
     --enable-local-file-access
@@ -160,7 +163,7 @@ defmodule ClipExo.Exo do
     --footer-html "../footer.html"
     --footer-line --footer-spacing 10
     --replace "exo_titre" "#{titre}" --replace "exo_ref" "#{ref}"
-    "#{file_name}.html" "#{file_name}.pdf"
+    "#{file_name}.html" "pdf/#{file_name}.pdf"
     """
     |> String.trim()
     |> String.replace("\n", " ")
