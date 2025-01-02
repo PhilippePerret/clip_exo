@@ -1,13 +1,6 @@
 
 .admin { display: none; }
 
-body {
-  margin: 1.8cm 2.5cm 5cm;
-  width: 17cm;
-  zoom: 120%;	
-  font-size:13pt;
-  counter-reset: pageNumber;
-}
 
 @font-face {
   font-family: "AvenirNC";
@@ -22,13 +15,14 @@ body {
   font-style: italic;
 }
 
-@page {
-  size:	a4 portrait;
-  counter-incremente: pageNumber;
-  /* margin box at top right showing page number */
-  @bottom-right {
-    content: "Page " counter(pageNumber);
-  }
+body {
+  position: relative;
+  /* margin: 1.8cm 2.5cm 5cm; */
+  margin: 0;
+  width: 17cm;
+  zoom: 120%;	
+  font-size:13pt;
+  counter-reset: pageNumber;
 }
 
 .center {text-align: center}
@@ -42,29 +36,30 @@ header {
   position: relative;
   display:block;
   border:1px solid transparent ;
+  margin-top: 0;
 }
 
-img#logo {
+header img.logo {
   position:absolute;
-  top: -0.5cm;
-  left: 0cm;
+  top: 0;
+  left: 0;
   width: 3.5cm;
 }
-
-div.titre {
-  display:block;
+header div.titre {
+  display:inline-block;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 22pt;
-  /* font-weight: bold; */
   font-variant: small-caps;
   text-align:center;
+  line-height: 0.8em;
   margin-top: 2.5cm;
   margin-bottom: 2cm;
-  line-height: 0.8em;
+  margin-left: 4.5cm;
+  width: 9cm;
 }
 
 section#exercice {
-  margin-top:1cm;
+  margin-top: 1cm;
   margin-bottom: 5cm;
 }
 

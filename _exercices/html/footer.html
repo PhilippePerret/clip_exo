@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script type="text/javascript">
+    const PROPS = ["page", "sitepages","exo_titre","exo_ref", "date"];
+    function substitute() {
+      var vars = {};
+      var query_strings = document.location.search.substring(1).split('&');
+      for (var qs in query_strings) {
+        if (query_strings.hasOwnProperty(qs)) {
+          var temp_var = query_strings[qs].split('=', 2);
+          vars[temp_var[0]] = decodeURI(temp_var[1]);
+        }
+      }
+      // On met des espaces à la place des "/" dans la date
+      vars.date = vars.date.replace(/\//g, '&ThinSpace;');
+
+      // On met les valeurs dans les champs
+      for ( var i in PROPS ) {
+        var spanId = PROPS[i];
+        document.querySelector("span#" + spanId).innerHTML = vars[spanId]
+      }
+    }
+  </script>
+
+  <style type="text/css">
+    footer {
+      display: block;
+      text-align: center;
+      color: #777777;
+      font-family: Arial, Helvetica, Geneva;
+      margin:0;
+      margin-left:-8px;   /* pour que ça soit bien au bord */
+      margin-right:-8px;  /* idem */
+      padding:0;
+      /* width: calc(100% + 32px); */
+    }
+    footer span {
+      margin:0;
+      padding:0;
+    }
+    /* footer > span {margin-left: 2em;} */
+    footer > span#exo_titre {
+      float: left;
+      display:inline-block;
+      white-space: nowrap;
+    }
+    footer > span#pages {float:right}
+  </style>
+</head>
+<body onload="substitute()">
+
+  <footer>
+
+    <span id="exo_titre"></span>
+
+    <span id="pages">
+      <span id="page"></span><span>/</span><span id="sitepages"></span>
+    </span>
+
+    <span id="refs">
+      <span id="exo_ref"></span>
+      <span>/</span>
+      <span id="date"></span>
+    </span>
+  </footer>
+</body>
+</html>

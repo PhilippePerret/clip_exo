@@ -5,3 +5,5 @@ defmodule ClipExoWeb.ExoHTML do
   embed_templates "exo_html/*"
 
 end
+
+# IO.puts "Je charge"

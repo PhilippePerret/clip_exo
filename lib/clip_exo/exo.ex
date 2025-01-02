@@ -18,7 +18,6 @@ defmodule ClipExo.Exo do
       competences: [],
       niveau: nil,
       duree: nil,
-      nombre_pages: 2, # à mettre à jour
       css_files: nil
     },
     body:       "contenu brut de l'exercice",
@@ -36,6 +35,10 @@ defmodule ClipExo.Exo do
   @folder_html_relative "./_exercices/html"
   @folder_html Path.absname(@folder_html_relative)
   # IO.inspect(@folder_html, label: "\nDossier html")
+
+  @reg_front_matter ~r/(^|\r?\n)---\r?\n(?<front_matter>(?:.|\r?\n)*)\r?\n---\r?\n(?<body>(.|\r?\n)*)\z/Um
+  @reg_for_formateur ~r/(admin\:|\.admin|\:qcm)/
+  @reg_front_matter_line ~r/^(?<property>.*)[\:\=](?<value>.*)$/
 
   @data_rubriques [
     {"mission", "Mission"},
@@ -64,8 +67,20 @@ defmodule ClipExo.Exo do
 
   @doc """
   Reçoit les paramètres d'une requête et retourne un
-  %Exo valide, même si partiel
+  %Exo valide. Si :all est ajouté en second paramètre, toutes
+  les données de l'exercice sont chargées (dans exo.infos)
   """
+  def get_from_params(params, :all) do
+    exo_mini = get_from_params(params)
+    case load_data(exo_mini) do
+    {:error, erreur} -> 
+      {:error, erreur}
+    exo -> 
+      exo
+      |> IO.inspect(label: "\nINFOS MISE DANS EXO")
+    end
+  end
+
   def get_from_params(params) do
     exo_path =
       cond do
@@ -83,6 +98,7 @@ defmodule ClipExo.Exo do
       %__MODULE__{infos: %{path: exo_path, name: exo_path}}
     end
   end
+
 
   @doc """
   Retourne la liste des exercices du dossier ./_exercices/clipexo/
@@ -119,6 +135,59 @@ defmodule ClipExo.Exo do
       end
     end
   end
+
+  @doc """
+  Fonction qui produit le fichier PDF de l'exercice.
+
+  Il faut bien sûr que son fichier HTML ait été préalablement construit.
+  """
+  def to_pdf(exo) do
+
+    titre = 
+      exo.infos.titre
+      |> String.replace("\\n", " ")
+
+    to_pdf_command = """
+    wkhtmltopdf 
+    --quiet
+    --enable-local-file-access
+    --encoding 'utf-8'
+    -O portrait -T "15mm" -B "25mm" -L "20mm" -R "20mm"
+    --footer-html "../footer.html"
+    --footer-line --footer-spacing 10
+    --replace "exo_titre" "#{titre}" --replace "exo_ref" "#{exo.infos.reference}"
+    "#{exo.infos.name}.html" "#{exo.infos.name}.pdf"
+    """
+    |> String.trim()
+    |> String.replace("\n", " ")
+
+    to_folder_command = "cd \"#{expanded_folder_path(exo)}\""
+
+    res = System.shell("#{to_folder_command} && #{to_pdf_command}")
+    IO.inspect(res, label: "\nretour de commande PDF")
+
+    {:ok, exo} # pour le moment
+  end
+
+
+  @doc """
+  Fonction qui retourne les données de l'exercice, lues dans son
+  fichier, qui doit donc exister.
+  """
+  def load_data(exo) do
+    exo_path = exo_data_path(exo)
+    if File.exists?(exo_path) do
+      code = File.read!(exo_path)
+      |> IO.inspect(label: "\n\nCODE")
+      resultat = Regex.named_captures(@reg_front_matter, code)
+      |> IO.inspect(label: "\n\nRÉSULTAT DÉCOUPE")
+      infos = get_infos_from_front_matter(resultat["front_matter"])
+      %__MODULE__{infos: elem(infos, 1)}
+    else 
+      {:error, "Le fichier #{exo_path} est introuvable…"} 
+    end
+  end
+
 
   @doc """
   Fonction qui vérifie la validité des données pour la création du
@@ -347,8 +416,6 @@ defmodule ClipExo.Exo do
     |> decompose_header_and_body()
   end
 
-  @reg_front_matter ~r/(^|\n)---\n(?<front_matter>(?:.|\n)*)\n---\n(?<body>(.|\n)*)\z/Um
-  @reg_for_formateur ~r/(admin\:|\.admin|\:qcm)/
   defp decompose_header_and_body(code) do
     if Regex.match?(@reg_front_matter, code) do
 
@@ -381,7 +448,6 @@ defmodule ClipExo.Exo do
     end
   end
 
-  @reg_front_matter_line ~r/^(?<property>.*)[\:\=](?<value>.*)$/
   defp get_infos_from_front_matter(front_matter) do
     infos =
       String.split(front_matter, "\n")
@@ -432,29 +498,29 @@ defmodule ClipExo.Exo do
     System.shell("open \"#{expanded_folder_path(exo)}\"")
   end
 
-  @doc """
-  Ouvre dans chrome (pour impression ou PDF) les 2 ou 3 fichiers de
-  l'exercice.
-  """
-  def open_in_chrome(exo) do
-    if File.exists?(exo_html_file(exo)) do
-      files = 
-        for {name, path} <- [
-          {"Fichier Exercice", exo_html_file(exo)},
-          {"Fichier Formateur", exo_html_formateur_file(exo)},
-          {"Fichier caractéristiques", exo_html_specs_file(exo)}
-          ] do
-            if File.exists?(path) do
-              System.shell("open -a \"Google Chrome\" \"#{path}\"")
-              name
-            end
-        end
-      files = files |> Enum.reject(fn x -> is_nil(x) end) |> Enum.join(", ")
-      {:ok, "Fichiers ouverts : #{files}"}
-    else
-      {:error, "Le fichier de l'exercice est introuvable. Il faut peut-être le produire."}
-    end
-  end
+  # @doc """
+  # Ouvre dans chrome (pour impression ou PDF) les 2 ou 3 fichiers de
+  # l'exercice.
+  # """
+  # def open_in_chrome(exo) do
+  #   if File.exists?(exo_html_file(exo)) do
+  #     files = 
+  #       for {name, path} <- [
+  #         {"Fichier Exercice", exo_html_file(exo)},
+  #         {"Fichier Formateur", exo_html_formateur_file(exo)},
+  #         {"Fichier caractéristiques", exo_html_specs_file(exo)}
+  #         ] do
+  #           if File.exists?(path) do
+  #             System.shell("open -a \"Google Chrome\" \"#{path}\"")
+  #             name
+  #           end
+  #       end
+  #     files = files |> Enum.reject(fn x -> is_nil(x) end) |> Enum.join(", ")
+  #     {:ok, "Fichiers ouverts : #{files}"}
+  #   else
+  #     {:error, "Le fichier de l'exercice est introuvable. Il faut peut-être le produire."}
+  #   end
+  # end
 
 
   # Ajoute si nécessaire ".clip.exo" ou simplement ".exo" au nom du fichier fourni
@@ -518,7 +584,6 @@ defmodule ClipExo.Exo do
     auteur: #{params["auteur"]}
     created_at: #{Date.utc_today()}
     revisions: [#{params["revisions"]}]
-    nombre_pages: 2
     ---
     #{rubriques}
     """
@@ -543,6 +608,13 @@ defmodule ClipExo.Exo do
   #
   ###################################################################
 
+
+  def exo_data_path(exo) do
+    case get_path_of_exo(exo.infos.name) do
+    {:ok, path} -> path
+    {:error, erreur} -> raise erreur
+    end
+  end
 
   # Retourne le chemin d'accès au fichier html de l'exercice
   def exo_html_file(exo) do
