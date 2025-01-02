@@ -1,7 +1,6 @@
 
 .admin { display: none; }
 
-
 @font-face {
   font-family: "AvenirNC";
   src: url("z_AvenirNextCondensed-Regular.ttf");
@@ -51,7 +50,7 @@ header div.titre {
   font-size: 22pt;
   font-variant: small-caps;
   text-align:center;
-  line-height: 0.8em;
+  line-height: 1em;
   margin-top: 2.5cm;
   margin-bottom: 2cm;
   margin-left: 4.5cm;
