@@ -43,10 +43,14 @@ defmodule ClipExoWeb.AppComponents do
     <div><code>:raw</code> (code brut — ne sera pas modifié)</div>
     
     <h4>Types de paragraphes</h4>
-    <p>Ils peuvent se mettre avant le paragraphe avec <code>&lt;class: Paragraphe…</code></p>
+    <p>Ils peuvent se mettre avant le paragraphe avec <code>&lt;class: Paragraphe…></code></p>
+    <div><code>rub:</code> Titre de rubrique</div>
+    <div><code>rubi:</code> Titre de rubrique « inline » — quand la description suit</div>
+    <div><code>doigt:</code> Texte décalé à droite et « pointé » par un doigt</div>
+    <div><code>cadre:</code> Texte encadré</div>
 
     <h4>Étapes avec pictos</h4>
-    <p>(à utiliser dans l'environnement d'une liste d'étapes (<code>:etapes</code>)</p>
+    <p>(à utiliser dans l'environnement <code>:etapes</code>)</p>
     <div><code>:souris</code> : une étape à la souris</div>
     <div><code>:clavier</code> : des touches à presser</div>
     <div><code>:clic</code> : un clic de souris</div>
@@ -72,7 +76,10 @@ defmodule ClipExoWeb.AppComponents do
     <p>(à utiliser dans un environnement <code>:qcm</code>)</p>
     <p>On détermine le type de question par <code>:qr </code> (question à boutons radio — choix unique) ou <code>:qc</code> (question à cases à cocher — choix multiples)</p>
     <p>Chaque question est déterminée ensuite par <code>:r&lt;points></code>. Les points vont impérativement de 0 à 9. À partir de 5, les réponses sont considérées comme juste (donc une alternance de 0 et de 5 suffit à distinguer les bonnes réponses des mauvaises).</p>
-    <p>Avec l'option <code>::permettre_ne_sait_pas</code>, à chaque question on ajoute une case ou un bouton radio « Je ne sais pas ». Cette réponse vaut toujours 1 point.</p>
+    <h5>Options générales du formulaires</h5>
+    <p><code>::permettre_ne_sait_pas</code> : à chaque question on ajoute une case ou un bouton radio « Je ne sais pas ». Cette réponse vaut toujours 1 point.</p>
+    <h5>Options pour les questions</h5>
+    <p><code>::horizontal</code> : les réponses seront présentées horizontalement pour cette question.</p>
 
     """
   end

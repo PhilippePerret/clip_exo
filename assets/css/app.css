@@ -185,6 +185,12 @@ h4 {
   margin-bottom: 0.8em;
 }
 
+h5 {
+  font-size:15pt;
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
 blockquote {
   font-style: italic;
 }
