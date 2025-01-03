@@ -186,6 +186,12 @@ div.reference:before {
   margin-left: 1em;
 }
 
+/* 
+
+  CONTENEUR ETAPES
+
+*/
+
 section.etapes {
   counter-reset: compteurPas;
   margin-left: 2em;
@@ -226,9 +232,7 @@ section.etapes div.pas.rouge {
   color:red;
 }
 
-section.liste {
-
-}
+/* section.liste {} */
 
 /* Les lignes de code */
 
@@ -305,6 +309,7 @@ table.conteneur.borders-v tr {
 */
 section.qcm {
   display:block;
+  counter-reset: compteurQuestions;
 }
 section.qcm div.question {
   margin-top:2.2em;
@@ -313,6 +318,13 @@ section.qcm div.question {
   background-color: slategrey;
   color: white;
   padding: 8px 12px;
+  counter-reset: compteurReponses;
+  counter-increment: compteurQuestions;
+}
+section.qcm div.question:before {
+  content: counter(compteurQuestions) ". ";
+  display:inline-block;
+  width: 24px;
 }
 section.qcm div.question:after {
   font-weight: normal;
@@ -329,24 +341,38 @@ section.qcm div.question.checkbox:after {
   content: "(Cocher toutes les bonnes réponses)";
 }
 
-section.qcm div.reponse {
+section.qcm span.reponse {
   position: relative;
   font-size: 0.9em;
   margin-left: 5em;
   margin-top: 6px;
   width: 460px;
+  counter-increment: compteurReponses
 }
-section.qcm div.reponse:before {
+section.qcm span.reponse:not(.horizontal) {
+  display: block;
+}
+section.qcm span.reponse.horizontal,
+section.qcm span.reponse.horizontal + span.reponse {
+  display: inline-block;
+  margin-right: 1rem;
+  width: auto;
+}
+
+
+section.qcm span.reponse:not(.horizontal):before {
   position:absolute;
   left: -1.7em;
 }
-section.qcm div.reponse.checkbox:before {
-  content: "❑";
-  top: 1px;
+section.qcm span.reponse.checkbox:before {
+  content: counter(compteurReponses, lower-alpha) ") ";
+  /* top: 1px; */
+  margin-right: 12px;
 }
-section.qcm div.reponse.radio:before {
-  content: "◎";
-  top: -3px;
+section.qcm span.reponse.radio:before {
+  content: counter(compteurReponses, lower-alpha) ")";
+  /* top: -3px; */
+  margin-right: 12px;
 }
 
 

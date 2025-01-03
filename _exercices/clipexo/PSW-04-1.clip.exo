@@ -66,9 +66,7 @@ rub:QCM terminal
 :qcm
 ::permettre_ne_sait_pas
 :qr `id` et `class` s'appellent des *attributs*
-:r5 vrai
-:r0 faux
+:r5 vrai | :r0 faux
 :
 :qr `id` et `class` sont les seuls attributs qu'on peut trouver dans un nœud.
-:r0 vrai
-:r5 faux
+:r0 vrai | :r5 faux

@@ -139,7 +139,7 @@ defmodule ExoLine.Builder do
     "<tr>" <> row <> "</tr>"
   end
   # - Ligne de LISTE -
-  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :liste} = conteneur) do
+  def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :liste} = _conteneur) do
     "<li>#{exoline.fcontent}</li>"
   end
   # - Ligne d'ÉTAPES -
@@ -166,10 +166,10 @@ defmodule ExoLine.Builder do
       "<div class=\"question #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
     true ->
       # Une réponse
-      # IO.inspect(exoline, label: "\nRÉPONSE dans construction")
-      "<div data-points=\"#{exoline.data.points}\" class=\"reponse #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
+      "<span data-points=\"#{exoline.data.points}\" class=\"reponse #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</span>"
     end
   end
+
   # Erreur : mauvais conteneur
   def to_html(%ExoLine{} = exoline, %ExoConteneur{} = conteneur) do
     "<div class=\"warning\">Line dans CONTENEUR INCONNU (#{conteneur.type}) : #{exoline.content}</div>"
@@ -317,7 +317,7 @@ defmodule ExoConteneur.Builder do
     collector = 
       conteneur.lines
       |> Enum.reject(fn line -> String.trim(line.content) == "" end)
-      |> Enum.reduce(%{type_courant: nil, lines: []}, fn line, collector -> 
+      |> Enum.reduce(%{type_courant: nil, lines: []}, fn line, collector ->
           if String.at(line.tline, 0) == "q" do
             # Pour une question
             qtype = (String.at(line.tline, 1) == "r") && "radio" || "checkbox"
@@ -336,7 +336,7 @@ defmodule ExoConteneur.Builder do
             #   de 6 à 9, elle reste sur très juste — vert foncé
             points = line.tline |> String.at(1) |> StringTo.value()
             new_line = Map.merge(line, %{
-              classes: [collector.type_courant],
+              classes: (line.classes || []) ++ [collector.type_courant],
               data:     %{points: points || 0}
             })
             %{ collector | lines: collector.lines ++ [new_line]}
@@ -344,7 +344,7 @@ defmodule ExoConteneur.Builder do
         end)
     new_lines = collector.lines
     
-    IO.inspect(new_lines, label: "\nNew_lines à la fin")
+    # IO.inspect(new_lines, label: "\nNew_lines à la fin")
 
     conteneur = %{conteneur | lines: new_lines}
     get_structure_section(conteneur, "section")
@@ -413,7 +413,17 @@ defmodule ExoConteneur.Builder do
     # est encore dans un questionnaire)
     lines_at_the_end = 
       if (collector.last_is_question == true) do
-        collector.lines ++ [case_dont_know]
+        # Si c'est une réponse sur une ligne horizontale (classes 
+        # contient 'horizontal'), il faut l'ajouter à la case don't
+        # know
+        # TODO: MALHEUREUSEMENT, ça n'ajoute la propriété "horizontal" que
+        # si c'est la dernière ligne. Pour le moment, on joue sur les classes
+        # CSS .horizontal + .reponse pour traiter l'alignement.
+        choix_dont_know =
+          if Enum.member?(Enum.at(collector.lines, -1).classes, "horizontal") do
+            %{case_dont_know | classes: ["horizontal"]}
+          else case_dont_know end
+        collector.lines ++ [choix_dont_know]
       else collector.lines end
 
     lines_at_the_end

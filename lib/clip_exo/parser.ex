@@ -152,10 +152,14 @@ defmodule ExoParser do
   rub.main: Paragraphe    Paragraphe avec deux classe CSS appliquées
   :<conteneur>            Si +conteneur+ est vide, c'est le début d'un nouveau conteneur.
                           On peut trouver les conteneur :raw, :table, :etapes, :blockcode, etc.
+  ::option(s)             Options de conteneur (ou de certaines lignes comme les questions dans
+                          un QCM)
   :   Paragraphe          Un paragraphe à mettre dans le conteneur courant. Le conteneur courant
                           doit être défini.
   :=> Paragraphe          Un résultat dans un conteneur :etapes par exemple
   :+  Paragraphe          Une ligne de code à mettre en exergue dans un conteneur de type :blockcode
+  :qr/qc                  Une question dans un QCM
+  :r<points>              Une réponse dans un QCM
   
   +conteneur+
     Structure courante (ou nil)
@@ -262,11 +266,15 @@ defmodule ExoParser do
         # Note 1 : Produit une erreur s'il n'y a pas de conteneur
         #          courant. Dans le cas contraire, on met la ligne 
         #          directement dans le conteneur
+        # Étude du cas spécial du conteneur :qcm qui peut contenir
+        # des lignes définissant plusieurs réponses horizontalement.
+        # Ce conteneur fait donc l'étude particulière de cette situa-
+        # tion
         if conteneur do
-          exoline = parse_cssed_line_content(type_cont <> rest)
           tline = SafeString.nil_if_empty(type_line, %{trim: true})
-          exoline = Map.merge(exoline, %{preline: String.replace(pre_line, "\t", "  "), tline: tline})
-          conteneur = %{conteneur | lines: conteneur.lines ++ [exoline]}
+          exolines = traite_rawline_conteneur(%{rline: type_cont <> rest, tline: tline, pline: pre_line}, conteneur)
+          # IO.inspect(exolines, label: "\nEXOLIGNES AJOUTÉES")
+          conteneur = %{conteneur | lines: conteneur.lines ++ exolines}
           {:ok, [conteneur: conteneur]}
         else
           {:error, "Ligne de conteneur sans conteneur : '#{line}'"}
@@ -274,11 +282,50 @@ defmodule ExoParser do
       true ->
         # Quand toutes les captures ont été faites mais qu'elles sont
         # vides ou qu'il y a une incompatibilité.
-        # TODO: Il faudrait peut-être plus analysé ça.
+        # TODO: Il faudrait peut-être plus analyser ça.
         {:error, "Aucune correspondance => Impossible d'analyse la ligne '#{line}'…"}
     end
 
   end
+
+  defp traite_rawline_conteneur(data_line, %ExoConteneur{type: :qcm} = _conteneur) do
+    if Regex.match?(~r/\|/, data_line.rline) do
+      # Il y a plusieurs réponses sur cette ligne de QCM (qui ne peut être une question)
+      # Ces réponses doivent être affichées horizontalement
+      %{rline: raw_line, tline: tline, pline: pre_line} = data_line
+      raw_line
+      |> String.split("|")
+      |> Enum.map(fn x -> 
+        %{"ltype" => line_type, "lraw" => raw_line} = Regex.named_captures(~r/^(?:\:(?<ltype>r[0-9]\s))?(?<lraw>.*)$/, String.trim(x))
+        line_type = line_type |> String.trim() |> SafeString.nil_if_empty()
+        # IO.inspect([x, line_type, raw_line], label: "\nORIGINALE, TLINE, RAW LINE")
+        subdata = %{rline: raw_line, tline: line_type || tline, pline: pre_line}
+        exoline = traite_rawline_conteneur(subdata) # => #ExoLine
+        %{exoline | classes: (exoline.classes || []) ++ ["horizontal"]}
+        end)
+    else
+      # Il y a une seule réponse sur cette ligne de QCM OU c'est une 
+      # question
+      [traite_rawline_conteneur(data_line)]
+    end
+  end
+  # Retourne la ligne unique dans une liste (car la fonction qui 
+  # reçoit met directement la liste dans le conteneur, car il peut
+  # y avoir plusieurs lignes dans une ligne — c'est le cas pour des
+  # réponses horizontales dans un QCM)
+  defp traite_rawline_conteneur(data_line, _conteneur) do
+    exoline = traite_rawline_conteneur(data_line)
+    [exoline]
+  end
+  # La "vraie" fonction qui traite la ligne et qui retourne une %ExoLine
+  # ATTENTION : Contrairement aux deux autres fonctions de même nom, celle-ci
+  # ne retourne qu'une %ExoLine, pas une liste.
+  defp traite_rawline_conteneur(data_line) do
+    %{rline: raw_line, tline: tline, pline: pre_line} = data_line
+    exoline = parse_cssed_line_content(raw_line)
+    Map.merge(exoline, %{preline: String.replace(pre_line, "\t", "  "), tline: tline})
+  end
+
 
   # Traitement d'une ligne de format : 'css.css: Contenu'
   # Note

@@ -69,7 +69,8 @@ defmodule ExoLine do
     type:     :line,  # toujours ? :line
     content:  nil, 
     fcontent: nil,    # Contenu formaté
-    classes:  nil,    # ou liste des css
+    classes:  nil,    # ou liste des css (pour un affichage
+                      # on ajoute la classe 'horizontal')
     tline:    nil,    # ou le type de line (caractères juste après ":")
     preline:  nil,    # ou les espaces/tabulations avant
     data:     nil     # Pour mettre n'importe quelle donnée. Par
