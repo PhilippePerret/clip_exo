@@ -29,9 +29,10 @@ La première chose à comprendre est que l'opération de stylisation comprend de
 
 Pour sélectionner des éléments HTML — et les désigner —, on a de nombreux moyens, mais trois sont les plus courants. On peut y faire référence par :
 
-- le **type de nœud**, c'est-à-dire de "boite", de "conteneur" (par exemple `div` ou `body` ou `img`, etc.),
-- l'**identifiant** de la boite, que nous avons déjà utilisé dans les exercices précédents (attribut qui s'appelle `id),
-- la  ou les **classes CSS** contenues dans l'attribut `class`.
+:liste
+: le **type de nœud**, c'est-à-dire de "boite", de "conteneur" (par exemple `div` ou `body` ou `img`, etc.),
+: l'**identifiant** de la boite, que nous avons déjà utilisé dans les exercices précédents (attribut qui s'appelle `id),
+: la  ou les **classes CSS** contenues dans l'attribut `class`.
 
 Par exemple, si on trouve le nœud/la boite suivante :
 
@@ -39,7 +40,12 @@ Par exemple, si on trouve le nœud/la boite suivante :
 ::no_num
 : <div id="maBoite" class="maClasse1 maClasse2 maclasse3">…</div>
 
-… on voit un type de nœud `div`, un identifiant `maBoite` et trois classes CSS (séparées par des espaces, comme c'est l'usage).
+… on voit un type de nœud :
+doigt: `&lt;div>`, 
+…un identifiant :
+doigt: `id = maBoite` 
+… et trois classes CSS (séparées par des espaces, comme c'est l'usage) :
+doigt: `class = maClasse1`, `maClasse2` et `maClasse3`.
 
 L'identifiant doit absolument être unique dans toute la page. Si une boite s'appelle `maBoite`, aucune autre boite ne doit porter le même identifiant.
 
@@ -53,3 +59,16 @@ Les règles CSS permettent de mettre le contenu en forme et même d'intervenir s
 
 
 rub: Recommandations
+  
+ 
+rub:QCM terminal
+
+:qcm
+::permettre_ne_sait_pas
+:qr `id` et `class` s'appellent des *attributs*
+:r5 vrai
+:r0 faux
+:
+:qr `id` et `class` sont les seuls attributs qu'on peut trouver dans un nœud.
+:r0 vrai
+:r5 faux

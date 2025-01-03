@@ -13,12 +13,13 @@ defmodule ExoInnerFormater do
 
   Dans l'idée, on peut avoir n'importe quelle classe à partir du
   moment où elle est définie dans clip_exo.css ou dans le fichier
-  CSS propre à l'exercice (non encore implémenté)
+  CSS propre à l'exercice [non encore implémenté]
   """
   @liste_classes_paragraphe [
     {"rub", "Titre de rubrique (p.e. « Mission » ou « Aide »)" },
     {"rubi", "Pour 'rub inline'. Comme si dessus, mais sur une seule ligne"},
-    {"cadre", "Pour un paragraphe dans un cadre"}
+    {"cadre", "Pour un paragraphe dans un cadre"},
+    {"doigt", "Pour « pointer » un texte"}
   ]
 
   def get_paragraph_styles() do
@@ -139,7 +140,7 @@ defmodule ExoLine.Builder do
   end
   # - Ligne de LISTE -
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :liste} = conteneur) do
-    "<ul class=\"#{ExoLine.classes_css(exoline, conteneur)}\"><li>#{exoline.fcontent}</li></ul>"
+    "<li>#{exoline.fcontent}</li>"
   end
   # - Ligne d'ÉTAPES -
   def to_html(%ExoLine{} = exoline, %ExoConteneur{type: :etapes} = conteneur) do
@@ -347,6 +348,13 @@ defmodule ExoConteneur.Builder do
 
     conteneur = %{conteneur | lines: new_lines}
     get_structure_section(conteneur, "section")
+  end
+
+  #
+  # CONTENEUR LISTE
+  #
+  def to_html(%ExoConteneur{type: :liste} = conteneur) do
+    get_structure_section(conteneur, "ul")
   end
 
   #

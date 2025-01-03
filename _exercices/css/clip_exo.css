@@ -83,6 +83,7 @@ section.blockcode > div.line, section.blockcode > div.linem {
   display: block;
   margin-left: 1cm;
   position: relative;
+  margin-top: 0 !important;
 }
 section.blockcode:not(.no_num) > div.line, section.blockcode:not(.no_num) > div.linem {
   counter-increment: monCompteur;
@@ -134,6 +135,17 @@ div.cadre {
   padding: 0.5em;
   font-size: 0.85em;
   margin:1em;
+}
+
+div.doigt {
+  margin-left:4cm;
+  vertical-align:middle;
+}
+div.doigt:before {
+  content: "☞";
+  font-size: 20pt;
+  margin-right: 0.5rem;
+  vertical-align:middle;
 }
 
 /* 
