@@ -17,6 +17,9 @@
 
 <h1>Données de l’exercice</h1>
 
+<%
+IO.inspect(@form, label: "\n@FORM")
+%>
 
 <.form 
   for={@form}
@@ -39,7 +42,7 @@
       <select name="exo[niveau]" id="exo_niveau">
         <option value="">Niveau…</option>
         <%= for {val, lab} <- @data_niveaux do %>
-          <option value={val} selected={@exo["niveau"] == val}><%= lab %></option>
+          <option value={val} selected={@form["niveau"] == val}><%= lab %></option>
         <% end %>
       </select>
     </div>
@@ -61,7 +64,7 @@
           id={"rub_#{value}"}
           name="exo[rubriques][]"
           value={value}
-          checked={value in @exo["rubriques"]}
+          checked={value in @form.params["rubriques"]}
           />
         <label for={"rub_#{value}"}><%= label %></label>
       </div>

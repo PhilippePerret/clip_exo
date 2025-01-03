@@ -60,10 +60,10 @@ defmodule ClipExoWeb.ExoController do
     exo = Exo.get_from_params(params)
     conn =
       case Exo.open(exo) do
-      {:ok, exo} -> 
+      {:ok, _exo} -> 
         conn |> put_flash(:info, "L'exercice est ouvert sur le bureau.")
       {:error, erreur} ->
-        conn |> put_flash(:error, "Impossible d'ouvrir #{exo.infos.path}")
+        conn |> put_flash(:error, "Impossible d'ouvrir #{exo.infos.path} : #{erreur}")
       end
 
     origin  = Enum.at(Plug.Conn.get_req_header(conn, "origin"), 0)
@@ -114,7 +114,7 @@ defmodule ClipExoWeb.ExoController do
     form = params_exo |> to_form(as: "exo")
     render(conn, :data_exo_form, %{
       form:           form, 
-      exo:            params_exo, 
+      # exo:            params_exo, 
       data_rubriques: @data_rubriques,
       data_niveaux:   @data_niveaux
     })

@@ -179,7 +179,7 @@ defmodule ClipExo.Exo do
     erreurs = erreurs ++
     if File.exists?(exo_html_file(exo)) do
       case to_pdf(exo, exo.infos.name) do
-      {:ok, exo} -> []
+      {:ok, _exo} -> []
       {:error, erreur} -> [erreur]
       end
     else
@@ -189,7 +189,7 @@ defmodule ClipExo.Exo do
     erreurs = erreurs ++
     if File.exists?(exo_html_specs_file(exo)) do
       case to_pdf(exo, "#{exo.infos.name}-specs") do
-      {:ok, exo} -> []
+      {:ok, _exo} -> []
       {:error, erreur} -> [erreur]
       end
     else
@@ -199,7 +199,7 @@ defmodule ClipExo.Exo do
     erreurs = erreurs ++ 
     if File.exists?(exo_html_formateur_file(exo)) do
       case to_pdf(exo, "#{exo.infos.name}-formateur") do
-      {:ok, exo}        -> []
+      {:ok, _exo}        -> []
       {:error, erreur}  -> [erreur]
       end
     else [] end
@@ -280,7 +280,7 @@ defmodule ClipExo.Exo do
         |> String.replace("_", " ")
       end)
       |> Enum.join(", ")
-      |> PPString.nil_if_empty()
+      |> SafeString.nil_if_empty()
     end
   end
 
@@ -329,7 +329,7 @@ defmodule ClipExo.Exo do
   def build(params_exo, options \\ %{}) do
     # IO.inspect(params_exo, label: "\nPARAMS_EXO")
     params_exo =
-      if params_exo["path"] |> PPString.nil_if_empty() |> is_nil() do
+      if params_exo["path"] |> SafeString.nil_if_empty() |> is_nil() do
         rappel_last_traitement() || raise("Il faut donner le path du fichier exercice.")
       else
         memo_last_traitement(params_exo)
@@ -545,31 +545,6 @@ defmodule ClipExo.Exo do
     end
   end
 
-  # @doc """
-  # Ouvre dans chrome (pour impression ou PDF) les 2 ou 3 fichiers de
-  # l'exercice.
-  # """
-  # def open_in_chrome(exo) do
-  #   if File.exists?(exo_html_file(exo)) do
-  #     files = 
-  #       for {name, path} <- [
-  #         {"Fichier Exercice", exo_html_file(exo)},
-  #         {"Fichier Formateur", exo_html_formateur_file(exo)},
-  #         {"Fichier caractéristiques", exo_html_specs_file(exo)}
-  #         ] do
-  #           if File.exists?(path) do
-  #             System.shell("open -a \"Google Chrome\" \"#{path}\"")
-  #             name
-  #           end
-  #       end
-  #     files = files |> Enum.reject(fn x -> is_nil(x) end) |> Enum.join(", ")
-  #     {:ok, "Fichiers ouverts : #{files}"}
-  #   else
-  #     {:error, "Le fichier de l'exercice est introuvable. Il faut peut-être le produire."}
-  #   end
-  # end
-
-
   # Ajoute si nécessaire ".clip.exo" ou simplement ".exo" au nom du fichier fourni
   # dans +path+ (qui peut être un simple nom de fichier ou un path complet)
   defp add_extensions_if_needed(path) do
@@ -605,7 +580,8 @@ defmodule ClipExo.Exo do
       {:error, "Un fichier d’exercice porte déjà le nom #{exo_name}\n(#{exo_path})"}
     true ->
       # On peut créer le fichier exercice
-      File.write!(exo_path, modele_preformated(params), [:utf8])
+      # File.write!(exo_path, modele_preformated(params), [:utf8])
+      File.write!(exo_path, modele_preformated(params))
       {:ok, params}
     end
   end
@@ -638,7 +614,8 @@ defmodule ClipExo.Exo do
   end
 
   defp formated_niveau(params) do
-    {_index, label} = Enum.at(@data_niveaux, String.to_integer(params["niveau"] || 0))
+    params_niveau = SafeString.to_integer(params["niveau"])
+    {_index, label} = Enum.at(@data_niveaux, params_niveau)
     label
   end
 

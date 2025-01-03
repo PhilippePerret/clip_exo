@@ -249,7 +249,7 @@ defmodule ExoParser do
         # Note 2 : Il peut définir des paramètres (qui seront évalués 
         #          plus tard)
         if type_conteneur_valid?(type_cont) do
-          rest = PPString.nil_if_empty(rest)
+          rest = SafeString.nil_if_empty(rest)
           {:ok, [type: :conteneur, conteneur: %ExoConteneur{type: String.to_atom(type_cont)}, params: rest]}
         else
           {:error, "Type de conteneur inconnu : '#{type_cont}'"}
@@ -264,7 +264,7 @@ defmodule ExoParser do
         #          directement dans le conteneur
         if conteneur do
           exoline = parse_cssed_line_content(type_cont <> rest)
-          tline = PPString.nil_if_empty(type_line, %{trim: true})
+          tline = SafeString.nil_if_empty(type_line, %{trim: true})
           exoline = Map.merge(exoline, %{preline: String.replace(pre_line, "\t", "  "), tline: tline})
           conteneur = %{conteneur | lines: conteneur.lines ++ [exoline]}
           {:ok, [conteneur: conteneur]}
