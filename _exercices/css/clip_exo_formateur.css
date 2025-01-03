@@ -21,33 +21,33 @@
     - Une réponse à plus de 1 point est considérée comme bonne.
 
 */
-section.qcm div.reponse:not([data-points="0"]):not([data-points="1"]):after {
+section.qcm span.reponse:not([data-points="0"]):not([data-points="1"]):after {
   content: "✅";
   display:inline-block;
   margin-left: 0.5em;
   padding: 2px 10px;
 }
-section.qcm div.reponse[data-points="2"]:after {
+section.qcm span.reponse[data-points="2"]:after {
   background-color: #EEFFEE;
 }
-section.qcm div.reponse[data-points="3"]:after {
+section.qcm span.reponse[data-points="3"]:after {
   background-color: #AAFFAA;
 }
-section.qcm div.reponse[data-points="4"]:after {
+section.qcm span.reponse[data-points="4"]:after {
   background-color: #77FF77;
 }
-section.qcm div.reponse[data-points="5"]:after {
+section.qcm span.reponse[data-points="5"]:after {
   background-color: #33FF33;
 }
-section.qcm div.reponse[data-points="6"]:after {
+section.qcm span.reponse[data-points="6"]:after {
   background-color: green;
 }
-section.qcm div.reponse[data-points="7"]:after {
+section.qcm span.reponse[data-points="7"]:after {
   background-color: green;
 }
-section.qcm div.reponse[data-points="8"]:after {
+section.qcm span.reponse[data-points="8"]:after {
   background-color: green;
 }
-section.qcm div.reponse[data-points="9"]:after {
+section.qcm span.reponse[data-points="9"]:after {
   background-color: green;
 }
