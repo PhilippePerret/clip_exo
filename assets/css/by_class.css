@@ -12,3 +12,9 @@ nav {display:block}
 
 .right {text-align: right}
 .left {text-align: left} /* dans un contexte right */
+
+
+form.disabled, form.disabled button {cursor: not-allowed!important}
+form.disabled {opacity: 0.3}
+form.disabled:hover {opacity:0.3}
+form.disabled:hover button {background-color:black}

@@ -29,17 +29,16 @@
       <% 
         exo = ClipExo.Exo.get_from_params(@exo)
         exo_path = exo.infos.name
-        has_html_files = ClipExo.Exo.exists_html_files?(exo)
+        has_html_files  = ClipExo.Exo.exists_html_files?(exo)
+        has_folder      = ClipExo.Exo.has_html_folder?(exo)
       %>
     
       <section id="exo-boutons">
         <span>Exercice courant (<%= exo_path %>)</span>
-        <.bouton type="ouvrir" path={exo_path} name="Ouvrir son dossier" />
+        <.bouton type="ouvrir" path={exo_path} name="Ouvrir son dossier" actif={has_folder} />
         <.bouton type="editer" path={exo_path} name="Éditer son fichier" />
         <.bouton type="produire" path={exo_path} name="Produire les HTML" />
-        <%= if has_html_files do %>
-          <.bouton type="produire_pdf" path={exo_path} name="Produire les PDF" />
-        <% end %>
+        <.bouton type="produire_pdf" path={exo_path} name="Produire les PDF" actif={has_html_files} />
       </section>
     <% end %>
     <section id="content">

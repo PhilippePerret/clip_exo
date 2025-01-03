@@ -10,16 +10,18 @@ defmodule ClipExoWeb.AppComponents do
   attr :path, :string, required: true # path de l'exercice
   attr :class, :string, default: "" # class CSS éventuelle
   attr :name, :string, default: nil
+  attr :actif, :boolean, default: true
 
   def bouton(assigns) do
     assigns = Map.merge(assigns, %{
       route:  "/exo/#{assigns.type}",
-      bouton: assigns.name || @ui_boutons[assigns.type]
+      bouton: assigns.name || @ui_boutons[assigns.type],
+      disabled: not(assigns.actif)
     })
     ~H"""
-    <form action={@route} method="POST">
+    <form action={@route} method="POST" class={@actif && "" || "disabled"}>
       <input type="hidden" name="exo[path]" value={@path} />
-      <button type="submit" class={@class}><%= @bouton %></button>
+      <button disabled={@disabled} type="submit" class={@class}><%= @bouton %></button>
     </form>
     """
   end

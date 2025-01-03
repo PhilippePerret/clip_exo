@@ -687,6 +687,10 @@ defmodule ClipExo.Exo do
     "#{exo.infos.name}-formateur.html"
   end
 
+  def has_html_folder?(exo) do
+    File.exists?(exo_html_folder(exo))
+  end
+
   def exo_html_folder(exo) do
     Path.join([@folder_html, exo.infos.name])
   end
