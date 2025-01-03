@@ -22,6 +22,14 @@
   }
 </script>
 
+<style type="text/css">
+  textarea#exo_contenu {
+    border-color: #DDDDDD;
+  }
+  textarea#exo_contenu:focus {
+    outline: none;
+  }
+</style>
 <%
 file_name = @exo["path"]
 %>
@@ -31,7 +39,10 @@ file_name = @exo["path"]
   <input type="hidden" name="exo[path]" value={file_name} />
   <input type="hidden" id="exo_scrolling" name="exo[scrolling]" />
 
-  <textarea name="exo[contenu]" id="exo_contenu" style="width:100%;height:800px;padding:1em;">
+  <textarea 
+    name="exo[contenu]" 
+    id="exo_contenu"
+    style="width:100%;height:800px;padding:1em;">
     <%= @exo["contenu"] %>
   </textarea>
   <script type="text/javascript">
