@@ -1,6 +1,6 @@
 ---
-titre: Trop stylé !
-reference: PSW-04
+titre: Des nœuds dans la tête…\nLe QCM
+reference: PSW-04-1
 name: psw-04-1
 path: psw-04-1.clip.exo
 competences: [connaissance de la définition (structure et contenu) d'un nœud, contenant\, contenu et attributs]
@@ -24,3 +24,10 @@ rub:QCM
 :
 :qr `id` et `class` sont les seuls attributs qu'on peut trouver dans un nœud.
 :r0 vrai | :r5 faux
+:
+:qr Les termes *boite*, *nœuds*, *balise* représentent des choses différentes
+:r0 vrai | :r5 faux
+:
+:qr Il existe un très grand nombre d'attributs
+:r5 vrai | :r0 faux
+:

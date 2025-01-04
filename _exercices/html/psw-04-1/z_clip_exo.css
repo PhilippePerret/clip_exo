@@ -322,9 +322,9 @@ section.qcm div.question {
   counter-increment: compteurQuestions;
 }
 section.qcm div.question:before {
-  content: counter(compteurQuestions) ". ";
+  content: "Q" counter(compteurQuestions) ". ";
   display:inline-block;
-  width: 24px;
+  width: 40px;
 }
 section.qcm div.question:after {
   font-weight: normal;
