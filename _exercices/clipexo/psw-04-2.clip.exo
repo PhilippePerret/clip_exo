@@ -1,0 +1,127 @@
+---
+titre: Petite leçon de Web\nNœuds, contenu et attributs
+reference: PSW-04-2
+name: psw-04-2
+path: psw-04-2.clip.exo
+competences: [cf. QCM]
+logiciels:
+niveau: Grand débutant
+duree: [30, 60]
+auteur: Philippe PERRET
+created_at: 2025-01-04
+revisions: []
+---
+rub: Mission
+Lire cette "petite leçon de Web" afin de pouvoir remplir le questionnaire qui accompagne ce document (référence PSW-04-1).
+
+rub: Petite leçon de Web
+
+**CONTENANTS/NŒUDS**
+
+Dans une page web, une *page HTML* telle que nous l'avons déjà vue, on trouve une grande variété de type de *boites* — qu'on appelle aussi *nœuds*. Chaque type de nœud a ses particularités, ses fonctionnalités. De façon non exhaustive, on trouve par exemple (inutile des les retenir pour le moment) :
+
+:liste
+: les `&lt;a>` qui permettent de rejoindre une autre page (ou de placer une *ancre*),
+: les `&lt;img>` qui permettent d’insérer des images,
+: les `&lt;form>` qui permettent de créer des formulaires,
+: les `&lt;textarea>` qui permettent d’entrer du texte dans un formulaire,
+: les `&lt;audio>` et `&lt;video>` qui permettent d’insérer du son et de la vidéo,
+: les `&lt;table>` qui permettent de créer des tableaux, 
+: les `&lt;ul>` et `&lt;ol>` qui permettent de faire des listes à puces ou listes numérotées,
+: les `&lt;p>` qui permettent d’être des paragraphes de texte.
+: etc. etc. il y en a pléthores.
+
+doigt: On parle indifféremment de *nœuds*, de *balise*, de *boite* ou simplement d'*élément* pour désigner ces objets HTML.
+
+**CONTENUS**
+
+La plupart de ces nœuds, de ces balises, sont des *contenant* et possèdent à ce titre un *contenu*. La plupart mais pas toutes. Ce contenu se trouve, comme nous l’avons déjà vu, entre `&lt;nom de la balise>` et `&lt;/nom de la balise>`. On appelle ces deux balises respectivement la *balise ouvrante* et la *balise fermante*.
+
+Par exemple, on définit le contenu d’un paragraphe entre `&lt;p>` et `&lt;/p>` :
+
+:blockcode
+::no_num
+: <p>Je suis un paragraphe dans la page</p>
+:
+: <table>
+: 	<!-- ici sera définie la table -->
+: </table>
+
+Les nœuds sans contenant sont rares mais ils existent. C’est par exemple le cas de la balise `&lt;img>`  qui ne contient rien, puisqu’elle *définit* une image. La balise `&lt;a>`, lorsqu’elle définit une *ancre* (un endroit de la page qu’on peut rejoindre par un *hyperlien*) peut ne pas avoir de contenu.
+
+**ATTRIBUTS**
+
+En plus de leur contenu, les nœuds sont définis par les **attributs** qui sont un point essentiel d’une page HTML. Les attributs se placent à l’intérieur de la balise ouvrante : 
+
+:blockcode
+::no_num
+: <balise attributs>contenu</balise>
+
+Un attribut est la plupart du temps défini par un nom (par exemple `style`) suivi du signe égal (« = ») et de sa valeur, toujours entre guillemets droits (même s’il est toléré de ne pas toujours mettre. La forme est donc la suivante :
+
+:blockcode
+::no_num
+: attribut="valeur"
+
+Il n’y a théoriquement aucune limite dans le nombre d’attributs qu’on peut mettre dans une balise.
+
+Et ces attributs sont extrêmement nombreux. Là aussi, il est inutile de les retenir tous, seuls quelques uns sont utilisés intensivement. On les appelle les *attributs universels*. Ce sont principalement les attributs : 
+
+:liste
+: `id` pour définir l’identifiant unique du nœud, de la boite,
+: `class` pour définir les classes du nœud, en relation par exemple avec les classes CSS,
+: `type` pour définir le type précis du nœud,
+: `style` pour définir « en dur » le style de l’élément.
+
+Cette liste est non exhaustive. Mais au-delà de ces attributs, on en trouve une infinité d’autres. Voyez plutôt, juste à titre indicatif : 
+
+L’attribut `href` pour définir la page que doit rejoindre un hyperlien `&lt;a>`, l’attribut `src` pour définir l’endroit où trouver une image `&lt;img>` ou un script JavaScript `&lt;script>`, l’attribut `onclick` sur un bouton `&lt;button>` pour savoir ce qu’on doit faire quand le visiteur clique sur le bouton, l’attribut `name` pour nommer tous les éléments d’un formulaire `&lt;form>`, c’est-à-dire les cases `&lt;input type="radio">`, les menus `&lt;select>`, les champs de texte `&lt;textarea>`, les attributs `method` et `action` pour savoir justement ce que doit faire un formulaire lorsqu’on le soumet, l’attribut `allow` d’un `&lt;iframe>` permettant de charger une page dans une autre page, les attributs `max` et `min` pour définir les valeurs minimales et maximales d’un champ `&lt;input>`, etc. Il y en a des centaines comme cela, pour répondre à tous les désirs et toutes les nécessités.
+
+En voilà pour finir quelques exemples concrets :
+
+:blockcode
+::no_num
+: <a href="vers/ma/page.php">Clique pour rejoindre ma page</a>
+: 
+: <a href="vers/autre_page.php" id="monlien">
+:   Clique pour rejoindre une autre page
+: </a>
+
+Une image :
+
+:blockcode
+::no_num
+: <img src="images/dans/dossier/monimage.png" />
+
+Remarquez la balise ci-dessus qui est « autofermante » (`/>` à la fin) car elle ne possède pas de contenu.
+
+Deux paragraphes avec de nombreux attributs qu’on peut tout à fait écrire en ligne ou les uns en-dessous des autres (ces attributs sont donnés à titre d’exemple pour le moment) :
+
+:blockcode
+::no_num
+: <p id="par1" class="class1 css2 grand" style="display:none;color:blue" contenteditable data-index="12" onfocus="save(this)" tabindex="5">Un paragraphe éditable</p>
+:
+: <!-- plus lisible -->
+: 
+: <p
+:    id="par1"
+:    class="class1 css3 grand"
+:    style="display: none; color: blue"
+:    data-index="12"
+:    data-owner="texte3"
+:    onfocus="save(this)"
+:    tabindex="5"
+:    contenteditable>
+:   Un paragraphe éditable
+: </p>
+
+Remarquez pour finir comment on inscrit des commentaires dans le code HTML à l’aide de : 
+
+:blockcode
+::no_num
+: <!-- Commentaire sur une ligne -->
+: 
+: <!--
+:	Un commentaire ici
+:	sur plusieurs lignes 
+: -->

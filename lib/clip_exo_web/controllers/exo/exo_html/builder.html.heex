@@ -8,13 +8,58 @@
 
   file_name = @exo.infos.name
 
-  %>
+  IO.inspect(@exo, label: "\nEXO dans le viewer")
+
+%>
+<script type="text/javascript">
+  const Exo_scrolling = <%= @exo.viewer_exercice_scrolling || 0 %>;
+  const For_scrolling = <%= @exo.viewer_formator_scrolling || 0 %>;
+  function set_editor_scrolling(){
+    console.log("-> set_editor_scrolling / Exo_scrolling", Exo_scrolling);
+    exercice_viewer().scroll(0, Exo_scrolling)
+  <%= if @exo.document_formateur_required do %>
+    formator_shower().scroll(0, For_scrolling)
+  <% end %>
+  }
+  function get_editor_scrolling(){
+    console.log("-> get_editor_scrolling / scroll =",exercice_viewer().scrollTop)
+    field_exo_viewer().value = exercice_viewer().scrollTop;
+    <%= if @exo.document_formateur_required do %>
+      field_formator_viewer().value = formateur_shower().scrollTop;
+    <% end %>
+    return true;
+  }
+  function exercice_viewer() {
+    return document.querySelector('iframe#iframe-exercice').contentWindow.document.documentElement
+  }
+  function formator_shower(){
+    return document.querySelector('iframe#iframe-formator').contentWindow.document.documentElement;
+  }
+  function field_exo_viewer(){
+    return document.querySelector('#field_exo_viewer')
+  }
+  function field_formator_viewer(){
+    return document.querySelector('#field_formator_viewer')
+  }
+</script>
+
+<style type="text/css">
+  button#btn-rebuild {
+    position: fixed;
+    transform: rotate(-90deg);
+    left: -140px;
+    top: 360px;
+    color: white;
+  }
+</style>
 
 <div>
   <form action={~p"/exo/produire"} method="POST">
     <div>
       <input type="hidden" name="exo[path]" value={file_name} />
-      <button type="submit">Reconstuire l’exercice '<%= file_name %>'</button>
+      <input type="hidden" id="field_exo_viewer" name="exo[viewer_exercice_scrolling]" value="" />
+      <input type="hidden" id="field_formator_viewer" name="exo[viewer_formator_scrolling]" value="" />
+      <button id="btn-rebuild" onclick="return get_editor_scrolling()" type="submit">♻️ Reconstuire l’exercice '<%= file_name %>'</button>
     </div>
   </form>
 </div>
@@ -36,7 +81,8 @@ style = "width:#{width}cm;height:#{height}cm;"
 
 <%= if @exo.document_formateur_required do %>
 
-  <iframe 
+  <iframe
+    id="iframe-formator"
     src={~p"/exercice/" <> "#{file_name}/#{file_name}-formateur.html"}
     style={"#{style}"}
     frameborder="1"></iframe>
@@ -47,3 +93,10 @@ style = "width:#{width}cm;height:#{height}cm;"
   src={~p"/exercice/" <> "#{file_name}/#{file_name}-specs.html"}
   style={"#{style}"}
   frameborder="1"></iframe>
+
+
+<script type="text/javascript">
+  if (Exo_scrolling + For_scrolling > 0) {
+    setTimeout(set_editor_scrolling, 500)
+  }
+</script>

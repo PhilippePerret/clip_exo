@@ -12,11 +12,17 @@ defmodule ClipExoWeb.ExoController do
   # participant, le fichier formateur et le fichier caractéristiques.
   # def build(conn, params) do
   def produire(conn, params) do
+    IO.inspect(params, label: "\nPARAMS in produire")
     options = %{
       open_folder: params["open_folder"]
     }
+    params_viewer = %{
+      viewer_exercice_scrolling: SafeString.nil_if_empty(params["exo"]["viewer_exercice_scrolling"]),
+      viewer_formator_scrolling: SafeString.nil_if_empty(params["exo"]["viewer_formator_scrolling"])
+    }
     case Exo.build(params["exo"], options) do
     {:ok, exo} ->
+      exo = Map.merge(exo, params_viewer)
       render(conn, :builder, exo: exo)
     {:error, err_msg} ->
       conn |> put_flash(:error, err_msg)

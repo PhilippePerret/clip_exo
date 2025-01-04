@@ -1,7 +1,7 @@
 ---
 name: psw-01-2
 reference: PSW-01
-titre: Les termes du web qu’il\nfaut connaitre – Texte
+titre: La petite leçon de Web\nles termes à connaitre
 auteur: Philippe PERRET
 competences: cf. QCM
 niveau: cf. QCM
@@ -11,34 +11,44 @@ revisions: []
 ---
 
 rub: Mission
-Réussir le QCM du fichier PSW-01-1 grâce à ce texte explicatif.
+Réussir le QCM du fichier PSW-01-1 grâce à cette petite leçon de Web sur les termes à connaitre.
 
-rub: Texte explicatif
+rub: La petite leçon de Web
 
 Du simple point de vue technique, un site web, ce sont des *pages HTML*. Ce qui est le raccourci pour dire des "pages écrite dans le langage de balisage HTML".
 
+doigt: Page Web = Page HTML
+
 **HTML** signifie « Hyper-Text Markup Language », c'est-à-dire, en français, « Langage de balisage de texte élaboré ». Ce qui est principalement "élaboré" en l'occurrence, c'est le fait qu’on peut cliquer sur certains mots — ou certains textes — pour atteindre une autre page, ou lancer une action, ce qui est révolutionnaire par rapport aux possibilités d’un texte jusque-là. 
 
-L’HTML sert, pour ce qui est visible, à mettre en forme ce texte élaboré.
+L’HTML sert, pour sa partie visible en tout cas — car l'HTML peut aussi cacher des choses^1 —, à mettre en forme ce texte élaboré.
 
-Mais en réalité, la *page HTML* rassemble plus que les balises concernant le contenu visible. Nous y reviendrons plus tard. Pour bien comprendre, limitons pour le moment son usage au seul *contenu*.
+cadre: ^1 La *page HTML* rassemble plus que les balises concernant le contenu visible. Nous y reviendrons plus tard. Pour bien comprendre, limitons pour le moment son usage au seul *contenu*.
 
-Le **contenu**, c’est le texte en premier lieu, mais aussi les images, les animations, les vidéos, les sons, etc. On peut trouver tous ces ***médias*** à l'intérieur d'une page web.
+Le **contenu**, c’est en premier lieu *le texte*, mais aussi les images, les animations, les vidéos, les sons, etc. On peut trouver tous ces ***médias*** à l'intérieur d'une page web.
 
-**Pour mettre en forme ce *contenu***, on utilise les **CSS**, sigle qui signifie « Cascade Style Sheets », c’est-à-dire les « Feuilles de Styles en cascade ». Le CSS s'occupe principalement de l’aspect de la page, l’aspect du site, son apparence. Les CSS permettent de séparer le contenu de l’apparence, pour les gérer plus facilement (même si c'est une mode qui tant à disparaitre…). 
+doigt: Une page HTML présente et dispose le contenu de la page, qui peut être constitué de nombreux médias.
 
-**Pour rendre la page interactive**, vient ensuite le **Javascript** pour… javascript. Il s'agit là, véritablement, d'un *langage de programmation*, qui permet, entre autres choses, de gérer toute l’interactivité du site. Par exemple, lorsque l’on déclenche un évènement (event) en cliquant sur un bouton pour passer en mode sombre, le javascript peut s’en charger. En tant que langage de programmation, le javascript permet de tout faire, dans la page, même s'entretenir avec l'utilisateur. La seule chose qu'il ne pouvait pas faire, avant l'avènement de framework comme node.js, c'était d'effectuer des opérations côté serveur.
+**Pour mettre en forme ce *contenu***, pour lui donner un bel aspect, on utilise les **CSS**, sigle qui signifie « Cascade Style Sheets », c’est-à-dire les « Feuilles de Styles en cascade ». Le CSS — on dit indifféremment *les* ou *le* CSS — s'occupe principalement de l'apparence de la page. Les CSS permettent de séparer le contenu de l’apparence, pour les gérer plus facilement (même si c'est une mode qui tant à disparaitre…). 
 
-cadre.air: Nous avons employé trois termes inexpliqués, ci-dessus : *interactivité*, *framework* et *côté serveur*.\nLe premier, *interactivité*, désigne les *interactions* de la page avec le visiteur du site, c'est-à-dire sa façon de réagir par rapport aux actions du visiteur, à commencer par les clics de souris dans la page.\nOn emploie le second, *framework*, le plus souvent en anglais, désigne une sorte d'infrastructure de développement de site. On utilise un *framework* pour faciliter grandement l'élaboration d'un site web et son fonctionnement, pour ne pas repartir de zéro à chaque fois et faciliter certaines opérations particulièrement complexes.\nPour comprendre l'idiome *côté serveur*, il faut réaliser que l'internet, schématiquement, fonctionne avec à un bout de la chaine une *machine distante* qui fabrique la page HTML et à l'autre bout de la chaine un visiteur qui reçoit la page, l'affiche et la consulte. On parle de *côté serveur* pour désigner la *machine distante* qui fabrique la page et de *côté client* pour désigner le *navigateur web* avec lequel le visiteur consulte la page.
+doigt: Le CSS s'occupe principalement de l'apparence — mais pas que…
 
-**HTML**, **CSS** et **Javascript** forment donc le trio de base d’un site internet. Pour simplifier (notez que c’est une simplification) :
+**Pour rendre la page interactive**, vient ensuite le **JavaScript** pour… javaScript. Il s'agit là, véritablement, d'un *langage de programmation*. Un langage qui permet, entre autres choses, de gérer toute l’*interactivité* du site. En tant que langage de programmation, le javascript permet de tout faire, dans la page, même s'entretenir avec l'utilisateur. La seule chose qu'il ne pouvait pas faire, avant l'avènement de *frameworks* comme node.js, c'était d'effectuer des opérations *côté serveur*.
+
+doigt: Le JavaScript gère l'interactivité de la page avec le visiteur.
+
+cadre.air: Oops ! Nous avons employé trois termes inexpliqués, ci-dessus : "*interactivité*", "*framework*" et "*côté serveur*".\nLe premier, *interactivité*, désigne les *interactions* de la page avec le visiteur du site, c'est-à-dire sa façon de réagir par rapport aux actions du visiteur. Quand le visiteur clique sur un bouton, c'est souvent le JavaScript qui réceptionne ce clic et le traite.\nOn emploie le second mot, *framework*, le plus souvent en anglais, pour désigner une sorte d'*infrastructure de développement de site*. On peut le voir comme un *modèle de site*, même si c'est plus complexe que ça. On utilise un *framework* pour faciliter grandement l'élaboration d'un site web et son fonctionnement, pour ne pas repartir de zéro à chaque fois. Un *framework* facilite souvent certaines opérations particulièrement délicates.\nPour comprendre l'idiome *côté serveur*, il faut réaliser que l'internet, schématiquement, fonctionne avec d'un côté un visiteur (un *client* — mais ça n'a pas le même sens en anglais) qui surfe avec son navigateur sur un site internet et de l'autre un ordinateur distant (un *serveur*) qui reçoit les commandes de ce visiteur et fabrique les pages HTML à renvoyer. On parle donc de *côté serveur* (fabrication des pages et réponses aux requêtes) et de *côté client* (consultation de la page et envoie des requêtes).
+
+doigt: **HTML**, **CSS** et **JavaScript** forment donc le trio de base d’un site internet. 
+
+Pour simplifier :
 
 :liste
 :	Le **HTML** s’occupe du **CONTENU**,
 :	le **CSS** s’occupe de L’**APPARENCE**,
 :	le **JAVASCRIPT** s’occupe de L’**INTERACTIVITÉ**.
 
-Mais attention : aujourd'hui, les frontières se brouillent de plus en plus. Le HTML se met à s'occuper beaucoup d'apparence avec des frameworks css comme *tailwind*, le javascript s'occupe de contenu et d'aspect et le CSS se mêle d'interactivité — pour gérer des menus par exemple — ou de contenu. La question n'est donc plus de savoir "qui fait quoi ?" mais plutôt "qui est le meilleur pour la situation donnée ?". Nonobstant, il est important de connaitre la base exprimée ci-dessus.
+C'est une simplification car aujourd'hui, les frontières se brouillent de plus en plus. Le HTML se met à s'occuper beaucoup d'apparence avec des *frameworks css* comme *tailwind*, le JavaScript s'occupe de contenu et d'apparence et le CSS se mêle d'interactivité — pour gérer des menus par exemple — ou même de contenu. La question n'est donc plus de savoir "qui fait quoi ?" mais plutôt "qui est le meilleur pour telle ou telle situation ?". Nonobstant, il est important de connaitre la base exprimée ci-dessus.
 
 ---
 
@@ -59,5 +69,6 @@ Pour atteindre l'adresse ci-dessus, on utilise sur le réseau le protocole HTTP 
 ::no_num
 :	https&#58;//www.mon_site.net
 
-Le protocole **HTTP** signifie « Hyper Text Transfert Protocole », c’est-à-dire « Protocole de transfert de texte élaboré », correspond à la méthode employée pour transférer des « pages internet » sur la toile. On ajoute maintenant le « S » pour « sécurisé » : **HTTPS**. Les données transmises par le protocole HTTPS sont cryptées, donc sécurisées.
-  
+Le protocole **HTTP** signifie « Hyper Text Transfert Protocole » — c’est-à-dire « Protocole de transfert de texte élaboré » — il désigne la méthode employée pour transférer des « pages internet » sur la *toile*. On ajoute maintenant le « S » pour « sécurisé » : **HTTPS**. Les données transmises par le protocole HTTPS sont cryptées, donc sécurisées.
+
+doigt: HTTP(S) est un protocole d'envoi des pages internet.

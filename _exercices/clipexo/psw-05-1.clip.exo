@@ -1,0 +1,22 @@
+---
+titre: Trop stylé !
+reference: PSW-05
+name: psw-05-1
+path: psw-05-1.clip.exo
+competences: [Désignation et reconnaissance des éléments HTML, Premières stylisation d'éléments HTML]
+logiciels: [Navigateur internet, Environnement de développement (Visual Studio Code)]
+niveau: Grand débutant
+duree: [30, 90]
+auteur: Philippe PERRET
+created_at: 2025-01-04
+revisions: []
+---
+rub: Mission
+
+
+rub: Scénario
+
+rub: Recommandations
+
+:liste
+: Revoyez l'exercice précédent (PSW-04) dans le cas où les termes et ce qu'ils désignent ne seraient plus clairs pour vous.

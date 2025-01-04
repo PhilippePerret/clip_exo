@@ -28,7 +28,9 @@ defmodule ClipExo.Exo do
                         # s'agit de la forgerie du document pour le 
                         # formateur ou pour le participant (en fait, un
                         # seul style (admin) diffère l'un de l'autre)
-    suivi: nil        # Pour le suivi de la construction
+    suivi: nil,         # Pour le suivi de la construction
+    viewer_formator_scrolling: nil,
+    viewer_exercice_scrolling: nil
   ]
 
 
