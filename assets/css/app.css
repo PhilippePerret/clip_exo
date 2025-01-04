@@ -102,14 +102,34 @@ button, a.btn {
   color: #EEEEEE ;
   padding: 12px 32px;
   border:0;
-  margin:1em;
+  margin:0 1em;
   cursor:pointer;
 }
 a.btn { display:inline-block;padding-bottom: 12px;}
 button:hover, a.btn:hover {
   background-color: purple;
 }
+button.small, a.btn.small {
+  font-size:12pt;
+  padding: 6px 12px 8px;
+}
 
+button.neutre {
+  all: unset;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  color: orange;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button:disabled:hover {
+  background-color: black;
+}
 
 div#flash-group {
   position:absolute;
@@ -197,14 +217,6 @@ blockquote {
 
 code {font-size:0.8em;}
 
-button.neutre {
-  all: unset;
-  font-family: inherit;
-  font-size: inherit;
-  font-style: inherit;
-  color: orange;
-  cursor: pointer;
-}
 
 div#panneau_aide_formatage {
   display:inline-block;

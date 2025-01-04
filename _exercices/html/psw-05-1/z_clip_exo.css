@@ -1,0 +1,475 @@
+
+.admin { display: none; }
+
+@font-face {
+  font-family: "AvenirNC";
+  src: url("z_AvenirNextCondensed-Regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "AvenirNC";
+  src: url("z_AvenirNextCondensed-Italic.ttf");
+  font-weight: normal;
+  font-style: italic;
+}
+
+body {
+  position: relative;
+  /* margin: 1.8cm 2.5cm 5cm; */
+  margin: 0;
+  width: 17cm;
+  zoom: 120%;	
+  font-size:13pt;
+  counter-reset: pageNumber;
+}
+
+.center {text-align: center}
+.nowrap {white-space: nowrap!important;}
+
+div.separator {
+  height: 0;
+}
+
+header {
+  position: relative;
+  display:block;
+  border:1px solid transparent ;
+  margin-top: 0;
+}
+
+header img.logo {
+  position:absolute;
+  top: 0;
+  left: 0;
+  width: 3.5cm;
+}
+header div.titre {
+  display:inline-block;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 22pt;
+  font-variant: small-caps;
+  text-align:center;
+  line-height: 1em;
+  margin-top: 2.5cm;
+  margin-bottom: 2cm;
+  margin-left: 4.5cm;
+  width: 9cm;
+}
+
+section#exercice {
+  margin-top: 1cm;
+  margin-bottom: 5cm;
+}
+
+section.conteneur,  table.conteneur {
+  margin: 0.75cm 0;
+  position: relative;
+}
+
+section.blockcode {
+  display: block;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11pt;
+  background-color: #EEEEEE;
+  padding: 18px;
+}
+section.blockcode:not(.no_num) {
+  counter-reset: monCompteur;
+}
+
+/* linem pour "line modified" */
+section.blockcode > div.line, section.blockcode > div.linem {
+  display: block;
+  margin-left: 1cm;
+  position: relative;
+  margin-top: 0 !important;
+}
+section.blockcode:not(.no_num) > div.line, section.blockcode:not(.no_num) > div.linem {
+  counter-increment: monCompteur;
+}
+
+section.blockcode:not(.no_num) > div.line:before, section.blockcode:not(.no_num) > div.linem:before {
+  content:counter(monCompteur); 
+  position: absolute;
+  left: -1cm;
+  font-size: 7.5pt;
+  top: 2px;
+}
+
+section.blockcode:not(.no_num) > div.linem:before {
+  content: counter(monCompteur) " +";
+  color: red;
+  font-weight: bold;
+}
+
+/* 
+
+  --- Les DIVs ---
+
+*/
+
+div.line {
+  margin-top: 1em;
+  line-height: 1.4em;
+  text-align: justify;
+}
+
+div.rub, div.rubi {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14pt;
+  font-weight: bold;
+}
+div.rub {
+  display:block;
+  margin-top: 1cm;
+  margin-bottom: 0.5cm;
+}
+/* Rubrique en ligne */
+div.rubi {
+  display:inline-block;
+}
+
+div.cadre {
+  border: 1px solid;
+  padding: 0.5em;
+  font-size: 0.85em;
+  margin:1em;
+}
+
+div.doigt {
+  margin-left:4cm;
+  vertical-align:middle;
+}
+div.doigt:before {
+  content: "☞";
+  font-size: 20pt;
+  margin-right: 0.5rem;
+  vertical-align:middle;
+}
+
+/* 
+-------- Pour les caractéristiques -----------
+*/
+table.table_specs {
+  padding:0;
+  margin:0;
+  border-collapse: collapse;
+  border: 2px solid rgb(140 140 140);
+}
+table.table_specs tr {
+  padding:0; margin:0;
+}
+table.table_specs tr td {
+  vertical-align: top;
+}
+table.table_specs tr td {
+  padding:4px 12px;
+  border: 1px solid black;
+}
+table.table_specs tr td:nth-child(1) {
+  background-color: #EEEEEE;
+  width:130px;
+}
+table.table_specs tr td:nth-child(2) {
+  background-color: transparent;
+  width:400px;
+}
+
+div.reference {
+  font-weight: bold;
+  text-align: right;
+}
+div.reference:before {
+  content: "Réf. : ";
+  color: #333333;
+  margin-left: 1em;
+}
+
+/* 
+
+  CONTENEUR ETAPES
+
+*/
+
+section.etapes {
+  counter-reset: compteurPas;
+  margin-left: 2em;
+}
+
+
+/* Pas d'un scénario (étapes) */
+section.etapes div.pas {
+  line-height: 1.2em;
+  margin-top: 8px;
+}
+section.etapes div.pas.picto {
+  margin-left: 1em;
+}
+/* Pour les tests qui suivent un picto (si formaté comme dans :etapes */
+span.text-picto {
+  display:inline-block;
+  margin-left: 2em;
+}
+div.picto {
+  position:absolute;
+  left: 0;
+}
+section.etapes div.pas:not(resultat) {
+  counter-increment: compteurPas;
+}
+section.etapes div.pas:before {
+  content: counter(compteurPas) ". ";
+  display:inline-block;
+  width:28px;
+  position: absolute;
+  left: -1.4em;
+}
+section.etapes div.resultat:before {
+  content: "=> ";
+}
+section.etapes div.pas.rouge {
+  color:red;
+}
+
+/* section.liste {} */
+
+/* Les lignes de code */
+
+div.code.counter_reset {
+  counter-reset: codeCounter;
+}
+div.code {
+  counter-increment: codeCounter;
+  font-family: Courier, Monospace;
+  font-size: 11pt;
+  background-color: #DDDDDD;
+  padding:0;
+  padding-right:8px;
+}
+div.empty + div.code {padding-top:8px;}
+
+div.code + div.empty:before {
+  display:block;
+  background-color: #DDDDDD;
+  height:8px;
+  content: " ";
+}
+
+div.code:before {
+  content: counter(codeCounter);
+  display:inline-block;
+  background-color:#EEEEEE;
+  width: 26px;
+  margin-right:16px;
+  font-family: Courier, Monospace;
+  font-size: 7.5pt;
+  line-height:11pt;
+  color: #555555;
+}
+div.code.added:before {
+  content: counter(codeCounter) " +";
+  color:red;
+  font-weight:bold;
+}
+
+
+table.conteneur {
+  border-collapse: collapse;
+}
+table.conteneur.border {
+  border: 2px solid;
+}
+table.conteneur tr {
+  border-bottom: 1px solid;
+}
+table.conteneur tr:nth-child(1) {
+  border-top: 1px solid;
+}
+table.conteneur td {
+  padding: 8px;
+  border-right: 1px solid;
+}
+table.conteneur tr td:nth-child(1) {
+  border-left: 1px solid;
+}
+/* avec l'option h seulement => lignes horizontales */
+table.conteneur.borders-h td {
+  border: 0 !important;
+}
+/* avec l'option v seule => lignes verticales */
+table.conteneur.borders-v tr {
+  border: none;
+}
+
+/* 
+
+--- CONTENEUR Q.C.M. ---
+
+*/
+section.qcm {
+  display:block;
+  counter-reset: compteurQuestions;
+}
+section.qcm div.question {
+  margin-top:2.2em;
+  margin-bottom:1.3em;
+  font-size: 1em;
+  background-color: slategrey;
+  color: white;
+  padding: 8px 12px;
+  counter-reset: compteurReponses;
+  counter-increment: compteurQuestions;
+}
+section.qcm div.question:before {
+  content: counter(compteurQuestions) ". ";
+  display:inline-block;
+  width: 24px;
+}
+section.qcm div.question:after {
+  font-weight: normal;
+  margin-left: 3em;
+  font-size: 0.75em;
+  font-style: italic;
+  display:block;
+  margin-top:7px;
+}
+section.qcm div.question.radio:after {
+  content: "(Une seule bonne réponse)";
+}
+section.qcm div.question.checkbox:after {
+  content: "(Cocher toutes les bonnes réponses)";
+}
+
+section.qcm span.reponse {
+  position: relative;
+  font-size: 0.9em;
+  margin-left: 5em;
+  margin-top: 6px;
+  width: 460px;
+  counter-increment: compteurReponses
+}
+section.qcm span.reponse:not(.horizontal) {
+  display: block;
+}
+section.qcm span.reponse.horizontal,
+section.qcm span.reponse.horizontal + span.reponse {
+  display: inline-block;
+  margin-right: 1rem;
+  width: auto;
+}
+
+
+section.qcm span.reponse:not(.horizontal):before {
+  position:absolute;
+  left: -1.7em;
+}
+section.qcm span.reponse.checkbox:before {
+  content: counter(compteurReponses, lower-alpha) ") ";
+  /* top: 1px; */
+  margin-right: 12px;
+}
+section.qcm span.reponse.radio:before {
+  content: counter(compteurReponses, lower-alpha) ")";
+  /* top: -3px; */
+  margin-right: 12px;
+}
+
+
+/* 
+---- PICTOS ----
+*/
+
+div.picto {
+  vertical-align: bottom;
+  display: inline-block;
+  background-image: url(z_icones-actions-sprite.png);
+  transform: scale(80%); /* pour ajuster de façon fine */
+  margin-right: 8px;
+}
+
+div.picto.souris {
+  background-position: 0px 0px;
+  width: 30px;
+  height: 20px;
+}
+
+div.picto.cle {
+  background-position: 30px 0px;
+  width: 30px;
+  height: 20px;
+}
+
+div.picto.clavier {
+  background-position: 60px 0px;
+  width: 30px;
+  height: 20px;
+}
+
+div.picto.mesure {
+  background-position: 0px 60px;
+  width: 30px;
+  height: 20px;
+}
+
+div.picto.menu {
+  background-position: 60px 60px;
+  width: 30px;
+  height: 20px;
+}
+div.picto.clic, div.picto.click {
+  background-position: 30px 60px;
+  width: 30px;
+  height: 20px;
+}
+
+div.picto.coche {
+  background-position: 0px 40px;
+  width: 30px;
+  height: 20px;
+}
+
+div.picto.radio {
+  background-position: 60px 40px;
+  width: 30px;
+  height: 20px;
+}
+
+div.picto.repete {
+  background-position: 30px 40px;
+  width: 30px;
+  height: 20px;
+}
+
+
+
+/* 
+  ---------- Styles généraux ------------
+*/
+
+.air {margin-top: 40px!important; margin-bottom: 40px!important;}
+.left {text-align: left}
+.center {text-align: center}
+.right {text-align: right}
+
+.bg_purple, td.bg_purple {
+  background-color: purple; 
+  color: white;
+}
+
+.bg_blue, td.bg_blue {
+  background-color: blue; 
+  color: white;
+}
+.bg_lightgrey, td.bg_lightgrey {
+  background-color: lightgrey;
+}
+pre.warning {
+  padding: 1em;
+  color: red;
+  background-color: #FFEEEE;
+  font-size: 10pt;
+  white-space: pre-wrap;
+}
+
+.bold {font-weight:bold}

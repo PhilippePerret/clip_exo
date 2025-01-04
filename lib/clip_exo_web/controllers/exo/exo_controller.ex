@@ -156,5 +156,4 @@ defmodule ClipExoWeb.ExoController do
       preformated_exo(conn, params)
     end
   end
-
 end

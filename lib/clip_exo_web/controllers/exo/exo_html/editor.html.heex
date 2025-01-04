@@ -1,6 +1,10 @@
 <!-- Éditeur de l'exercice -->
 <script type="text/javascript">
-  
+  const ThisUI = {
+    get textarea(){
+      return this._textarea || (this._textarea = document.querySelector('#exo_contenu'))
+    }
+  }
   
   function set_action(action){
     let field = document.querySelector('#exo_scrolling')
@@ -11,7 +15,6 @@
   }
 
   function toggle_overview(afficher){
-    console.log("afficher = ", afficher);
     // Il faut mettre 
     let apercu = document.querySelector('#apercu');
     if ( afficher ) {
@@ -19,6 +22,16 @@
       apercu.src = "/exercice/"+file_name+"/"+file_name+".html";
     }
     apercu.style.display = afficher ? "block" : "none";
+  }
+
+  function toggle_zen_ui(mettre_en_zen){
+    var domList = ["header", "nav#main"];
+    for (var idom in domList) {
+      var dom = document.querySelector(domList[idom]);
+      dom.style.display = mettre_en_zen ? 'none' : '' ;
+    }
+    var sectionContent = document.querySelector('section#content');
+    sectionContent.style.margin = mettre_en_zen ? '0' : '' ;
   }
 </script>
 
@@ -61,13 +74,81 @@ file_name = @exo["path"]
     <span class="main-titre">AIDE FORMATAGE</span>
   </div>
 
-    <span id="cb_apercu" class="smaller left">
+    <span id="cb_apercu" class="smaller fleft" style="margin-left: 1cm;">
+      <input checked={@exo["zen_ui"] == "on"} type="checkbox" name="exo[zen_ui]" id="exo_zen_ui" onclick="toggle_zen_ui(this.checked)" />
+      <label for="exo_zen_ui" class="smaller">UI Zen</label>
       <input checked={@exo["apercu"] == "on"} type="checkbox" name="exo[apercu]" id="exo_apercu" onclick="toggle_overview(this.checked)" />
       <label for="exo_apercu" class="smaller">Activer l’aperçu</label>
     </span>
     <button onclick="set_action('save')" type="submit"><%= @ui.boutons["enregistrer"] %></button>
   </div>
 </form>
+
+<script type="text/javascript">
+  function on_blur_replace(field) {
+    if ( field.value == "") {
+      Search.setBoutonSearchTo("Chercher");
+    } else {
+      Search.setBoutonSearchTo("Remplacer");
+    }
+  }
+  function on_blur_searched(field) {
+    Search.setBoutonStateTo(field.value !== "")
+  }
+
+  const Search = {
+    search(){
+      var regexp = (function (s){
+        if ( s.match(/^\/.*\/$/) ) {
+          s = s.substr(1, s.length - 2)
+        }
+        var options = ["g"]
+        if (s.charAt(0) == "^" || s.charAt(s.length - 1) == "$") {
+          options.push("m")
+        }
+        return RegExp(s, options.join(""))
+      })(this.fieldSeached.value)
+      console.log("regexp: ", regexp, typeof regexp)
+      var replace  = this.fieldReplace.value;
+      var text = ThisUI.textarea.value
+      text = text.replace(regexp, replace)
+      ThisUI.textarea.value = text
+    },
+    setBoutonSearchTo(name){
+      this.bouton.innerHTML = name
+      this.setBoutonStateTo(true)
+    },
+    setBoutonStateTo(state){
+      this.bouton.disabled = !state
+    },
+    get bouton(){
+      if (undefined == this._btn) {
+        this._btn = document.querySelector("#btn-search")
+      }; return this._btn
+    },
+    get fieldSeached(){
+      if (undefined == this._fieldsearched){
+        this._fieldsearched = document.querySelector("#search-searched")
+      }; return this._fieldsearched;
+    },
+    get fieldReplace(){
+      if (undefined == this._fieldreplace){
+        this._fieldreplace = document.querySelector("#search-replace")
+      }; return this._fieldreplace;
+    }
+  }
+</script>
+
+<div id="toolbar" class="smaller">
+  <fieldset>
+    <legend>Recherche/remplacement</legend>
+    <span>Chercher </span> 
+    <input tabindex="1" id="search-searched" type="text" name="search[searched]" style="width:180px;" onblur="on_blur_searched(this)" />
+    <span>Remplacer par </span>
+    <input tabindex="2" id="search-replace" type="text" name="search[replace]" style="width:180px;" onblur="on_blur_replace(this)" />
+    <button tabindex="3" disabled id="btn-search" onclick="Search.search()" class="small" style="width:140px;">Chercher</button>
+  </fieldset>
+</div>
 
 <%
 
@@ -95,4 +176,7 @@ height = Float.to_string( 120 / 100 * 29)
   frameborder="1">
 </iframe>
 
-<script type="text/javascript">toggle_overview(<%= @exo["apercu"] == "on" %>)</script>
+<script type="text/javascript">
+  toggle_overview(<%= @exo["apercu"] == "on" %>);
+  toggle_zen_ui(<%= @exo["zen_ui"] == "on" %>);
+</script>

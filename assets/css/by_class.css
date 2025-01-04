@@ -13,6 +13,8 @@ nav {display:block}
 .right {text-align: right}
 .left {text-align: left} /* dans un contexte right */
 
+.fright {float:right}
+.fleft {float:left}
 
 form.disabled, form.disabled button {cursor: not-allowed!important}
 form.disabled {opacity: 0.3}
