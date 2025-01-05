@@ -79,6 +79,9 @@ defmodule ClipExoWeb.ExoBuilderView do
     end
   end
 
+  defp formated_revisions(nil = revisions) do
+    "---"
+  end
   defp formated_revisions(revisions) when is_list(revisions) do
     IO.inspect(revisions, label: "\nRÉVISIONS")
     if Enum.empty?(revisions), do: "---", else: Enum.join(revisions, ", ")
