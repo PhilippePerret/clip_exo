@@ -50,10 +50,10 @@
 
 <div>
   <label for="exos_filter">Filtre : </label>
-  <input type="text" name="exos_filter" class="medium" oninput="filtreExos(this.value)"/>
+  <input type="text" name="exos_filter" class="medium" oninput="filtreExos(this.value)" value={@exo_filter} />
 </div>
 
-<ul>
+<ul id="exos-liste">
   <form id="exos_liste_form" action="/exo/editer" method="POST">
     <input type="hidden" name="last_filter" id="last_filter" />
     <input type="hidden" name="exo[path]" id="exo_path" />
@@ -64,3 +64,8 @@
     <% end %>
   </form>
 </ul>
+
+
+<%= if @exo_filter && @exo_filter != "" do %>
+<script>filtreExos('<%= @exo_filter %>')</script>
+<% end %>

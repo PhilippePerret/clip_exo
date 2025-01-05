@@ -11,7 +11,12 @@ defmodule ClipExoWeb.PageController do
   def forgerie(conn, params) do
     exo = Map.put(params, "path", get_path_from_params_or_last_traitement(params))
 
-    render(conn, :forgerie, ui: ClipExo.ui_terms, exo: exo, exo_liste: Exo.liste_exercices())
+    render(conn, :forgerie, %{
+      ui: ClipExo.ui_terms, 
+      exo: exo, 
+      exo_liste: Exo.liste_exercices(),
+      exo_filter: Last.get(:exo_filter)
+    })
   end
 
   def get_path_from_params_or_last_traitement(params) do
