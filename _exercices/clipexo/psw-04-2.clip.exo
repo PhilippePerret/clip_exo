@@ -74,7 +74,7 @@ Un attribut est la plupart du temps défini par un nom (par exemple `style`) sui
 Il n’y a théoriquement aucune limite dans le nombre d’attributs qu’on peut mettre dans une balise et dans le code de la page HTML, on n'hésite pas à les mettre les uns au-dessous des autres lorsqu'ils sont nombreux.
 
 :blockcode
-:no_num
+::no_num
 : <balise 
 :   attribut1="valeur"
 :   attribut2="valeur"
@@ -146,5 +146,3 @@ Remarquez pour finir comment on inscrit des commentaires dans le code HTML à l�
 :	Un commentaire ici
 :	sur plusieurs lignes 
 : -->
-  
- <!-- FIN DU DOCUMENT -->
