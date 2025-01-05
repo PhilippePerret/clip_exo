@@ -20,6 +20,7 @@ defmodule ClipExo.Exo do
       duree: nil,
       css_files: nil
     },
+    description:  nil,  # Description optionnelle de l'exercice
     body:       "contenu brut de l'exercice",
     body_html:  nil,  # le contenu formaté
     rubriques:  [],   # pour les rubriques des infos
@@ -590,6 +591,7 @@ defmodule ClipExo.Exo do
     """
     ---
     titre: #{params["titre"]}
+    description:
     reference: #{params["reference"]}
     name: #{params["name"]}
     path: #{params["path"]}
