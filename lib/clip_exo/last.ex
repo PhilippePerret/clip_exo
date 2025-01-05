@@ -52,7 +52,6 @@ defmodule Last do
       Map.replace(last_values(), key, val)
       end)
     |> set_last_values()
-    |> IO.inspect(label: "\nNOUVELLES LAST VALUES")
   end
   def set(value, prop, retour \\ nil) when is_binary(prop) do
     set(value, String.to_atom(prop), retour)

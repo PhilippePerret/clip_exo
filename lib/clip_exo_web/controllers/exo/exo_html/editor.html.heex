@@ -3,6 +3,15 @@
   const ThisUI = {
     get textarea(){
       return this._textarea || (this._textarea = document.querySelector('#exo_contenu'))
+    },
+    get editor(){
+      return this._editor || (this._editor = document.querySelector('form#editor-form'))
+    },
+    get searchedField(){
+      return this._searchedfield || (this._searchedfield = document.querySelector('input#search-searched'))
+    },
+    get searchButton(){
+      return this._searchBtn || (this._searchBtn = document.querySelector('button#btn-search'))
     }
   }
   
@@ -10,8 +19,11 @@
     let field = document.querySelector('#exo_scrolling')
     let textarea = document.querySelector('#exo_contenu');
     field.value = textarea.scrollTop;
-    let form = document.querySelector('#editor-form');
+    let form = ThisUI.editor;
     form.action = "/exo/" + action;
+  }
+  function submit_form(){
+    ThisUI.editor.submit()
   }
 
   function toggle_overview(afficher){
@@ -98,33 +110,61 @@ file_name = @exo["path"]
 
   const Search = {
     search(){
+      var replace  = this.fieldReplace.value;
+      var just_find = (replace && replace != "") == false;
+      var from_offset = Number(ThisUI.searchedField.dataset.from_offset || 0);
       var regexp = (function (s){
         if ( s.match(/^\/.*\/$/) ) {
           s = s.substr(1, s.length - 2)
         }
-        var options = ["g"]
+        var options = just_find ? [] : ["g"]
         if (s.charAt(0) == "^" || s.charAt(s.length - 1) == "$") {
           options.push("m")
         }
         return RegExp(s, options.join(""))
       })(this.fieldSeached.value)
-      console.log("regexp: ", regexp, typeof regexp)
-      var replace  = this.fieldReplace.value;
-      var text = ThisUI.textarea.value
-      text = text.replace(regexp, replace)
-      ThisUI.textarea.value = text
+      const tA = ThisUI.textarea
+      // console.log("regexp: ", regexp, typeof regexp)
+      var text = tA.value
+      if ( just_find ) {
+        // Sinon, c'est une recherche
+        console.log("-> recherche simple")
+        var slicedText;
+        if ( from_offset > 0 ) {
+          slicedText = text.slice(from_offset)
+        } else {
+          slicedText = text;
+        }
+        var match = slicedText.match(regexp)
+        console.log("match", match)
+        if ( match ) {
+          var start = from_offset + match.index;
+          console.log("start", start)
+          var end   = start + match[0].length;
+          ThisUI.searchedField.dataset.from_offset = start + 1;
+          ThisUI.searchButton.innerHTML = "Suivant";
+          const fullText = tA.value;
+          tA.style.overflow = "scroll";
+          tA.focus();
+          tA.value = fullText.substring(0, start);
+          const scrollTop = tA.scrollHeight - 300;
+          console.info("scroll top trouvé : ", scrollTop)
+          tA.value = fullText;
+          tA.setSelectionRange(start, end);
+          tA.scrollTop = scrollTop
+        }
+      } else {
+        // Un remplacement
+        text = text.replace(regexp, replace)
+        ThisUI.textarea.value = text
+      }
     },
     setBoutonSearchTo(name){
-      this.bouton.innerHTML = name
+      ThisUI.searchButton.innerHTML = name
       this.setBoutonStateTo(true)
     },
     setBoutonStateTo(state){
-      this.bouton.disabled = !state
-    },
-    get bouton(){
-      if (undefined == this._btn) {
-        this._btn = document.querySelector("#btn-search")
-      }; return this._btn
+      ThisUI.searchButton.disabled = !state
     },
     get fieldSeached(){
       if (undefined == this._fieldsearched){
@@ -143,7 +183,7 @@ file_name = @exo["path"]
   <fieldset>
     <legend>Recherche/remplacement</legend>
     <span>Chercher </span> 
-    <input tabindex="1" id="search-searched" type="text" name="search[searched]" style="width:180px;" onblur="on_blur_searched(this)" />
+    <input tabindex="1" id="search-searched" type="text" data-from_offset="0" name="search[searched]" style="width:180px;" onfocus="this.dataset.from_offset = 0" onblur="on_blur_searched(this)" />
     <span>Remplacer par </span>
     <input tabindex="2" id="search-replace" type="text" name="search[replace]" style="width:180px;" onblur="on_blur_replace(this)" />
     <button tabindex="3" disabled id="btn-search" onclick="Search.search()" class="small" style="width:140px;">Chercher</button>
@@ -179,6 +219,34 @@ height = Float.to_string( 120 / 100 * 29)
 <script type="text/javascript">
   toggle_overview(<%= @exo["apercu"] == "on" %>);
   toggle_zen_ui(<%= @exo["zen_ui"] == "on" %>);
+
+  function stopEvent(ev){
+    ev.preventDefault()
+    ev.stopPropagation()
+    ev.stopImmediatePropagation()
+    return false;
+  }
+
+
+  // Pour que la touche entrée enregistre le code
+
+  document.querySelector('#exo_contenu').addEventListener("keypress", (ev) => {
+    if (ev.metaKey) {
+      switch(ev.charCode) {
+        case 115:
+          stopEvent(ev)
+          set_action('save')
+          submit_form()
+          return false;
+        case 102: 
+          stopEvent(ev)
+          ThisUI.searchedField.focus()
+          return false;
+      }
+    } else {
+      console.log("ev = ", ev)
+    }
+  })
 </script>
 
 <script defer type="module" phx-track-static src={~p"/assets/js/for_textarea.js"}></script>

@@ -1,0 +1,461 @@
+<!-- <ClipExoWeb.Layouts.root> lib/clip_exo_web/components/layouts/root.html.heex:1 (clip_exo) -->
+<!DOCTYPE html>
+<html lang="fr" class="[scrollbar-gutter:stable]">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="aSUONyAHVTIjJVcQcF5UKgN4HmVXEg5a6NjtPNcGis0vD07Ay1OVneX7">
+    <!-- @caller lib/clip_exo_web/components/layouts/root.html.heex:10 (clip_exo) --><!-- <Phoenix.Component.live_title> lib/phoenix_component.ex:2099 (phoenix_live_view) --><title data-suffix=" · Phoenix Framework">
+ClipExo
+     · Phoenix Framework</title><!-- </Phoenix.Component.live_title> -->
+    <link phx-track-static rel="stylesheet" href="/assets/app.css">
+    <script defer phx-track-static type="text/javascript" src="/assets/app.js"></script>
+    <script type="module" phx-track-static src="/assets/js/taboverride.min.js"></script>
+  </head>
+  <body class="bg-white">
+    <header>
+      <a href="/">CLIP-EXO - Exercices pour le CLIP</a>
+    </header>
+    <nav id="main">
+      <a href="/manuel">Manuel</a>
+      <a href="/forgerie">Forgerie</a>
+      <a href="/formatage">Formatage</a>
+    </nav>
+    <!-- @caller lib/clip_exo_web/components/layouts/root.html.heex:26 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.flash_group> lib/clip_exo_web/components/core_components.ex:148 (clip_exo) --><div id="flash-group">
+  <!-- @caller lib/clip_exo_web/components/core_components.ex:150 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.flash> lib/clip_exo_web/components/core_components.ex:111 (clip_exo) --><!-- </ClipExoWeb.CoreComponents.flash> -->
+  <!-- @caller lib/clip_exo_web/components/core_components.ex:151 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.flash> lib/clip_exo_web/components/core_components.ex:111 (clip_exo) --><!-- </ClipExoWeb.CoreComponents.flash> -->
+  <!-- @caller lib/clip_exo_web/components/core_components.ex:152 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.flash> lib/clip_exo_web/components/core_components.ex:111 (clip_exo) --><div id="client-error" phx-click="[[&quot;push&quot;,{&quot;value&quot;:{&quot;key&quot;:&quot;error&quot;},&quot;event&quot;:&quot;lv:clear-flash&quot;}],[&quot;hide&quot;,{&quot;time&quot;:200,&quot;to&quot;:&quot;#client-error&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;]]}]]" role="alert" class="fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1 bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900" hidden phx-connected="[[&quot;hide&quot;,{&quot;time&quot;:200,&quot;to&quot;:&quot;#client-error&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;]]}]]" phx-disconnected="[[&quot;show&quot;,{&quot;time&quot;:300,&quot;to&quot;:&quot;.phx-client-error #client-error&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-out&quot;,&quot;duration-300&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;]]}]]">
+  <p class="flex items-center gap-1.5 text-sm font-semibold leading-6">
+    
+    <!-- @caller lib/clip_exo_web/components/core_components.ex:126 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.icon> lib/clip_exo_web/components/core_components.ex:595 (clip_exo) --><span class="hero-exclamation-circle-mini h-4 w-4"></span><!-- </ClipExoWeb.CoreComponents.icon> -->
+    We can&#39;t find the internet
+  </p>
+  <p class="mt-2 text-sm leading-5">
+    Attempting to reconnect
+    <!-- @caller lib/clip_exo_web/components/core_components.ex:161 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.icon> lib/clip_exo_web/components/core_components.ex:595 (clip_exo) --><span class="hero-arrow-path ml-1 h-3 w-3 animate-spin"></span><!-- </ClipExoWeb.CoreComponents.icon> -->
+  </p>
+  <button type="button" class="group absolute top-1 right-1 p-2" aria-label="close">
+    <!-- @caller lib/clip_exo_web/components/core_components.ex:131 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.icon> lib/clip_exo_web/components/core_components.ex:595 (clip_exo) --><span class="hero-x-mark-solid h-5 w-5 opacity-40 group-hover:opacity-70"></span><!-- </ClipExoWeb.CoreComponents.icon> -->
+  </button>
+</div><!-- </ClipExoWeb.CoreComponents.flash> -->
+
+  <!-- @caller lib/clip_exo_web/components/core_components.ex:164 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.flash> lib/clip_exo_web/components/core_components.ex:111 (clip_exo) --><div id="server-error" phx-click="[[&quot;push&quot;,{&quot;value&quot;:{&quot;key&quot;:&quot;error&quot;},&quot;event&quot;:&quot;lv:clear-flash&quot;}],[&quot;hide&quot;,{&quot;time&quot;:200,&quot;to&quot;:&quot;#server-error&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;]]}]]" role="alert" class="fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1 bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900" hidden phx-connected="[[&quot;hide&quot;,{&quot;time&quot;:200,&quot;to&quot;:&quot;#server-error&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;]]}]]" phx-disconnected="[[&quot;show&quot;,{&quot;time&quot;:300,&quot;to&quot;:&quot;.phx-server-error #server-error&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-out&quot;,&quot;duration-300&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;]]}]]">
+  <p class="flex items-center gap-1.5 text-sm font-semibold leading-6">
+    
+    <!-- @caller lib/clip_exo_web/components/core_components.ex:126 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.icon> lib/clip_exo_web/components/core_components.ex:595 (clip_exo) --><span class="hero-exclamation-circle-mini h-4 w-4"></span><!-- </ClipExoWeb.CoreComponents.icon> -->
+    Something went wrong!
+  </p>
+  <p class="mt-2 text-sm leading-5">
+    Hang in there while we get back on track
+    <!-- @caller lib/clip_exo_web/components/core_components.ex:173 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.icon> lib/clip_exo_web/components/core_components.ex:595 (clip_exo) --><span class="hero-arrow-path ml-1 h-3 w-3 animate-spin"></span><!-- </ClipExoWeb.CoreComponents.icon> -->
+  </p>
+  <button type="button" class="group absolute top-1 right-1 p-2" aria-label="close">
+    <!-- @caller lib/clip_exo_web/components/core_components.ex:131 (clip_exo) --><!-- <ClipExoWeb.CoreComponents.icon> lib/clip_exo_web/components/core_components.ex:595 (clip_exo) --><span class="hero-x-mark-solid h-5 w-5 opacity-40 group-hover:opacity-70"></span><!-- </ClipExoWeb.CoreComponents.icon> -->
+  </button>
+</div><!-- </ClipExoWeb.CoreComponents.flash> -->
+</div><!-- </ClipExoWeb.CoreComponents.flash_group> -->
+
+
+      <section id="exo-boutons">
+        <span>Exercice courant (psw-04-2)</span>
+        <!-- @caller lib/clip_exo_web/components/layouts/root.html.heex:38 (clip_exo) --><!-- <ClipExoWeb.AppComponents.bouton> lib/clip_exo_web/components/app_components.ex:21 (clip_exo) --><form action="/exo/ouvrir" method="POST" class="">
+  <input type="hidden" name="exo[path]" value="psw-04-2">
+  <button type="submit" class="">Ouvrir son dossier</button>
+</form><!-- </ClipExoWeb.AppComponents.bouton> -->
+        <!-- @caller lib/clip_exo_web/components/layouts/root.html.heex:39 (clip_exo) --><!-- <ClipExoWeb.AppComponents.bouton> lib/clip_exo_web/components/app_components.ex:21 (clip_exo) --><form action="/exo/editer" method="POST" class="">
+  <input type="hidden" name="exo[path]" value="psw-04-2">
+  <button type="submit" class="">Éditer son fichier</button>
+</form><!-- </ClipExoWeb.AppComponents.bouton> -->
+        <!-- @caller lib/clip_exo_web/components/layouts/root.html.heex:40 (clip_exo) --><!-- <ClipExoWeb.AppComponents.bouton> lib/clip_exo_web/components/app_components.ex:21 (clip_exo) --><form action="/exo/produire" method="POST" class="">
+  <input type="hidden" name="exo[path]" value="psw-04-2">
+  <button type="submit" class="">Produire les HTML</button>
+</form><!-- </ClipExoWeb.AppComponents.bouton> -->
+        <!-- @caller lib/clip_exo_web/components/layouts/root.html.heex:41 (clip_exo) --><!-- <ClipExoWeb.AppComponents.bouton> lib/clip_exo_web/components/app_components.ex:21 (clip_exo) --><form action="/exo/produire_pdf" method="POST" class="">
+  <input type="hidden" name="exo[path]" value="psw-04-2">
+  <button type="submit" class="">Produire les PDF</button>
+</form><!-- </ClipExoWeb.AppComponents.bouton> -->
+      </section>
+
+    <section id="content">
+<!-- <ClipExoWeb.ExoHTML.editor> lib/clip_exo_web/controllers/exo/exo_html/editor.html.heex:1 (clip_exo) --><!-- Éditeur de l'exercice -->
+<script type="text/javascript">
+  const ThisUI = {
+    get textarea(){
+      return this._textarea || (this._textarea = document.querySelector('#exo_contenu'))
+    }
+  }
+  
+  function set_action(action){
+    let field = document.querySelector('#exo_scrolling')
+    let textarea = document.querySelector('#exo_contenu');
+    field.value = textarea.scrollTop;
+    let form = document.querySelector('#editor-form');
+    form.action = "/exo/" + action;
+  }
+
+  function toggle_overview(afficher){
+    // Il faut mettre 
+    let apercu = document.querySelector('#apercu');
+    if ( afficher ) {
+      let file_name = "psw-04-2";
+      apercu.src = "/exercice/"+file_name+"/"+file_name+".html";
+    }
+    apercu.style.display = afficher ? "block" : "none";
+  }
+
+  function toggle_zen_ui(mettre_en_zen){
+    var domList = ["header", "nav#main"];
+    for (var idom in domList) {
+      var dom = document.querySelector(domList[idom]);
+      dom.style.display = mettre_en_zen ? 'none' : '' ;
+    }
+    var sectionContent = document.querySelector('section#content');
+    sectionContent.style.margin = mettre_en_zen ? '0' : '' ;
+  }
+</script>
+
+<style type="text/css">
+  textarea#exo_contenu {
+    border-color: #DDDDDD;
+  }
+  textarea#exo_contenu:focus {
+    outline: none;
+  }
+</style>
+
+<form id="editor-form" action="" method="POST">
+
+  <input type="hidden" name="exo[path]" value="psw-04-2">
+  <input type="hidden" id="exo_scrolling" name="exo[scrolling]">
+
+  <textarea name="exo[contenu]" id="exo_contenu" style="width:100%;height:800px;padding:1em;">
+---
+titre: Des nœuds dans la tête\nPetite leçon de Web
+reference: PSW-04-2
+name: psw-04-2
+path: psw-04-2.clip.exo
+competences: [cf. QCM]
+logiciels:
+niveau: Grand débutant
+duree: [30, 60]
+auteur: Philippe PERRET
+created_at: 2025-01-04
+revisions: []
+---
+rub: Mission
+Lire cette &quot;petite leçon de Web&quot; afin de pouvoir remplir le questionnaire qui accompagne ce document (référence PSW-04-1).
+
+rub: Petite leçon de Web
+
+**CONTENANTS/NŒUDS**
+
+Dans une page web — c&#39;est-à-dire une *page HTML* telle que nous l&#39;avons déjà vue — on trouve une grande variété de type de *boites* — qu&#39;on appelle aussi *nœuds*, ou *balises*. 
+
+doigt: On parle indifféremment de *nœuds*, de *balise*, de *boite* ou simplement d&#39;*élément* pour désigner ces objets HTML.
+
+Chaque *type de nœud* a ses particularités, ses propres fonctionnalités. Par exemple, on a déjà vu que les balises `&lt;div&gt;` pouvaient contenir du texte, elles peuvent aussi contenir d&#39;autres boites. Les balises `&lt;meta&gt;`, qu&#39;on trouve dans le `&lt;head&gt;` de la page, ne contiennent rien mais permettent de définir des choses aussi différentes que les mots-clés de la page, la description pour les robots et les moteurs de recherche ou encore le type d&#39;encodage du texte de la page (en général UTF8).
+
+De façon __non exhaustive__, les *types de nœuds* qu&#39;on trouve sont par exemple (inutile des les retenir pour le moment) :
+
+:liste
+: les `&lt;a&gt;` qui permettent de créer un lien pour rejoindre une autre page (ou de placer une *ancre*),
+: les `&lt;img&gt;` qui permettent d’insérer des images,
+: les `&lt;form&gt;` qui permettent de créer des formulaires,
+: les `&lt;textarea&gt;` qui permettent d’entrer du texte dans un formulaire,
+: les `&lt;audio&gt;` et`&lt;video&gt;` qui permettent d’insérer du son et de la vidéo,
+: les `&lt;table&gt;` qui permettent de créer des tableaux, 
+: les `&lt;ul&gt;` et`&lt;ol&gt;` qui permettent de faire des listes à puces ou listes numérotées,
+: les `&lt;p&gt;` qui permettent d’être des paragraphes de texte,
+: les `&lt;meta&gt;` qui définissent les données générales de la page,
+: etc. etc. il y en a pléthores.
+
+
+**CONTENUS**
+
+La plupart de ces nœuds, de ces balises, sont des *contenant* et possèdent à ce titre un *contenu*. La plupart mais pas toutes. Ce contenu se trouve, comme nous l’avons déjà vu, entre la borne `&lt;nom de la balise&gt;` et la borne `&lt;/nom de la balise&gt;`. On appelle ces deux *bornes*, respectivement, la *balise ouvrante* et la *balise fermante*.
+
+Par exemple, on définit le contenu d’un paragraphe entre `&lt;p&gt;` et `&lt;/p&gt;` :
+
+:blockcode
+::no_num
+: &lt;p&gt;Je suis un paragraphe dans la page&lt;/p&gt;
+:
+: &lt;table&gt;
+: 	&lt;!-- ici sera définie la table --&gt;
+: &lt;/table&gt;
+
+Les nœuds sans contenant sont rares mais ils existent. C’est par exemple le cas des balises `&lt;img&gt;` ou `&lt;meta&gt;`, qui ne contiennent rien, mais *définissent* une donnée. La balise `&lt;a&gt;`, lorsqu’elle définit une *ancre* (un endroit de la page qu’on peut rejoindre par un *hyperlien*) peut ne pas avoir de contenu.
+
+doigt: Certains nœuds ne possèdent pas de contenu.
+
+**ATTRIBUTS**
+
+Les nœuds se définissent également, de façon intensive, par leurs **attributs**, points essentiels d’une page HTML. Les *attributs* se placent à l’intérieur de la balise ouvrante : 
+
+:blockcode
+::no_num
+: &lt;balise attributs&gt;contenu&lt;/balise&gt;
+
+Un attribut est la plupart du temps défini par un nom (par exemple `style`) suivi du signe égal (« = ») et de sa valeur (par exemple `\&quot;color: red;\&quot;`), toujours entre guillemets droits (même s’il est toléré de ne pas toujours mettre. La forme est donc la suivante :
+
+:blockcode
+::no_num
+: &lt;balise attribut=&quot;valeur&quot;&gt;contenu&lt;/balise&gt;
+
+Il n’y a théoriquement aucune limite dans le nombre d’attributs qu’on peut mettre dans une balise et dans le code de la page HTML, on n&#39;hésite pas à les mettre les uns au-dessous des autres lorsqu&#39;ils sont nombreux.
+
+:blockcode
+:no_num
+: &lt;balise 
+:   attribut1=&quot;valeur&quot;
+:   attribut2=&quot;valeur&quot;
+:   attribut3=&quot;valeur&quot;
+:   … etc.
+:   &gt;
+:     contenu
+: &lt;/balise&gt;
+
+Ces attributs sont **extrêmement nombreux**. Là aussi, il est inutile de les retenir tous, d&#39;autant que seuls quelques-uns sont utilisés intensivement. On les appelle les *attributs universels*. Ce sont principalement les attributs :
+
+:liste
+: `id` pour définir l’identifiant unique du nœud, de la boite,
+: `class` pour définir les classes du nœud, en relation par exemple avec les classes CSS,
+: `type` pour définir le type précis du nœud,
+: `style` pour définir « en dur » le style de l’élément.
+
+doigt: Ces attributs font partie des *attributs* universels qu&#39;on peut trouver dans presque toutes les balises.
+
+Au-delà de ces attributs, on en trouve une infinité d’autres. Voyez plutôt, juste à titre indicatif : 
+
+L’attribut `href` pour définir la page que doit rejoindre un hyperlien`&lt;a&gt;`, l’attribut `src` pour définir l’endroit où trouver une image`&lt;img&gt;` ou un script JavaScript`&lt;script&gt;`, l’attribut `onclick` sur un bouton`&lt;button&gt;` pour savoir ce qu’on doit faire quand le visiteur clique sur le bouton, l’attribut `name` pour nommer tous les éléments d’un formulaire`&lt;form&gt;`, c’est-à-dire les cases`&lt;input type=&quot;radio&quot;&gt;`, les menus`&lt;select&gt;`, les champs de texte`&lt;textarea&gt;`, les attributs `method` et `action` pour savoir justement ce que doit faire un formulaire lorsqu’on le soumet, l’attribut `allow` d’un`&lt;iframe&gt;` permettant de charger une page dans une autre page, les attributs `max` et `min` pour définir les valeurs minimales et maximales d’un champ`&lt;input&gt;`, etc. Il y en a des centaines comme cela, pour répondre à tous les désirs et toutes les nécessités.
+
+En voilà pour finir quelques exemples concrets :
+
+:blockcode
+::no_num
+: &lt;a href=&quot;vers/ma/page.php&quot;&gt;Clique pour rejoindre ma page&lt;/a&gt;
+: 
+: &lt;a href=&quot;vers/autre_page.php&quot; id=&quot;monlien&quot;&gt;
+:   Clique pour rejoindre une autre page
+: &lt;/a&gt;
+
+Une image :
+
+:blockcode
+::no_num
+: &lt;img src=&quot;images/dans/dossier/monimage.png&quot; /&gt;
+
+Remarquez la balise ci-dessus qui est « autofermante » (`/&gt;` à la fin) car elle ne possède pas de contenu.
+
+Deux paragraphes avec de nombreux attributs qu’on peut tout à fait écrire en ligne ou les uns en-dessous des autres (ces attributs sont donnés à titre d’exemple pour le moment) :
+
+:blockcode
+::no_num
+: &lt;p id=&quot;par1&quot; class=&quot;class1 css2 grand&quot; style=&quot;display:none;color:blue&quot; contenteditable data-index=&quot;12&quot; onfocus=&quot;save(this)&quot; tabindex=&quot;5&quot;&gt;Un paragraphe éditable&lt;/p&gt;
+:
+: &lt;!-- plus lisible --&gt;
+: 
+: &lt;p
+:    id=&quot;par1&quot;
+:    class=&quot;class1 css3 grand&quot;
+:    style=&quot;display: none; color: blue&quot;
+:    data-index=&quot;12&quot;
+:    data-owner=&quot;texte3&quot;
+:    onfocus=&quot;save(this)&quot;
+:    tabindex=&quot;5&quot;
+:    contenteditable&gt;
+:   Un paragraphe éditable
+: &lt;/p&gt;
+
+Remarquez pour finir comment on inscrit des commentaires dans le code HTML à l’aide de : 
+
+:blockcode
+::no_num
+: &lt;!-- Commentaire sur une ligne --&gt;
+: 
+: &lt;!--
+:	Un commentaire ici
+:	sur plusieurs lignes 
+: --&gt;
+  </textarea>
+  <script type="text/javascript">
+    let scroll = 0 ;
+    let textarea = document.querySelector('#exo_contenu');
+    if (scroll > 0) {
+      textarea.scroll(0, scroll)
+    }
+  </script>
+  
+  <div class="right">
+  <div id="panneau_aide_formatage">
+    <div class="content">
+      <!-- @caller lib/clip_exo_web/controllers/exo/exo_html/editor.html.heex:72 (clip_exo) --><!-- <ClipExoWeb.AppComponents.aide_formatage> lib/clip_exo_web/components/app_components.ex:31 (clip_exo) --><h4>Règles</h4>
+<p>– Tout caractère échappé est gardé tel quel.</p>
+<p>– Les exposants se marquent avec « ^ ».</p>
+<p>– Des substitutions sont automatiquement effectuées (guillemets droits, apostrophes, renforcement des insécables par un nowrap)</p>
+
+<h4>Environnements</h4>
+<div><code>:table</code> (une table)</div>
+<div><code>:etapes</code> (des pas numérotés)</div>
+<div><code>:blockcode</code> (un bloc de code numéroté)</div>
+<div><code>:qcm</code> (un QCM…)</div>
+<div><code>:liste</code> (une liste avec des pictos par exemple)</div>
+<div><code>:raw</code> (code brut — ne sera pas modifié)</div>
+
+<h4>Types de paragraphes</h4>
+<p>Ils peuvent se mettre avant le paragraphe avec <code>&lt;class: Paragraphe…></code></p>
+<div><code>rub:</code> Titre de rubrique</div>
+<div><code>rubi:</code> Titre de rubrique « inline » — quand la description suit</div>
+<div><code>doigt:</code> Texte décalé à droite et « pointé » par un doigt</div>
+<div><code>cadre:</code> Texte encadré</div>
+
+<h4>Étapes avec pictos</h4>
+<p>(à utiliser dans l'environnement <code>:etapes</code>)</p>
+<div><code>:souris</code> : une étape à la souris</div>
+<div><code>:clavier</code> : des touches à presser</div>
+<div><code>:clic</code> : un clic de souris</div>
+<div><code>:menu</code> : un menu à activer</div>
+<div><code>:repete</code> : une action à répéter</div>
+<div><code>:coche</code> : une case à cocher</div>
+<div><code>:radio</code> : un bouton radio à activer</div>
+<div><code>:cle</code> : une clé USB à utiliser</div>
+<div><code>:mesure</code> : une mesure à faire</div>
+
+<h4>Table</h4>
+<p>(à utiliser dans l'environnement <code>:table</code>)</p>
+<p class="italic">Les arguments des options suivantes concernent chacune des colonnes.</p>
+<div><code>::cols_width</code> : largeur colonnes</div>
+<div><code>::cols_align</code> : alignement colonnes</div>
+<div><code>::cols_pad</code> : padding cellules</div>
+<div><code>::cols_class</code> : class colonnes</div>
+<div><code>::cols_libelle</code> : titre colonnes</div>
+<p>Chaque ligne du tableau est amorcée par un « <code>: </code> » (deux points et espace) et les colonnes sont séparées par des virgules.</p>
+<p class="italic">Si des virgules sont nécessaires, on les échappe.</p>
+
+<h4>QCM</h4>
+<p>(à utiliser dans un environnement <code>:qcm</code>)</p>
+<p>On détermine le type de question par <code>:qr </code> (question à boutons radio — choix unique) ou <code>:qc</code> (question à cases à cocher — choix multiples)</p>
+<p>Chaque question est déterminée ensuite par <code>:r&lt;points></code>. Les points vont impérativement de 0 à 9. À partir de 5, les réponses sont considérées comme juste (donc une alternance de 0 et de 5 suffit à distinguer les bonnes réponses des mauvaises).</p>
+<h5>Options générales du formulaires</h5>
+<p><code>::permettre_ne_sait_pas</code> : à chaque question on ajoute une case ou un bouton radio « Je ne sais pas ». Cette réponse vaut toujours 1 point.</p>
+<h5>Options pour les questions</h5>
+<p><code>::horizontal</code> : les réponses seront présentées horizontalement pour cette question.</p><!-- </ClipExoWeb.AppComponents.aide_formatage> -->
+    </div>
+    <span class="main-titre">AIDE FORMATAGE</span>
+  </div>
+
+    <span id="cb_apercu" class="smaller fleft" style="margin-left: 1cm;">
+      <input type="checkbox" name="exo[zen_ui]" id="exo_zen_ui" onclick="toggle_zen_ui(this.checked)">
+      <label for="exo_zen_ui" class="smaller">UI Zen</label>
+      <input type="checkbox" name="exo[apercu]" id="exo_apercu" onclick="toggle_overview(this.checked)">
+      <label for="exo_apercu" class="smaller">Activer l’aperçu</label>
+    </span>
+    <button onclick="set_action('save')" type="submit">Enregistrer le fichier</button>
+  </div>
+</form>
+
+<script type="text/javascript">
+  function on_blur_replace(field) {
+    if ( field.value == "") {
+      Search.setBoutonSearchTo("Chercher");
+    } else {
+      Search.setBoutonSearchTo("Remplacer");
+    }
+  }
+  function on_blur_searched(field) {
+    Search.setBoutonStateTo(field.value !== "")
+  }
+
+  const Search = {
+    search(){
+      var regexp = (function (s){
+        if ( s.match(/^\/.*\/$/) ) {
+          s = s.substr(1, s.length - 2)
+        }
+        var options = ["g"]
+        if (s.charAt(0) == "^" || s.charAt(s.length - 1) == "$") {
+          options.push("m")
+        }
+        return RegExp(s, options.join(""))
+      })(this.fieldSeached.value)
+      console.log("regexp: ", regexp, typeof regexp)
+      var replace  = this.fieldReplace.value;
+      var text = ThisUI.textarea.value
+      text = text.replace(regexp, replace)
+      ThisUI.textarea.value = text
+    },
+    setBoutonSearchTo(name){
+      this.bouton.innerHTML = name
+      this.setBoutonStateTo(true)
+    },
+    setBoutonStateTo(state){
+      this.bouton.disabled = !state
+    },
+    get bouton(){
+      if (undefined == this._btn) {
+        this._btn = document.querySelector("#btn-search")
+      }; return this._btn
+    },
+    get fieldSeached(){
+      if (undefined == this._fieldsearched){
+        this._fieldsearched = document.querySelector("#search-searched")
+      }; return this._fieldsearched;
+    },
+    get fieldReplace(){
+      if (undefined == this._fieldreplace){
+        this._fieldreplace = document.querySelector("#search-replace")
+      }; return this._fieldreplace;
+    }
+  }
+</script>
+
+<div id="toolbar" class="smaller">
+  <fieldset>
+    <legend>Recherche/remplacement</legend>
+    <span>Chercher </span> 
+    <input tabindex="1" id="search-searched" type="text" name="search[searched]" style="width:180px;" onblur="on_blur_searched(this)">
+    <span>Remplacer par </span>
+    <input tabindex="2" id="search-replace" type="text" name="search[replace]" style="width:180px;" onblur="on_blur_replace(this)">
+    <button tabindex="3" disabled id="btn-search" onclick="Search.search()" class="small" style="width:140px;">Chercher</button>
+  </fieldset>
+</div>
+
+<style type="text/css">
+  iframe#apercu {
+    position: fixed;
+    display: none;
+    top: 40px;
+    left: 1080px;
+    width: 25.2cm;
+    height: 34.8cm;
+    z-index: -1
+  }
+</style>
+
+
+<iframe id="apercu" src="" frameborder="1">
+</iframe>
+
+<script type="text/javascript">
+  toggle_overview(false);
+  toggle_zen_ui(false);
+
+
+  // Pour que la touche entrée enregistre le code
+
+  document.querySelector('#exo_contenu').addEventListener("keypress", (ev) => {
+    if (ev.metaKey && ev.charCode == 115) {
+      ev.preventDefault()
+      ev.stopPropagation()
+      ev.stopImmediatePropagation()
+      document.querySelector('form#editor-form').submit()
+    } else {
+      console.log("ev = ", ev)
+    }
+  })
+</script>
+
+<script defer type="module" phx-track-static src="/assets/js/for_textarea.js"></script><!-- </ClipExoWeb.ExoHTML.editor> -->
+    </section>
+  <iframe hidden height="0" width="0" src="/phoenix/live_reload/frame"></iframe></body>
+</html><!-- </ClipExoWeb.Layouts.root> -->
