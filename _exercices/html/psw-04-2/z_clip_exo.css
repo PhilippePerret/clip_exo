@@ -338,7 +338,7 @@ section.qcm div.question.radio:after {
   content: "(Une seule bonne réponse)";
 }
 section.qcm div.question.checkbox:after {
-  content: "(Cocher toutes les bonnes réponses)";
+  content: "(Plusieurs bonnes réponses)";
 }
 
 section.qcm span.reponse {

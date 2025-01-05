@@ -1,5 +1,5 @@
 ---
-titre: Des nœuds dans la tête…\nPetite leçon de Web
+titre: Des nœuds dans la tête\nPetite leçon de Web
 reference: PSW-04-2
 name: psw-04-2
 path: psw-04-2.clip.exo
@@ -18,26 +18,32 @@ rub: Petite leçon de Web
 
 **CONTENANTS/NŒUDS**
 
-Dans une page web, une *page HTML* telle que nous l'avons déjà vue, on trouve une grande variété de type de *boites* — qu'on appelle aussi *nœuds*. Chaque type de nœud a ses particularités, ses fonctionnalités. De façon non exhaustive, on trouve par exemple (inutile des les retenir pour le moment) :
-
-:liste
-: les `&lt;a>` qui permettent de rejoindre une autre page (ou de placer une *ancre*),
-: les `&lt;img>` qui permettent d’insérer des images,
-: les `&lt;form>` qui permettent de créer des formulaires,
-: les `&lt;textarea>` qui permettent d’entrer du texte dans un formulaire,
-: les `&lt;audio>` et `&lt;video>` qui permettent d’insérer du son et de la vidéo,
-: les `&lt;table>` qui permettent de créer des tableaux, 
-: les `&lt;ul>` et `&lt;ol>` qui permettent de faire des listes à puces ou listes numérotées,
-: les `&lt;p>` qui permettent d’être des paragraphes de texte.
-: etc. etc. il y en a pléthores.
+Dans une page web — c'est-à-dire une *page HTML* telle que nous l'avons déjà vue — on trouve une grande variété de type de *boites* — qu'on appelle aussi *nœuds*, ou *balises*. 
 
 doigt: On parle indifféremment de *nœuds*, de *balise*, de *boite* ou simplement d'*élément* pour désigner ces objets HTML.
 
+Chaque *type de nœud* a ses particularités, ses propres fonctionnalités. Par exemple, on a déjà vu que les balises `<div>` pouvaient contenir du texte, elles peuvent aussi contenir d'autres boites. Les balises `<meta>`, qu'on trouve dans le `<head>` de la page, ne contiennent rien mais permettent de définir des choses aussi différentes que les mots-clés de la page, la description pour les robots et les moteurs de recherche ou encore le type d'encodage du texte de la page (en général UTF8).
+
+De façon __non exhaustive__, les *types de nœuds* qu'on trouve sont par exemple (inutile des les retenir pour le moment) :
+
+:liste
+: les `<a>` qui permettent de créer un lien pour rejoindre une autre page (ou de placer une *ancre*),
+: les `<img>` qui permettent d’insérer des images,
+: les `<form>` qui permettent de créer des formulaires,
+: les `<textarea>` qui permettent d’entrer du texte dans un formulaire,
+: les `<audio>` et`<video>` qui permettent d’insérer du son et de la vidéo,
+: les `<table>` qui permettent de créer des tableaux, 
+: les `<ul>` et`<ol>` qui permettent de faire des listes à puces ou listes numérotées,
+: les `<p>` qui permettent d’être des paragraphes de texte,
+: les `<meta>` qui définissent les données générales de la page,
+: etc. etc. il y en a pléthores.
+
+
 **CONTENUS**
 
-La plupart de ces nœuds, de ces balises, sont des *contenant* et possèdent à ce titre un *contenu*. La plupart mais pas toutes. Ce contenu se trouve, comme nous l’avons déjà vu, entre `&lt;nom de la balise>` et `&lt;/nom de la balise>`. On appelle ces deux balises respectivement la *balise ouvrante* et la *balise fermante*.
+La plupart de ces nœuds, de ces balises, sont des *contenant* et possèdent à ce titre un *contenu*. La plupart mais pas toutes. Ce contenu se trouve, comme nous l’avons déjà vu, entre la borne `<nom de la balise>` et la borne `</nom de la balise>`. On appelle ces deux *bornes*, respectivement, la *balise ouvrante* et la *balise fermante*.
 
-Par exemple, on définit le contenu d’un paragraphe entre `&lt;p>` et `&lt;/p>` :
+Par exemple, on définit le contenu d’un paragraphe entre `<p>` et `</p>` :
 
 :blockcode
 ::no_num
@@ -47,25 +53,38 @@ Par exemple, on définit le contenu d’un paragraphe entre `&lt;p>` et `&lt;/p>
 : 	<!-- ici sera définie la table -->
 : </table>
 
-Les nœuds sans contenant sont rares mais ils existent. C’est par exemple le cas de la balise `&lt;img>`  qui ne contient rien, puisqu’elle *définit* une image. La balise `&lt;a>`, lorsqu’elle définit une *ancre* (un endroit de la page qu’on peut rejoindre par un *hyperlien*) peut ne pas avoir de contenu.
+Les nœuds sans contenant sont rares mais ils existent. C’est par exemple le cas des balises `<img>` ou `<meta>`, qui ne contiennent rien, mais *définissent* une donnée. La balise `<a>`, lorsqu’elle définit une *ancre* (un endroit de la page qu’on peut rejoindre par un *hyperlien*) peut ne pas avoir de contenu.
+
+doigt: Certains nœuds ne possèdent pas de contenu.
 
 **ATTRIBUTS**
 
-En plus de leur contenu, les nœuds sont définis par les **attributs** qui sont un point essentiel d’une page HTML. Les attributs se placent à l’intérieur de la balise ouvrante : 
+Les nœuds se définissent également, de façon intensive, par leurs **attributs**, points essentiels d’une page HTML. Les *attributs* se placent à l’intérieur de la balise ouvrante : 
 
 :blockcode
 ::no_num
 : <balise attributs>contenu</balise>
 
-Un attribut est la plupart du temps défini par un nom (par exemple `style`) suivi du signe égal (« = ») et de sa valeur, toujours entre guillemets droits (même s’il est toléré de ne pas toujours mettre. La forme est donc la suivante :
+Un attribut est la plupart du temps défini par un nom (par exemple `style`) suivi du signe égal (« = ») et de sa valeur (par exemple `\"color: red;\"`), toujours entre guillemets droits (même s’il est toléré de ne pas toujours mettre. La forme est donc la suivante :
 
 :blockcode
 ::no_num
-: attribut="valeur"
+: <balise attribut="valeur">contenu</balise>
 
-Il n’y a théoriquement aucune limite dans le nombre d’attributs qu’on peut mettre dans une balise.
+Il n’y a théoriquement aucune limite dans le nombre d’attributs qu’on peut mettre dans une balise et dans le code de la page HTML, on n'hésite pas à les mettre les uns au-dessous des autres lorsqu'ils sont nombreux.
 
-Et ces attributs sont extrêmement nombreux. Là aussi, il est inutile de les retenir tous, seuls quelques uns sont utilisés intensivement. On les appelle les *attributs universels*. Ce sont principalement les attributs : 
+:blockcode
+:no_num
+: <balise 
+:   attribut1="valeur"
+:   attribut2="valeur"
+:   attribut3="valeur"
+:   … etc.
+:   >
+:     contenu
+: </balise>
+
+Ces attributs sont **extrêmement nombreux**. Là aussi, il est inutile de les retenir tous, d'autant que seuls quelques-uns sont utilisés intensivement. On les appelle les *attributs universels*. Ce sont principalement les attributs :
 
 :liste
 : `id` pour définir l’identifiant unique du nœud, de la boite,
@@ -73,9 +92,11 @@ Et ces attributs sont extrêmement nombreux. Là aussi, il est inutile de les re
 : `type` pour définir le type précis du nœud,
 : `style` pour définir « en dur » le style de l’élément.
 
-Cette liste est non exhaustive. Mais au-delà de ces attributs, on en trouve une infinité d’autres. Voyez plutôt, juste à titre indicatif : 
+doigt: Ces attributs font partie des *attributs* universels qu'on peut trouver dans presque toutes les balises.
 
-L’attribut `href` pour définir la page que doit rejoindre un hyperlien `&lt;a>`, l’attribut `src` pour définir l’endroit où trouver une image `&lt;img>` ou un script JavaScript `&lt;script>`, l’attribut `onclick` sur un bouton `&lt;button>` pour savoir ce qu’on doit faire quand le visiteur clique sur le bouton, l’attribut `name` pour nommer tous les éléments d’un formulaire `&lt;form>`, c’est-à-dire les cases `&lt;input type="radio">`, les menus `&lt;select>`, les champs de texte `&lt;textarea>`, les attributs `method` et `action` pour savoir justement ce que doit faire un formulaire lorsqu’on le soumet, l’attribut `allow` d’un `&lt;iframe>` permettant de charger une page dans une autre page, les attributs `max` et `min` pour définir les valeurs minimales et maximales d’un champ `&lt;input>`, etc. Il y en a des centaines comme cela, pour répondre à tous les désirs et toutes les nécessités.
+Au-delà de ces attributs, on en trouve une infinité d’autres. Voyez plutôt, juste à titre indicatif : 
+
+L’attribut `href` pour définir la page que doit rejoindre un hyperlien`<a>`, l’attribut `src` pour définir l’endroit où trouver une image`<img>` ou un script JavaScript`<script>`, l’attribut `onclick` sur un bouton`<button>` pour savoir ce qu’on doit faire quand le visiteur clique sur le bouton, l’attribut `name` pour nommer tous les éléments d’un formulaire`<form>`, c’est-à-dire les cases`<input type="radio">`, les menus`<select>`, les champs de texte`<textarea>`, les attributs `method` et `action` pour savoir justement ce que doit faire un formulaire lorsqu’on le soumet, l’attribut `allow` d’un`<iframe>` permettant de charger une page dans une autre page, les attributs `max` et `min` pour définir les valeurs minimales et maximales d’un champ`<input>`, etc. Il y en a des centaines comme cela, pour répondre à tous les désirs et toutes les nécessités.
 
 En voilà pour finir quelques exemples concrets :
 

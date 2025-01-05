@@ -11,8 +11,8 @@
       <%= assigns[:page_title] || "ClipExo" %>
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
-    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
-    </script>
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}></script>
+    <script type="module" phx-track-static src={~p"/assets/js/taboverride.min.js"}></script>
   </head>
   <body class="bg-white">
     <header>

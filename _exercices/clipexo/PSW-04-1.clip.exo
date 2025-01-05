@@ -1,5 +1,5 @@
 ---
-titre: Des nœuds dans la tête…\nLe QCM
+titre: Des nœuds dans la tête\nLe QCM
 reference: PSW-04-1
 name: psw-04-1
 path: psw-04-1.clip.exo
@@ -18,27 +18,42 @@ Réussir à remplir le QCM (questionnaire à choix multiples) suivant en lisant 
 rub:QCM
 
 :qcm
-::permettre_ne_sait_pas
-:qr `id` et `class` s'appellent des *attributs*
-:r5 vrai | :r0 faux
+:qr `id` et `class` s'appellent des *attributs*. C'est…
+:r5 vrai | :r0 faux | :r1 Je ne sais pas
 :
-:qr `id` et `class` sont les seuls attributs qu'on peut trouver dans un nœud.
-:r0 vrai | :r5 faux
+:qr `id` et `class` sont les seuls *attributs* qu'on peut trouver dans un nœud.
+:r0 Oui, les seuls | :r5 Non | :r1 Je ne sais pas
 :
-:qr Les termes *boite*, *nœuds*, *balise* représentent des choses différentes
-:r0 vrai | :r5 faux
+:qr Les termes *boite*, *nœud*, *balise* représentent des choses tout à fait différentes. C'est…
+:r0 vrai | :r5 faux | :r1 Je ne sais pas
 :
-:qr Il existe un très grand nombre d'attributs (plus de 20)
-:r5 vrai | :r0 faux
+:qr Il existe un très grand nombre d'attributs (plus de 20).
+:r5 Oui, un très grand nombre | :r0 Non, très peu | :r1 Je ne sais pas
 :
-:qc Parmi ces noms, lesquels sont des *types de nœud* (noms de balise) ?
-:r2 div
-:r2 img
-:r2 form
-:r2 style
+:qc Parmi ces noms, lesquels sont des *types de nœud* (noms de balise) (attention, il y a un piège) ?
+:r0 `link` | :r2 `div` | :r2 `img` 
+:r2 `form` | :r0 `src` | :r0 `class`
+:r3 `style` | :r1 Je ne sais pas
 :
 :qc Parmi ces noms, lesquels sont des *attributs* ?
-:r2 href | :r0 div
-:r2 img
-:r2 type
-:r2 style
+:r2 href | :r0 div | :r0 iframe
+:r2 img | :r2 link | :r2 type
+:r0 div | :r2 style | :r1 Je ne sais pas
+:
+:qr De quel type de nœud se sert-on pour faire **un lien vers une autre page** ?
+:r0 `<link>` | :r5 `<a>` | :r0 `<rel>` | :r1 Je ne sais pas
+:
+:qr Peut-on mettre du contenu dans un nœud `<img>` ?
+:r5 Non | :r0 Oui | :r1 Je ne sais pas
+:
+:qr Avec quelle balise peut-on insérer une autre page dans une page ?
+:r0 `<div>` | :r0 `<include>` | :r5 `<iframe>` | :r1 Je ne sais pas
+:
+:qr Où se trouvent en général les balises `<meta>` ?
+:r0 Dans le `<body>` de la page | :r5 Dans le `<head>` de la page HTML | :r1 Je ne sais pas
+:
+:qc À quoi servent les balises `<meta>` ?
+:r5 À décrire la page pour les navigateurs et le robots
+:r5 À définir le type d'encodage (par exemple UTF8)
+:r5 À définir les mots-clés qui peuvent caractériser la page
+:r1 Je ne sais pas
