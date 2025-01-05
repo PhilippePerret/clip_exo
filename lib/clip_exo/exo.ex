@@ -332,9 +332,9 @@ defmodule ClipExo.Exo do
     # IO.inspect(params_exo, label: "\nPARAMS_EXO")
     params_exo =
       if params_exo["path"] |> SafeString.nil_if_empty() |> is_nil() do
-        rappel_last_traitement() || raise("Il faut donner le path du fichier exercice.")
+        Last.get(:path) || raise("Il faut donner le path du fichier exercice.")
       else
-        memo_last_traitement(params_exo)
+        Last.set(params_exo["path"], :path, params_exo)
       end
 
     with  {:ok, path} <- get_path_exo(params_exo),
@@ -346,31 +346,6 @@ defmodule ClipExo.Exo do
     else
       {:error, message_erreur} ->
         {:error, message_erreur}
-    end
-  end
-
-  @path_memo_file ".last_traitement"
-  def rappel_last_traitement() do
-    if File.exists?(@path_memo_file) do
-      @path_memo_file |> File.read!() |> Jason.decode!()
-    else nil end
-  end
-  def memo_last_traitement(params) do
-    # Filtrage des données qu'on enregistre
-    params_saved = %{
-      path: params["path"] || params[:path],
-      date: Date.utc_today()
-    }
-    File.write(@path_memo_file, Jason.encode!(params_saved), [:utf8])
-    params # pour simplifier le code appelant
-  end
-
-  # Retourne le dernier path utilisé, if any
-  def last_path() do
-    if memo = rappel_last_traitement() do
-      memo["path"]
-    else
-      nil
     end
   end
 
