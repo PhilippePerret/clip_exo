@@ -163,7 +163,13 @@ defmodule ExoLine.Builder do
       "<div class=\"warning\">Ligne sans tline : '#{exoline.content}' (#{inspect(exoline)})</div>"
     String.at(exoline.tline, 0) == "q" -> 
       # Une question
-      "<div class=\"question #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</div>"
+      classes = ExoLine.classes_css(exoline, conteneur)
+      "<div class=\"question #{classes}\">#{exoline.fcontent}</div>" 
+      <> "<div class=\"nombre_reponses\">" <> if Enum.member?(String.split(classes, " "), "radio") do
+        "(une seule bonne réponse)"
+      else
+        "(plusieurs réponses possibles)"
+      end <> "</div>"
     true ->
       # Une réponse
       "<span data-points=\"#{exoline.data.points}\" class=\"reponse #{ExoLine.classes_css(exoline, conteneur)}\">#{exoline.fcontent}</span>"

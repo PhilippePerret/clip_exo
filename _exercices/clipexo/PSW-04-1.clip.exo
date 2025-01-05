@@ -37,7 +37,7 @@ rub:QCM
 :
 :qc Parmi ces noms, lesquels sont des *attributs* ?
 :r2 href | :r0 div | :r0 iframe
-:r2 img | :r2 link | :r2 type
+:r0 img | :r0 link | :r2 type
 :r0 div | :r2 style | :r1 Je ne sais pas
 :
 :qr De quel type de nœud se sert-on pour faire **un lien vers une autre page** ?
