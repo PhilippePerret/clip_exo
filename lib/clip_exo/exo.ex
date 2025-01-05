@@ -103,9 +103,24 @@ defmodule ClipExo.Exo do
     {res, _status} = System.shell("ls \"#{@folder_full_path}\"")
     res 
     |> String.split("\n")
-    |> Enum.reject(fn x -> x == "" || String.slice(x, -9..-1) != ".clip.exo" end)
-    |> Enum.map(fn x -> x |> String.slice(0..-10) end)
+    |> Enum.reject(fn x -> x == "" || not(x =~ ~r/\.clip\.exo$/) end)
+    |> Enum.map(fn name -> 
+      nom = name |> String.replace(~r/\.clip\.exo/, "")
+      titre = get_titre_of(name) |> String.replace("\\n", " ")
+      "#{nom} — #{titre}"
+    end)
     # |> IO.inspect(label: "\nRETOUR DE liste exercices")
+  end
+
+  @doc """
+  Retourne le titre de l'exercice
+  +filename+ Nom du fichier avec extension
+  """
+  def get_titre_of(filename) do
+    fullpath = Path.join([@folder_full_path, filename])
+    Regex.named_captures(~r/^titre\:(?<titre>.*)$/m, File.read!(fullpath))
+    # => %{titre: "Le titre"}
+    |> Map.get("titre")
   end
 
   @doc """
