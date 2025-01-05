@@ -57,9 +57,9 @@
   <form id="exos_liste_form" action="/exo/editer" method="POST">
     <input type="hidden" name="last_filter" id="last_filter" />
     <input type="hidden" name="exo[path]" id="exo_path" />
-    <%= for exo <- @exo_liste do %>
+    <%= for {titre, path} <- @exo_liste do %>
       <li>
-        <a href={"javascript:setPathFromList('#{exo}')"}><%= exo %></a>
+        <a href={"javascript:setPathFromList('#{path}')"}><%= path %> — <%= titre %></a>
       </li>
     <% end %>
   </form>

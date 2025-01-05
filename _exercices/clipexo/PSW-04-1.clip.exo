@@ -28,6 +28,17 @@ rub:QCM
 :qr Les termes *boite*, *nœuds*, *balise* représentent des choses différentes
 :r0 vrai | :r5 faux
 :
-:qr Il existe un très grand nombre d'attributs
+:qr Il existe un très grand nombre d'attributs (plus de 20)
 :r5 vrai | :r0 faux
 :
+:qc Parmi ces noms, lesquels sont des *types de nœud* (noms de balise) ?
+:r2 div
+:r2 img
+:r2 form
+:r2 style
+:
+:qc Parmi ces noms, lesquels sont des *attributs* ?
+:r2 href | :r0 div
+:r2 img
+:r2 type
+:r2 style

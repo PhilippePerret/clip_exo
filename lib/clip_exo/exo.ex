@@ -108,7 +108,7 @@ defmodule ClipExo.Exo do
     |> Enum.map(fn name -> 
       nom = name |> String.replace(~r/\.clip\.exo/, "")
       titre = get_titre_of(name) |> String.replace("\\n", " ")
-      "#{nom} — #{titre}"
+      {titre, nom}
     end)
     # |> IO.inspect(label: "\nRETOUR DE liste exercices")
   end
