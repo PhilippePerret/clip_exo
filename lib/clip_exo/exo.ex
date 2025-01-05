@@ -329,7 +329,7 @@ defmodule ClipExo.Exo do
     {:error, msg} -> "Impossible de lire le fichier : #{msg}"
     {:ok, path} -> 
       File.read!(path)
-      |> IO.inspect(label: "\nCONTENU DU FICHIER (get_content_of)")
+      # |> IO.inspect(label: "\nCONTENU DU FICHIER (get_content_of)")
     end
   end
 
