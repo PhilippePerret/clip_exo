@@ -124,7 +124,18 @@ defmodule StringTo do
   @reg_guillemets ~r/"(.+)"/U; @remp_guillemets "« \\1 »"
   @reg_return ~r/( +)?\\n( +)?/; @remp_return "<br />"
   @reg_line ~r/(^|\r?\n)\-\-\-(\r?\n|$)/; @remp_line "\\1<hr />\\2"
-  @reg_ponct_nowrap ~r/\b([^ ]+)([  ])([!?:;])/U ; @temp_ponct_nowrap "<span class=\"nowrap\">\\1\\2\\3</span>"
+  
+  # Expression régulière pour capter les textes du style :
+  #   ««« un mot ? »»»
+  # et les transformer en :
+  #   ««« un <nowrap>mot ?</nowrap>
+  # Note
+  # Penser qu'on peut avoir des styles, par exemple <em>un mot</em> 
+  # et qu'on ne peut donc pas utiliser le \b
+  #
+  @reg_ponct_nowrap ~r/ ([^ ]+)([  ])([!?:;])/U ; @temp_ponct_nowrap " <nowrap>\\1\\2\\3</nowrap>"
+  # Si le <nowrap> ne se révèle pas efficace, utiliser plutôt :
+  # @reg_ponct_nowrap ~r/ ([^ ]+)([  ])([!?:;])/U ; @temp_ponct_nowrap " <span class=\"nowrap\">\\1\\2\\3</span>"
 
   def html(str, _options \\ %{}) do
     # Il faut que le string contienne un "candidat" pour que

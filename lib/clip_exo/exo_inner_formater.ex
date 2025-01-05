@@ -419,8 +419,9 @@ defmodule ExoConteneur.Builder do
         # TODO: MALHEUREUSEMENT, ça n'ajoute la propriété "horizontal" que
         # si c'est la dernière ligne. Pour le moment, on joue sur les classes
         # CSS .horizontal + .reponse pour traiter l'alignement.
+        classes_last_line = Enum.at(collector.lines, -1).classes
         choix_dont_know =
-          if Enum.member?(Enum.at(collector.lines, -1).classes, "horizontal") do
+          if classes_last_line && Enum.member?(classes_last_line, "horizontal") do
             %{case_dont_know | classes: ["horizontal"]}
           else case_dont_know end
         collector.lines ++ [choix_dont_know]

@@ -37,7 +37,7 @@ rub:QCM
 :r2 form
 :r2 style
 :
-:qc Parmi ces noms, lesquels sont des *attributs* ?
+:qc Parmi ces noms, lesquels sont des *attributs* ?
 :r2 href | :r0 div
 :r2 img
 :r2 type
