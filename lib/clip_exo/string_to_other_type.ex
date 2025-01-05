@@ -113,6 +113,8 @@ defmodule StringTo do
   # tous les textes qui peuvent déclencher la correction.
   @reg_candidats_html ~r/[\`\*_\-\^\\\"\'\:\;\!\?]/
 
+  # Expression régulière pour capturer les codes entre backsticks.
+  # Note : on en profite pour remplacer les '<' par des '&lt;'.
   @reg_backsticks ~r/\`(.+)\`/U; @remp_backsticks "<code>\\1</code>"
   @reg_bold_ital ~r/\*\*\*(.+)\*\*\*/U; @remp_bold_ital "<b><em>\\1</em></b>"
   @reg_bold ~r/\*\*(.+)\*\*/U; @remp_bold "<b>\\1</b>"
@@ -151,7 +153,9 @@ defmodule StringTo do
       |> String.replace("'", "’")
       |> String.replace(@reg_guillemets, @remp_guillemets)
       |> String.replace(@reg_line, @remp_line)
-      |> String.replace(@reg_backsticks, @remp_backsticks)
+      |> (&Regex.replace(@reg_backsticks, &1, fn _tout, code -> 
+          "<code>" <> String.replace(code, "<", "&lt;") <> "</code>"
+        end)).()
       |> String.replace(@reg_bold_ital, @remp_bold_ital)
       |> String.replace(@reg_bold, @remp_bold)
       |> String.replace(@reg_ital, @remp_ital)
