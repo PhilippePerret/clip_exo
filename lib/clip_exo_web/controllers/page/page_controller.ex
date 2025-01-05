@@ -18,7 +18,7 @@ defmodule ClipExoWeb.PageController do
     if params["exo"] && params["exo"]["path"] do
       params["exo"]["path"]
     else
-      Exo.last_path()
+      Last.get(:path)
     end
   end
 

@@ -37,7 +37,7 @@ defmodule ClipExoWeb.ExoController do
     ""  -> on_error_miss_exo(conn)
     exo ->
       exo = Map.put(exo, "contenu", Exo.get_content_of(params["exo"]["path"]))
-      Exo.memo_last_traitement(exo)
+      Last.set(%{path: exo["path"], exo_filter: params["last_filter"]})
       render(conn, :editor, exo: exo, ui: ClipExo.ui_terms)
     end
   end

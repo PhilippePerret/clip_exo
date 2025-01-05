@@ -1,9 +1,12 @@
 <h1>Forgerie</h1>
 
 <script type="text/javascript">
+
   function goto(location){
     document.querySelector('#edition_form').action = location;
   }
+
+
 </script>
 <center>
   <a href={~p"/exo/preformater"} class="btn"><%= @ui.boutons["preformatage"] %></a>
@@ -21,9 +24,43 @@
 
 <h3>Liste des exercices</h3>
 
-<ul id="exo-liste">
-<%= for exo <- @exo_liste do %>
-  <% path = "/exo/editer/?exo[path]=#{exo}" %>
-  <li><a href={path}><%= exo %></a></li>
-<% end %>
+<script>
+  function filtreExos(filter) {
+    document
+      .querySelector("#exos-liste")
+      .querySelectorAll("li")
+      .forEach( li => {
+        var lien = li.querySelector('a')
+        var nom_et_titre = lien.href.split("=").pop()
+        if ( nom_et_titre.match(filter) ) {
+          li.style.display = "";
+        } else {
+          li.style.display = "none";
+        }
+      })
+    document.querySelector('#last_filter').value = filter;
+  }  
+
+  function setPathFromList(path) {
+    let form = document.querySelector('form#exos_liste_form');
+    form.querySelector("#exo_path").value = path
+    form.submit();
+  }
+</script>
+
+<div>
+  <label for="exos_filter">Filtre : </label>
+  <input type="text" name="exos_filter" class="medium" oninput="filtreExos(this.value)"/>
+</div>
+
+<ul>
+  <form id="exos_liste_form" action="/exo/editer" method="POST">
+    <input type="hidden" name="last_filter" id="last_filter" />
+    <input type="hidden" name="exo[path]" id="exo_path" />
+    <%= for exo <- @exo_liste do %>
+      <li>
+        <a href={"javascript:setPathFromList('#{exo}')"}><%= exo %></a>
+      </li>
+    <% end %>
+  </form>
 </ul>

@@ -6,25 +6,33 @@ defmodule Last do
   """
 
   defstruct [
-    "path" => nil , # dernier fichier travaillé (nom sans extension)
-    # 
+    path: nil , # dernier fichier travaillé (nom sans extension)
+    
+    last_paths: [], # les derniers fichiers travaillés
+
     # Dernier filtre appliqué à un exercice
-    "exo_filter" => nil, 
+    exo_filter: nil, 
 
     # --- Laisser en dernier ---
     # C'est une NaiveDateTime
-    "modified_at" => nil
+    modified_at: nil
   ]
+
+  @doc """
+  Chemin d'accès fichier qui conserve les dernières valeurs utilisées
+  à commencer par le chemin d'accès au dernier fichier.
+  """
+  @path_memo_file ".last_values"
 
   @doc """
   RETOURNE la dernière valeur de la propriété +prop+ ou la valeur
   par +defautl+
   """
-  def get(prop, default \\ nil) do
-    Map.fetch!(last_values, prop) || default
+  def get(prop, default \\ nil) when is_binary(prop) do
+    get(String.to_atom(prop), default)
   end
-  def get(prop, default \\ nil) when is_atom(prop) do
-    get(Atom.to_string(prop), default)
+  def get(prop, default) do
+    Map.fetch!(last_values(), prop) || default
   end
 
   @doc """
@@ -37,26 +45,41 @@ defmodule Last do
     Last.set("value", "prop"[, retour])
 
   """
-  def set(value, prop, retour \\ nil) do
-    lasts = struct(last_values(), [prop, value])
+  def set(%{} = values) do
+    current_values = last_values()
+    values 
+    |> Enum.reduce(current_values, fn {key, val}, acc -> 
+      Map.replace(last_values(), key, val)
+      end)
+    |> set_last_values()
+    |> IO.inspect(label: "\nNOUVELLES LAST VALUES")
+  end
+  def set(value, prop, retour \\ nil) when is_binary(prop) do
+    set(value, String.to_atom(prop), retour)
+  end
+  def set(value, prop, retour) do
+    lasts = Map.replace(last_values(), prop, value)
     set_last_values(lasts)
     retour || value
   end
-  def set(value, prop, retour \\ nil) when is_atom(prop) do
-    set(value, Atom.to_string(prop), retour)
+
+
+  # @retourne les dernières valeurs enregistrées en une structure
+  # %Last{}
+  defp last_values do
+    Map.merge(%__MODULE__{}, get_last_values())
   end
 
-  @path_memo_file ".last_values"
-  defp last_values, do: Map.merge(%__MODULE__{}, get_last_values())
-
+  # Lit les dernières valeurs dans le fichier et les renvoie
+  # (clés atomiques)
   defp get_last_values() do
     if File.exists?(@path_memo_file) do
-      @path_memo_file |> File.read!() |> Jason.decode!()
+      @path_memo_file |> File.read!() |> Jason.decode!(keys: :atoms)
     else %{} end
   end
 
   defp set_last_values(lasts) do
-    lasts = %{lasts | "modified_at" => NaiveDateTime.utc_now()}
+    lasts = %{lasts | modified_at: NaiveDateTime.utc_now()}
     values = lasts |> Map.from_struct() |> Jason.encode!()
     File.write(@path_memo_file, values, [:utf8])
   end
