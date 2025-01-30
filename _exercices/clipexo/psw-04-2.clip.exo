@@ -24,19 +24,21 @@ doigt: On parle indifféremment de *nœuds*, de *balise*, de *boite* ou simpleme
 
 Chaque *type de nœud* a ses particularités, ses propres fonctionnalités. Par exemple, on a déjà vu que les balises `<div>` pouvaient contenir du texte, elles peuvent aussi contenir d'autres boites. Les balises `<meta>`, qu'on trouve dans le `<head>` de la page, ne contiennent rien mais permettent de définir des choses aussi différentes que les mots-clés de la page, la description pour les robots et les moteurs de recherche ou encore le type d'encodage du texte de la page (en général UTF8).
 
-De façon __non exhaustive__, les *types de nœuds* qu'on trouve sont par exemple (inutile des les retenir pour le moment) :
+De façon __non exhaustive__, les *types de nœuds* qu'on trouve sont par exemple :
 
 :liste
-: les `<a>` qui permettent de créer un lien pour rejoindre une autre page (ou de placer une *ancre*),
-: les `<img>` qui permettent d’insérer des images,
-: les `<form>` qui permettent de créer des formulaires,
-: les `<textarea>` qui permettent d’entrer du texte dans un formulaire,
-: les `<audio>` et`<video>` qui permettent d’insérer du son et de la vidéo,
-: les `<table>` qui permettent de créer des tableaux, 
-: les `<ul>` et`<ol>` qui permettent de faire des listes à puces ou listes numérotées,
-: les `<p>` qui permettent d’être des paragraphes de texte,
-: les `<meta>` qui définissent les données générales de la page,
+: `<a>` qui permet de créer un lien pour rejoindre une autre page,
+: `<img>` qui permet d’insérer des images,
+: `<form>` qui permet de créer des formulaires,
+: `<textarea>` qui permet d’entrer du texte dans un formulaire,
+: `<audio>` et `<video>` qui permettent d’insérer du son et de la vidéo,
+: `<table>` qui permet de créer des tableaux, 
+: `<ul>` et`<ol>` qui permettent de faire des listes à puces ou listes numérotées,
+: `<p>` qui permet d'écrire des paragraphes de texte,
+: `<meta>` qui définit les données générales de la page,
 : etc. etc. il y en a pléthores.
+
+*Pas de panique ! Ça n'est pas la peine de les retenir !*
 
 
 **CONTENUS**
@@ -59,19 +61,19 @@ doigt: Certains nœuds ne possèdent pas de contenu.
 
 **ATTRIBUTS**
 
-Les nœuds se définissent également, de façon intensive, par leurs **attributs**, points essentiels d’une page HTML. Les *attributs* se placent à l’intérieur de la balise ouvrante : 
+Un autre point capital des nœuds, c'est leurs **attributs**. Les *attributs* se placent à l’intérieur de la *balise ouvrante* :
 
 :blockcode
 ::no_num
 : <balise attributs>contenu</balise>
 
-Un attribut est la plupart du temps défini par un nom (par exemple `style`) suivi du signe égal (« = ») et de sa valeur (par exemple `\"color: red;\"`), toujours entre guillemets droits (même s’il est toléré de ne pas toujours mettre. La forme est donc la suivante :
+Un attribut est la plupart du temps défini par un nom (par exemple `style`) suivi du signe égal (« = ») et de sa valeur (par exemple `\"color: red;\"`), toujours entre guillemets droits (même s’il est toléré de ne pas toujours les mettre. La forme générale, à bien connaitre, est donc la suivante :
 
 :blockcode
 ::no_num
 : <balise attribut="valeur">contenu</balise>
 
-Il n’y a théoriquement aucune limite dans le nombre d’attributs qu’on peut mettre dans une balise et dans le code de la page HTML, on n'hésite pas à les mettre les uns au-dessous des autres lorsqu'ils sont nombreux.
+Il n’y a théoriquement aucune limite dans le nombre d’attributs qu’on peut mettre dans une balise et dans le code de la page HTML, on n'hésite pas à les mettre les uns au-dessous des autres lorsqu'ils sont nombreux, pour rendre les choses plus claires, plus lisibles.
 
 :blockcode
 ::no_num
@@ -87,16 +89,18 @@ Il n’y a théoriquement aucune limite dans le nombre d’attributs qu’on peu
 Ces attributs sont **extrêmement nombreux**. Là aussi, il est inutile de les retenir tous, d'autant que seuls quelques-uns sont utilisés intensivement. On les appelle les *attributs universels*. Ce sont principalement les attributs :
 
 :liste
-: `id` pour définir l’identifiant unique du nœud, de la boite,
-: `class` pour définir les classes du nœud, en relation par exemple avec les classes CSS,
-: `type` pour définir le type précis du nœud,
-: `style` pour définir « en dur » le style de l’élément.
+: `id` pour définir l’identifiant unique du nœud, de la boite (c'est son *petit nom*, en quelque sorte),
+: `class` pour définir les classes CSS du nœud, donc son apparence très souvent,
+: `type` pour définir le type précis du nœud, quand il est spécial,
+: `style` pour définir « en dur » le style de l’élément, son apparence (*ça n'est pas recommandé, mais quelquefois, on est un peu fainéant…*).
 
 doigt: Ces attributs font partie des *attributs* universels qu'on peut trouver dans presque toutes les balises.
 
 Au-delà de ces attributs, on en trouve une infinité d’autres. Voyez plutôt, juste à titre indicatif : 
 
-L’attribut `href` pour définir la page que doit rejoindre un hyperlien`<a>`, l’attribut `src` pour définir l’endroit où trouver une image`<img>` ou un script JavaScript`<script>`, l’attribut `onclick` sur un bouton`<button>` pour savoir ce qu’on doit faire quand le visiteur clique sur le bouton, l’attribut `name` pour nommer tous les éléments d’un formulaire`<form>`, c’est-à-dire les cases`<input type="radio">`, les menus`<select>`, les champs de texte`<textarea>`, les attributs `method` et `action` pour savoir justement ce que doit faire un formulaire lorsqu’on le soumet, l’attribut `allow` d’un`<iframe>` permettant de charger une page dans une autre page, les attributs `max` et `min` pour définir les valeurs minimales et maximales d’un champ`<input>`, etc. Il y en a des centaines comme cela, pour répondre à tous les désirs et toutes les nécessités.
+L’attribut `href` pour définir la page que doit rejoindre un hyperlien `<a>`, l’attribut `src` pour définir l’endroit où se trouve une image `<img>` ou un fichier JavaScript `<script>`, l’attribut `onclick` sur un bouton `<button>` pour savoir ce qu’on doit faire quand le visiteur clique sur ce bouton, l’attribut `name` pour nommer tous les éléments d’un formulaire `<form>`, c’est-à-dire les cases `<input type="radio">`, les menus `<select>`, les champs de texte `<textarea>`, les attributs `method` et `action` pour savoir justement ce que doit faire un formulaire lorsqu’on le soumet, l’attribut `allow` d’un `<iframe>` permettant de charger une page dans une autre page, les attributs `max` et `min` pour définir les valeurs minimales et maximales d’un champ`<input>`. Et puis l'attribut…
+
+*STOP ! N'en jetez plus !* Il y en a des centaines comme cela, pour répondre à tous les désirs et toutes les nécessités.
 
 En voilà pour finir quelques exemples concrets :
 
@@ -120,7 +124,9 @@ Deux paragraphes avec de nombreux attributs qu’on peut tout à fait écrire en
 
 :blockcode
 ::no_num
-: <p id="par1" class="class1 css2 grand" style="display:none;color:blue" contenteditable data-index="12" onfocus="save(this)" tabindex="5">Un paragraphe éditable</p>
+: <p id="par1" class="class1 css2 grand" style="display:none;color:
+: blue" contenteditable data-index="12" onfocus="save(this)" 
+: tabindex="5">Un paragraphe éditable</p>
 :
 : <!-- plus lisible -->
 : 
@@ -136,7 +142,7 @@ Deux paragraphes avec de nombreux attributs qu’on peut tout à fait écrire en
 :   Un paragraphe éditable
 : </p>
 
-Remarquez pour finir comment on inscrit des commentaires dans le code HTML à l’aide de : 
+Remarquez pour finir comment on inscrit des commentaires dans le code HTML à l’aide de `&lt;!-\- le commentaire -\->` : 
 
 :blockcode
 ::no_num
@@ -146,3 +152,8 @@ Remarquez pour finir comment on inscrit des commentaires dans le code HTML à l�
 :	Un commentaire ici
 :	sur plusieurs lignes 
 : -->
+  
+
+Nous avons vu les types de balises, les nœuds différents qu'on peut trouver, nous avons parlé de leur *contenu* (certains en avaient d'autres pas) et de leurs *attributs*, vous avez donc maintenant une vision complète de ce que peut contenir une page HTML. 
+
+À l'aide de ces quelques paramètres, vous verrez qu'on peut définir des milliers de choses ! Comme la musique, qui ne contient que ses sept notes !

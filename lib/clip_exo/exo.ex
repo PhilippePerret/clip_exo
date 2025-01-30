@@ -90,10 +90,27 @@ defmodule ClipExo.Exo do
     %__MODULE__{infos: %{path: exo["path"], name: exo["path"]}}
   end
   def get_from_params(%__MODULE__{} = exo) do
+    exo = ensure_infos_in(exo) # s'assure que la donnée :infos est conforme (structure ExoInfos)
     %__MODULE__{infos: %{path: exo.infos.path, name: exo.infos.name}}
   end
   def get_from_params(params) do
     raise "Impossible de trouver l'exercice dans #{inspect(params)}"
+  end
+
+  defp ensure_infos_in(exo) do
+    # Dans tous les cas, il faut que exo.infos existe
+    Map.has_key?(exo, :infos) || raise "La clé :infos doit impérativement exister dans exo… (#{inspect exo})"
+    # Dans tous les cas, il faut que exo.infos.name existe
+    Map.has_key?(exo.infos, :name) || raise "La clé :name doit impérativement exister dans exo.infos (#{inspect exo})"
+    # On met le :path s'il n'est pas défini
+    exo = Map.has_key?(exo.infos, :path) && exo || add_key_infos(exo, :path)
+
+    exo # pour le moment
+  end
+
+  defp add_key_infos(exo, :path) do
+    infos = Map.put(exo.infos, :path, get_path_exo!(exo.infos.name))
+    %{exo | infos: infos}
   end
 
 

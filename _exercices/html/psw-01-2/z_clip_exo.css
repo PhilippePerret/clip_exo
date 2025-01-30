@@ -313,7 +313,6 @@ section.qcm {
 }
 section.qcm div.question {
   margin-top:2.2em;
-  margin-bottom:1.3em;
   font-size: 1em;
   background-color: slategrey;
   color: white;
@@ -321,10 +320,17 @@ section.qcm div.question {
   counter-reset: compteurReponses;
   counter-increment: compteurQuestions;
 }
+section.qcm div.nombre_reponses {
+  margin-bottom:1.3em;
+  font-size: 0.85em;
+  font-style: italic;
+  text-align: right;
+  padding-right: 1em;
+}
 section.qcm div.question:before {
-  content: counter(compteurQuestions) ". ";
+  content: "Q" counter(compteurQuestions) ". ";
   display:inline-block;
-  width: 24px;
+  width: 40px;
 }
 section.qcm div.question:after {
   font-weight: normal;
@@ -334,12 +340,13 @@ section.qcm div.question:after {
   display:block;
   margin-top:7px;
 }
+/* 
 section.qcm div.question.radio:after {
   content: "(Une seule bonne réponse)";
 }
 section.qcm div.question.checkbox:after {
-  content: "(Cocher toutes les bonnes réponses)";
-}
+  content: "(Plusieurs bonnes réponses)";
+} */
 
 section.qcm span.reponse {
   position: relative;
